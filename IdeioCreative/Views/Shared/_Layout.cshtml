@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- == Meta Tags == -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Keywords -->
+    <meta name="keywords" content="boot, Bootstrap, Xstar - HTML Template">
+    <!--  Description -->
+    <meta name="description" content="Xstar - Landing HTML Template">
+    <!-- == Page title == -->
+    <title>İdeio Creative</title>
+    <!-- Favicon/x-icon -->
+    <link rel="shortcut icon" href="@Url.Content("~/assets/img/logo/favicon.png")" type="image/x-icon">
+
+    <!-- Bootstrap Min 5.2.3 Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap.min.css")">
+
+    <!-- Fontawesome Icons Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/all.min.css")">
+
+    <!-- Magnific Popup Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/magnific-popup.css")">
+
+    <!-- Nice Select Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/nice-select.css")">
+
+    <!-- Swiper Slider Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/swiper.min.css")">
+
+    <!-- AOS Animation Css -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")">
+
+</head>
+<body class="position-relative bg2-clr">
+
+    @await Component.InvokeAsync("Navbar")
+    
+     
+            @RenderBody()
+       
+    
+
+    @await Component.InvokeAsync("Footer")
+
+    <!-- js Jquery start -->
+    <script src="@Url.Content("~/assets/js/jquery.js")"></script>
+
+    <!-- js Bootstrap start -->
+    <script src="@Url.Content("~/assets/js/bootstrap.bundle.min.js")"></script>
+
+    <!-- js Waypoints start -->
+    <script src="@Url.Content("~/assets/js/jquery.waypoints.js")"></script>
+
+    <!-- js Magnific popup start -->
+    <script src="@Url.Content("~/assets/js/magnific-popup.js")"></script>
+
+    <!-- js Nice Select start -->
+    <script src="@Url.Content("~/assets/js/jquery.nice-select.min.js")"></script>
+
+    <!-- js Swiper start -->
+    <script src="@Url.Content("~/assets/js/swiper.js")"></script>
+
+    <!-- js CounterUp start -->
+    <script src="@Url.Content("~/assets/js/jquery.counterup.min.js")"></script>
+
+    <!-- js AOS Animation start -->
+    <script src="@Url.Content("~/assets/js/aos.js")"></script>
+
+    <!-- js Tilt start -->
+    <script src="@Url.Content("~/assets/js/vanilla-tilt.min.js")"></script>
+
+    <!-- js Main start -->
+    <script src="@Url.Content("~/assets/js/main.js")"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,178 @@
+﻿<style>
+    .logo-img {
+        width: 100%; /* büyük ekranlarda genişliğini korur */
+        height: auto;
+        max-width: 180px; /* mobilde aşırı büyümesini engeller */
+    }
+
+    /* Çok küçük ekranlar için daha da küçültmek istersen */
+    @@media(max - width: 576px)
+
+    {
+        .logo-img {
+            max-width: 140px;
+        }
+    }
+</style>     
+<!-- Preloader Start -->
+<div id="preloader" class="preloader">
+    <div class="animation-preloader">
+        <div class="spinner">
+        </div>
+        <div class="txt-loading">
+            <span data-text-preloader="İ" class="letters-loading">
+                İ
+            </span>
+            <span data-text-preloader="D" class="letters-loading">
+                D
+            </span>
+            <span data-text-preloader="E" class="letters-loading">
+                E
+            </span>
+            <span data-text-preloader="İ" class="letters-loading">
+                İ
+            </span>
+            <span data-text-preloader="O" class="letters-loading">
+                O
+            </span>
+            <span data-text-preloader=" " class="letters-loading">
+                
+            </span>
+            <span data-text-preloader="C" class="letters-loading">
+                C
+            </span>
+            <span data-text-preloader="R" class="letters-loading">
+                R
+            </span>
+            <span data-text-preloader="E" class="letters-loading">
+                E
+            </span>
+            <span data-text-preloader="A" class="letters-loading">
+                A
+            </span>
+            <span data-text-preloader="T" class="letters-loading">
+                T
+            </span>
+            <span data-text-preloader="İ" class="letters-loading">
+                İ
+            </span>
+            <span data-text-preloader="V" class="letters-loading">
+                V
+            </span>
+            <span data-text-preloader="V" class="letters-loading">
+                E
+            </span>
+           
+        </div>
+        <p class="text-center">Yükleniyor...</p>
+    </div>
+    <div class="loader">
+        <div class="row">
+            <div class="col-3 loader-section section-left">
+                <div class="bg"></div>
+            </div>
+            <div class="col-3 loader-section section-left">
+                <div class="bg"></div>
+            </div>
+            <div class="col-3 loader-section section-right">
+                <div class="bg"></div>
+            </div>
+            <div class="col-3 loader-section section-right">
+                <div class="bg"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Header Start -->
+<header class="header-section cmn-fixed py-lg-0 py-6">
+    <div class="container">
+        <div class="main-navbar">
+            <nav class="navbar-custom">
+                <div class="d-lg-flex flex-xl-nowrap flex-wrap align-items-center justify-content-lg-between">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a asp-controller="Home" asp-action="Index" class="brand-logo">
+                            <img class="logo-img" height="70" src="/img/ideio-logo.png" alt="logo">
+                        </a>
+                        <div class="d-flex align-items-center gap-xxl-5 gap-5">
+                            <a href="javascript:void(0)" class="search-trigger search-icon d-lg-none d-block">
+                                <i class="fal fa-search"></i>
+                            </a>
+                            <button class="navbar-toggle-btn d-block d-lg-none" type="button">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="navbar-toggle-item">
+                        <ul class="custom-nav d-lg-flex d-grid gap-xxl-10 gap-xl-8 gap-lg-5 gap-md-2 gap-2 pt-lg-0 pt-5">
+                            <li class="menu-item position-relative">
+                                <button onclick="window.location.href='@Url.Action("Index", "Home")'"
+                                        class="position-relative ps-5 white-clr fw_500 cus-z1"
+                                        type="button">
+                                    Anasayfa
+                                </button>
+                            </li>
+                            <li class="menu-item position-relative">
+                                <button onclick="window.location.href='@Url.Action("Index", "About")'" class="position-relative  ps-5 fw_500 white-clr cus-z1">
+                                    Hakkımızda
+                                </button>
+                                
+                            </li>
+                            <li class="menu-item position-relative">
+                                <button onclick="window.location.href='@Url.Action("Index", "Service")'" class="position-relative  ps-5 fw_500 white-clr cus-z1">
+                                    Hizmetlerimiz
+                                </button>
+                               
+                            </li>
+                            <li class="menu-item position-relative">
+                                <button onclick="window.location.href='@Url.Action("Index", "Team")'" class="position-relative  ps-5 fw_500 white-clr cus-z1">
+                                    Ekip
+                                </button>
+                                
+                            </li>
+                            <li class="menu-item position-relative">
+                                <button onclick="window.location.href='@Url.Action("Index", "Contact")'" class="position-relative  ps-5 fw_500 white-clr cus-z1">
+                                    İletişim
+                                </button>
+                               
+                            </li>
+                           
+                        </ul>
+                    </div>
+                    <div class="d-lg-flex d-none d-grid justify-content-center ph-clickwrap align-items-center gap-xxl-7 gap-xl-6 gap-lg-5 gap-3">
+                        <div class="search-shopcart d-flex gap-xxl-9 gap-xl-5 gap-3">
+                            <a href="javascript:void(0)" class="search-trigger search-icon">
+                                <i class="fal fa-search"></i>
+                            </a>
+                           
+                        </div>
+                        <a href="https://ideiotest.com" target="_blank" class="d-flex align-items-center gap-sm-3 gap-2 touch-btn cmn-btn">
+                            <span class="rot60">
+                                <i class="fas fa-arrow-up"></i>
+                            </span>
+                            Social İdeio
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
+<!-- Custom Header End -->
+<!-- Custom Search Start -->
+<div class="search-wrap">
+    <div class="search-inner">
+        <i class="fas fa-times search-close" id="search-close"></i>
+        <div class="search-cell">
+            <form method="get">
+                <div class="search-field-holder">
+                    <input type="search" class="main-search-input" placeholder="Ara...">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Custom Search End -->
