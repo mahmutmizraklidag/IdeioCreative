@@ -1,0 +1,76 @@
+﻿@model User
+
+@{
+    ViewData["Title"] = "Ekle";
+}
+
+<div class="container my-4">
+    <div class="card shadow-lg border-0 rounded-3">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            <i class="bi bi-person-badge me-2 fs-4"></i>
+            <h4 class="mb-0">Kullanıcı Ekle</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Username" class="form-label fw-bold"></label>
+                        <input asp-for="Username" class="form-control" placeholder="Kullanıcı giriniz" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="password" class="form-label fw-bold"></label>
+                        <div class="input-group">
+                            <input asp-for="password" class="form-control" placeholder="Şifre giriniz" type="password" id="passwordInput" />
+                            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="password" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <input type="submit" value="Ekle" class="btn btn-primary btn-lg w-100 mt-3 shadow-sm" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+    }
+
+    input.form-control, textarea.form-control {
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+        input.form-control:focus, textarea.form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 8px rgba(13, 110, 253, 0.2);
+        }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("passwordInput");
+
+        togglePassword.addEventListener("click", function () {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+
+            const icon = this.querySelector("i");
+            icon.classList.toggle("bi-eye");
+            icon.classList.toggle("bi-eye-slash");
+        });
+    });
+</script>

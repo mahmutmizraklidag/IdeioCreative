@@ -2901,7 +2901,7 @@ input.main-search-input::placeholder {
   border: 2px solid var(--white);
 }
 #progress i {
-  color: var(--black);
+  color: #fff;
 }
 #progress #valiu {
   display: block;

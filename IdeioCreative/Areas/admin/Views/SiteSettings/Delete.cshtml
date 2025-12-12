@@ -1,0 +1,103 @@
+﻿@model SiteSetting
+
+@{
+    ViewData["Title"] = "Site Ayarı Sil";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0 rounded-3">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="bi bi-trash3 me-2"></i> Site Ayarı Sil
+            </h4>
+            <a asp-action="Index" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Geri Dön
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="alert alert-warning border-0 d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill fs-4 me-2"></i>
+                <div>
+                    <strong>Dikkat!</strong> Bu Site Ayarı kalıcı olarak silinecek. Bu işlemi geri alamazsınız.
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Logo))
+                    {
+                        <img src="/img/@Model.Logo" alt="@Model.MetaTitle" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light p-5 text-muted">Görsel Yok</div>
+                    }
+                </div>
+
+                <div class="col-md-8">
+
+                    <dl class="row mt-3 small">
+                        <dt class="col-sm-4">Telefon</dt>
+                        <dd class="col-sm-8">@Model.Phone</dd>
+
+                        <dt class="col-sm-4">E-Posta</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+
+                        <dt class="col-sm-4">Adres</dt>
+                        <dd class="col-sm-8">@Model.Address</dd>
+
+                        <dt class="col-sm-4">Harita Linki</dt>
+                        <dd class="col-sm-8">@Model.mapLink</dd>
+
+                        <dt class="col-sm-4">Facebook</dt>
+                        <dd class="col-sm-8">@Model.Facebook</dd>
+
+                        <dt class="col-sm-4">Instagram</dt>
+                        <dd class="col-sm-8">@Model.Instagram</dd>
+
+                        <dt class="col-sm-4">Twitter</dt>
+                        <dd class="col-sm-8">@Model.Twitter</dd>
+
+                        <dt class="col-sm-4">LinkedIn</dt>
+                        <dd class="col-sm-8">@Model.LinkedIn</dd>
+
+                        <dt class="col-sm-4">YouTube</dt>
+                        <dd class="col-sm-8">@Model.YouTube</dd>
+
+                        <dt class="col-sm-4">SMTP Sunucusu</dt>
+                        <dd class="col-sm-8">@Model.SmtpServer</dd>
+
+                        <dt class="col-sm-4">SMTP Portu</dt>
+                        <dd class="col-sm-8">@Model.SmtpPort</dd>
+
+                        <dt class="col-sm-4">SMTP Gönderen Mail</dt>
+                        <dd class="col-sm-8">@Model.SmtpEmail</dd>
+
+                        <dt class="col-sm-4">Mail Şifresi</dt>
+                        <dd class="col-sm-8">@Model.EmailPassword</dd>
+
+                        <dt class="col-sm-4">Anahtar Kelimeler</dt>
+                        <dd class="col-sm-8">@Model.Keywords</dd>
+
+                        <dt class="col-sm-4">Meta Başlık</dt>
+                        <dd class="col-sm-8">@Model.MetaTitle</dd>
+
+                        <dt class="col-sm-4">Dil</dt>
+                        <dd class="col-sm-8">@Model.Language</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <form asp-action="Delete" class="text-end">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="bi bi-trash3-fill me-1"></i> Evet, Sil
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2 px-4">
+                    <i class="bi bi-x-circle me-1"></i> Vazgeç
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

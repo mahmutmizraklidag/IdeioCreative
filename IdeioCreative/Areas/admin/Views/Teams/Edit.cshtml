@@ -1,0 +1,116 @@
+﻿@model Team
+
+@{
+    ViewData["Title"] = "Slider Düzenle";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0 rounded-3">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-journal-plus me-2"></i>Personel Düzenle</h4>
+            <a asp-action="Index" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Geri Dön
+            </a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="Name" class="form-label fw-semibold"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Ad Soyad giriniz" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label asp-for="Position" class="form-label fw-semibold"></label>
+                        <input asp-for="Position" class="form-control" placeholder="Personel Görevi giriniz" />
+                        <span asp-validation-for="Position" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Description" class="form-label fw-semibold"></label>
+                        <textarea id="AboutEditor" asp-for="Description" class="form-control" rows="4" placeholder="Açıklama giriniz"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" asp-for="IsHomePage" />
+                            <label class="form-check-label fw-semibold">@Html.DisplayNameFor(model => model.IsHomePage)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Slug" class="form-label fw-semibold"></label>
+                        <input asp-for="Slug" class="form-control" placeholder="Slug" />
+                        <span asp-validation-for="Slug" class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <label asp-for="Language" class="form-label fw-semibold"></label>
+                        <select asp-for="Language" class="form-select" asp-items="Html.GetEnumSelectList<Language>()"></select>
+                        <span asp-validation-for="Language" class="text-danger small"></span>
+                    </div>
+
+
+
+                    <div class="col-md-12">
+                        <label asp-for="Image" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="Image" type="file" class="form-control" id="imageInput" />
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Image))
+                        {
+                            <div class="mb-3">
+                                <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
+                                <img src="/img/@Model.Image" alt="" class="rounded border" width="200" />
+                            </div>
+                        }
+                        <div class="mt-2">
+                            <img id="previewImage" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
+                        </div>
+                        <span asp-validation-for="Image" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-check-circle me-1"></i> Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Görsel önizleme
+        document.getElementById("imageInput").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById("previewImage");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            } else {
+                preview.classList.add("d-none");
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const editor = new Jodit('#AboutEditor', {
+                height: 400,
+                maxLength: 10000
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

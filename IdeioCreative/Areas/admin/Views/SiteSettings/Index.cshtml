@@ -1,0 +1,117 @@
+﻿@model IEnumerable<SiteSetting>
+
+@{
+    ViewData["Title"] = "Site Ayarları Yönetimi";
+}
+
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary mb-0">
+            <i class="bi bi-journal-text me-2"></i> Site Ayarları Yönetimi
+        </h2>
+        @if (Model.Count() == 0)
+        {
+            <a asp-action="Create" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle me-1"></i> Yeni Site Ayarı Ekle
+            </a>
+        }
+
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Ara...">
+                </div>
+                <span class="text-muted small align-self-center">@Model.Count() kayıt bulundu</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table align-middle table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Logo</th>
+                            <th>Telefon</th>
+                            <th>Email</th>
+                            <th>Adres</th>
+                            <th>Harita Linki</th>
+                            <th>Facebook</th>
+                            <th>Instagram</th>
+                            <th>Twitter</th>
+                            <th>Linkedln</th>
+                            <th>Youtube</th>
+                            <th>SMTP Sunucusu</th>
+                            <th>SMTP Portu</th>
+                            <th>SMTP Gönderen Mail</th>
+                            <th>Mail Şifresi</th>
+                            <th>Meta-Keywords</th>
+                            <th>Meta-Description</th>
+                            <th>Meta-Title</th>
+                            <th>Dil</th>
+                            <th class="text-end">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="blogTable">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Logo))
+                                    {
+                                        <img src="/img/@item.Logo" alt="@item.MetaTitle" class="rounded" width="60" height="40" style="object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Yok</span>
+                                    }
+                                </td>
+                                <td class="fw-semibold">@item.Phone</td>
+
+                                <td>@item.Email</td>
+                                <td>@item.Address</td>
+                                <td>@item.mapLink</td>
+                                <td>@item.Facebook</td>
+                                <td>@item.Instagram</td>
+                                <td>@item.Twitter</td>
+                                <td>@item.LinkedIn</td>
+                                <td>@item.YouTube</td>
+                                <td>@item.SmtpServer</td>
+                                <td>@item.SmtpPort</td>
+                                <td>@item.SmtpEmail</td>
+                                <td>@item.EmailPassword</td>
+                                <td>@item.Keywords</td>
+                                <td>@item.MetaDescription</td>
+                                <td>@item.MetaTitle</td>
+                                <td>@item.Language</td>
+                                <td class="text-end">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Basit tablo arama
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            var value = this.value.toLowerCase();
+            var rows = document.querySelectorAll("#blogTable tr");
+            rows.forEach(function (row) {
+                row.style.display = row.textContent.toLowerCase().includes(value) ? "" : "none";
+            });
+        });
+    </script>
+}

@@ -1,0 +1,79 @@
+﻿@model About
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0 rounded-3">
+        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">
+                <i class="bi bi-trash3 me-2"></i> Blog Sil
+            </h4>
+            <a asp-action="Index" class="btn btn-light btn-sm">
+                <i class="bi bi-arrow-left"></i> Geri Dön
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="alert alert-warning border-0 d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill fs-4 me-2"></i>
+                <div>
+                    <strong>Dikkat!</strong> kalıcı olarak silinecek. Bu işlemi geri alamazsınız.
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="/img/@Model.Image" alt="@Model.Title" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light p-5 text-muted">Görsel Yok</div>
+                    }
+                </div>
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.HomeImage))
+                    {
+                        <img src="/img/@Model.HomeImage" alt="@Model.Title" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light p-5 text-muted">Görsel Yok</div>
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <h5 class="fw-bold">@Model.Title</h5>
+                    <p class="text-muted mb-1">@Model.Description</p>
+                    <h5 class="fw-bold">@Model.HomeTitle</h5>
+                    <p class="text-muted mb-1">@Model.HomeDescription</p>
+                    <dl class="row mt-3 small">
+
+
+                        <dt class="col-sm-4">Anahtar Kelimeler</dt>
+                        <dd class="col-sm-8">@Model.Keywords</dd>
+
+                        <dt class="col-sm-4">Meta Başlık</dt>
+                        <dd class="col-sm-8">@Model.MetaTitle</dd>
+
+                        <dt class="col-sm-4">Dil</dt>
+                        <dd class="col-sm-8">@Model.Language</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <form asp-action="Delete" class="text-end">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="bi bi-trash3-fill me-1"></i> Evet, Sil
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2 px-4">
+                    <i class="bi bi-x-circle me-1"></i> Vazgeç
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

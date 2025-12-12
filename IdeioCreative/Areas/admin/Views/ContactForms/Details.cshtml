@@ -1,0 +1,62 @@
+﻿@model ContactForm
+
+@{
+    ViewData["Title"] = "İletişim Detayları";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h3 class="mb-0">
+                <i class="bi bi-envelope-paper"></i> İletişim Formu Detayı
+            </h3>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row mb-3">
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted fw-bold">
+                        <i class="bi bi-person"></i> Ad Soyad
+                    </label>
+                    <div class="fs-5">@Html.DisplayFor(model => model.Name)</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted fw-bold">
+                        <i class="bi bi-envelope"></i> E-posta
+                    </label>
+                    <div class="fs-5">@Html.DisplayFor(model => model.Email)</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted fw-bold">
+                        <i class="bi bi-telephone"></i> Telefon
+                    </label>
+                    <div class="fs-5">@Html.DisplayFor(model => model.Phone)</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="text-muted fw-bold">
+                        <i class="bi bi-tag"></i> Konu
+                    </label>
+                    <div class="fs-5">@Html.DisplayFor(model => model.Subject)</div>
+                </div>
+                <div class="col-12">
+                    <label class="text-muted fw-bold">
+                        <i class="bi bi-chat-dots"></i> Mesaj
+                    </label>
+                    <div class="border rounded p-3 bg-light fs-5">
+                        @Html.DisplayFor(model => model.Message)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer bg-light text-end rounded-bottom-4">
+
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Listeye Dön
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons (ekli değilse bu satırı Layout.cshtml'e ekleyebilirsin) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
