@@ -1,20 +1,20 @@
-﻿@model Team
+﻿@model Reference
 
 @{
-    ViewData["Title"] = "Slider Düzenle";
+    ViewData["Title"] = "Yeni Referans Ekle";
 }
 
 <div class="container mt-5">
     <div class="card shadow border-0 rounded-3">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-journal-plus me-2"></i>Personel Düzenle</h4>
+            <h4 class="mb-0"><i class="bi bi-journal-plus me-2"></i>Yeni Referans Ekle</h4>
             <a asp-action="Index" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Geri Dön
             </a>
         </div>
 
         <div class="card-body">
-            <form asp-action="Edit" enctype="multipart/form-data">
+            <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
 
                 <div class="row g-3">
@@ -25,36 +25,13 @@
                         <span asp-validation-for="Name" class="text-danger small"></span>
                     </div>
 
-
-                    <div class="col-md-6">
-                        <label asp-for="Position" class="form-label fw-semibold"></label>
-                        <input asp-for="Position" class="form-control" placeholder="Personel Görevi giriniz" />
-                        <span asp-validation-for="Position" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label asp-for="Description" class="form-label fw-semibold"></label>
-                        <textarea id="AboutEditor" asp-for="Description" class="form-control" rows="4" placeholder="Açıklama giriniz"></textarea>
-                        <span asp-validation-for="Description" class="text-danger small"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label asp-for="OrderNo" class="form-label fw-semibold"></label>
-                        <input asp-for="OrderNo" class="form-control" placeholder="Sıra Numarası giriniz" />
-                        <span asp-validation-for="OrderNo" class="text-danger small"></span>
-                    </div>
-
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="form-check mt-4">
-                            <input class="form-check-input" asp-for="IsHomePage" />
-                            <label class="form-check-label fw-semibold">@Html.DisplayNameFor(model => model.IsHomePage)</label>
+                            <input class="form-check-input" asp-for="IsHome" />
+                            <label class="form-check-label fw-semibold">@Html.DisplayNameFor(model => model.IsHome)</label>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <label asp-for="Slug" class="form-label fw-semibold"></label>
-                        <input asp-for="Slug" class="form-control" placeholder="Slug" />
-                        <span asp-validation-for="Slug" class="text-danger small"></span>
-                    </div>
+                   
 
 
                     <div class="col-md-12">
@@ -70,13 +47,6 @@
                         <div class="input-group">
                             <input asp-for="Image" type="file" class="form-control" id="imageInput" />
                         </div>
-                        @if (!string.IsNullOrEmpty(Model.Image))
-                        {
-                            <div class="mb-3">
-                                <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
-                                <img src="/img/@Model.Image" alt="" class="rounded border" width="200" />
-                            </div>
-                        }
                         <div class="mt-2">
                             <img id="previewImage" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
                         </div>
@@ -93,6 +63,7 @@
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script>

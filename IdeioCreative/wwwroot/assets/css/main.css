@@ -162,9 +162,11 @@ p {
 .bb-border {
   border-bottom: 1px solid var(--border1) !important;
 }
-
+.scrolling-wrap .comm {
+    margin-top: 25px !important;
+}
 .bt-border {
-  border-top: 1px solid var(--border1) !important;
+    border-top: 1px solid var(--border1) !important;
 }
 
 .htheme {
@@ -177,7 +179,10 @@ p {
 .tag-clr {
   color: var(--tag);
 }
-
+.team-staft {
+    background: url(../../assets/img/team/team-bg.png) no-repeat center center !important;
+    background-size: cover !important;
+}
 .fs14 {
   font-size: 14px;
 }
@@ -272,13 +277,19 @@ span {
   color: transparent;
   display: block;
 }
+.hero-section-version1 .hero-arrow{
+        width: 280px !important;
+    height: 280px !important;
+}
+}
 @media (max-width: 575px) {
-  .slider-button .previus-text {
-    font-size: 18px;
-  }
-  .slider-button .project-storke {
-    font-size: 30px;
-  }
+    .slider-button .previus-text {
+        font-size: 18px;
+    }
+
+    .slider-button .project-storke {
+        font-size: 30px;
+    }
 }
 @media (max-width: 575px) {
   .slider-button .previus-text {
@@ -3372,14 +3383,14 @@ input.main-search-input::placeholder {
 }
 
 .team-card01 .thumb::before {
-  position: absolute;
-  content: "";
-  bottom: -100%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(239, 100, 76, 0) 64.05%, #E3FF04 115.68%);
-  transition: all 0.5s;
+    position: absolute;
+    content: "";
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(239, 100, 76, 0) 64.05%, #f47e3e 115.68%);
+    transition: all 0.5s;
 }
 .team-card01 .thumb .common-social {
   position: absolute;
@@ -3426,8 +3437,8 @@ input.main-search-input::placeholder {
   opacity: 1;
 }
 .team-card01:hover .thumb::before {
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(239, 100, 76, 0) 64.05%, #E3FF04 115.68%);
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(239, 100, 76, 0) 64.05%, #f47e3e 115.68%);
 }
 .team-card01:hover .thumb .common-social {
   transition: all 0.4s;

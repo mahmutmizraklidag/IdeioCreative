@@ -37,6 +37,12 @@
                         <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
 
+                    <div class="col-md-6">
+                        <label asp-for="OrderNo" class="form-label fw-semibold"></label>
+                        <input asp-for="OrderNo" class="form-control" placeholder="Sıra Numarası giriniz" />
+                        <span asp-validation-for="OrderNo" class="text-danger small"></span>
+                    </div>
+
                     <div class="col-md-6 d-flex align-items-center">
                         <div class="form-check mt-4">
                             <input class="form-check-input" asp-for="IsHomePage" />

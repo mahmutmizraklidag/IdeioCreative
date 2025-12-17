@@ -1,4 +1,20 @@
-﻿  <!-- Main start -->
+﻿@model About
+@{
+    var site = DataRequestModel.SiteSetting;
+
+    ViewData["Title"] = string.IsNullOrEmpty(Model?.MetaTitle)
+        ? "Hakkımızda"
+        : Model.MetaTitle;
+
+    ViewData["MetaDescription"] = string.IsNullOrEmpty(Model?.MetaDescription)
+        ? (site?.MetaDescription ?? "Hakkımızda")
+        : Model.MetaDescription;
+
+    ViewData["MetaKeywords"] = string.IsNullOrEmpty(Model?.Keywords)
+        ? (site?.Keywords ?? "Hakkımızda")
+        : Model.Keywords;
+}
+ <!-- Main start -->
 <main class="main">
 
     <!-- Breadcrumnd Banner -->
@@ -83,7 +99,8 @@
                             <img src="assets/img/about/about-s2.png" alt="img" class="w-100">
                         </div>
                         <!--- About Arrow -->
-                        <img src="assets/img/element/arrow-right-storke.png" alt="img" class="about-tumb-arrow">
+                     @*    <img src="/img/ideio-about.png" height="182" width="182" alt="img" class="about-tumb-arrow"> *@
+
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -91,14 +108,14 @@
                         <div class="pricing-title">
                             <div class="radius-btn text-uppercase cmn-border d-inline-flex radius100 py-xxl-2 py-2 px-xxl-4 px-4 theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5"
                                  data-aos="zoom-in-left" data-aos-duration="1400">
-                                ABOUT XSTAR
+                                Hakkımızda
                                 <span class="rot60 d-inline-block">
                                     <i class="fas fa-arrow-up theme-clr"></i>
                                 </span>
                             </div>
                             <h2 class="stitle d-flex align-items-center mb-xxl-8 mb-xl-7 mb-lg-6 mb-5 gap-xxl-7 gap-xl-5 gap-3"
                                 data-aos="zoom-in-left" data-aos-duration="1700">
-                                <img src="assets/img/element/arrow-right-storke.png" alt="img" data-aos="zoom-in-up"
+                                <img src="/img/ideio-about.png" height="182" width="182" alt="img" data-aos="zoom-in-up"
                                      data-aos-duration="2000">
                                 To Create Artistic & Creative Design
                             </h2>
@@ -304,18 +321,18 @@
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-5 mb-xxl-15 mb-xl-12 mb-lg-10 mb-md-10 mb-sm-10 mb-9">
                 <div class="pricing-title">
                     <div class="radius-btn text-uppercase cmn-border d-inline-flex radius100 py-xxl-2 py-2 px-xxl-4 px-4 theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5">
-                        oUR experts
+                        Ekibimiz
                         <span class="rot60 d-inline-block">
                             <i class="fas fa-arrow-up theme-clr"></i>
                         </span>
                     </div>
                     <h2 class="stitle">
-                        Meet our <span class="fw-400">creative</span> staff
+                        Yaratıcı <span class="fw-400">Ekibimizle</span> Tanışın
                     </h2>
                 </div>
                 <a href="service-details.html"
                    class="radius-btn d-inline-flex radius100 py-xxl-2 py-2 px-xxl-5 px-5 theme-border theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5">
-                    view all teams
+                    Hepsini Gör...
                 </a>
             </div>
             <div class="row g-xxl-7 g-xl-5 g-4 justify-content-center">
@@ -535,118 +552,7 @@
         </div>
     </section>
     <!-- Cmn Team stafs End -->
-    <!-- Testimonial version2 Start -->
-    <section class="pt-space pb-space bg2-clr">
-        <div class="container">
-            <div class="row g-md-5 g-6 align-items-end justify-content-between bb-border pb-xxl-15 pb-lg-10 pb-9 mb-xxl-15 mb-lg-10 mb-9">
-                <div class="col-lg-7">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-5">
-                        <div class="pricing-title">
-                            <div class="radius-btn text-uppercase cmn-border d-inline-flex radius100 py-xxl-2 py-2 px-xxl-4 px-4 theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5"
-                                 data-aos="zoom-in-left" data-aos-duration="1500">
-                                Testimonials
-                                <span class="rot60 d-inline-block">
-                                    <i class="fas fa-arrow-up theme-clr"></i>
-                                </span>
-                            </div>
-                            <h2 class="stitle" data-aos="zoom-in" data-aos-duration="1800">
-                                Some Of Our <span class="fw-400">Respected</span> Happy Clients Say
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4" data-aos="zoom-in-right" data-aos-duration="1600">
-                    <div class="d-flex justify-content-md-end">
-                        <div class="d-flex align-items-center gap-3">
-                            <ul class="customer-man d-flex align-items-center">
-                                <li>
-                                    <img src="assets/img/team/avatar1.png" alt="img">
-                                </li>
-                                <li>
-                                    <img src="assets/img/team/avatar2.png" alt="img">
-                                </li>
-                                <li>
-                                    <img src="assets/img/team/avatar3.png" alt="img">
-                                </li>
-                                <li>
-                                    <img src="assets/img/team/avatar4.png" alt="img">
-                                </li>
-                            </ul>
-                            <div class="review-cont">
-                                <div class="d-flex align-items-center gap-2 mb-xl-2 mb-1">
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-solid fa-star"></i>
-                                    <i class="fa-regular fa-star"></i>
-                                </div>
-                                <span class="texts">
-                                    450+ reviews
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center g-xxl-15 g-xl-8 g-lg-6 g-4">
-                <div class="col-lg-4">
-                    <div class="testimonial-thumb-v2 w-100" data-aos="zoom-in" data-aos-duration="1800">
-                        <img src="assets/img/testimonial/regulation-arrow.png" alt="img" class="w-100 h-100">
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="swiper testimonial-wrapv2">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="testimonial-item2 bg1-clr p-xxl-15 p-xl-10 p-lg-6 p-sm-5 p-5">
-                                    <svg width="60" height="43" viewBox="0 0 60 43" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M0 25.8H12.8571L4.28564 43H17.1428L25.7143 25.8V0H0V25.8Z"
-                                              fill="#E3FF04" />
-                                        <path d="M34.2852 0V25.8H47.1423L38.5708 43H51.4279L59.9994 25.8V0H34.2852Z"
-                                              fill="#E3FF04" />
-                                    </svg>
-                                    <p class="pra-clr mt-xxl-10 mt-xl-8 mt-lg-7 mt-6 mb-xxl-10 mb-xl-8 mb-lg-7 mb-6">
-                                        “Welcome to our digital agency We specialize in helping business most like
-                                        yours
-                                        succeed
-                                        online. From website design and
-                                        development to digital marketing agency”
-                                    </p>
-                                    <div class="d-flex flex-wrap gap-4 align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center gap-xxl-4 gap-xl-3 gap-3">
-                                            <img src="assets/img/team/delors.png" alt="img" class="radius100">
-                                            <div class="cont">
-                                                <div>
-                                                    <h6 class="mb-2 white-clr">
-                                                        Delores Olivo
-                                                    </h6>
-                                                    <span class="pra-clr">
-                                                        Software Tester
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="slider-button d-flex gap-xxl-3 gap-2 align-items-center justify-content-between slider-button-60">
-                                            <button class="cmn-prev cmn-border d-center" tabindex="0"
-                                                    aria-label="Next slide">
-                                                <i class="fas fa-chevron-left"></i>
-                                            </button>
-                                            <button class="cmn-next cmn-border d-center" tabindex="0"
-                                                    aria-label="Previous slide">
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Testimonial version2 End -->
+ 
 
 </main>
 <!-- Main End -->

@@ -1,4 +1,10 @@
-﻿ <!-- Main start -->
+﻿@{
+    ViewData["Title"] = "İletişim";
+    ViewData["MetaDescription"] = "Bizimle iletişime geçin";
+    ViewData["MetaKeywords"] = "Bizimle iletişime geçin";
+
+}
+ <!-- Main start -->
 <main class="main">
 
     <!-- Breadcrumnd Banner -->
@@ -88,11 +94,9 @@
                            Telefon
                         </h5>
                         <span class="msub d-block mb-2">
-                            Mobile : +197 -90 - 56 - 780
+                            @DataRequestModel.SiteSetting.Phone
                         </span>
-                        <span class="msub">
-                            Fax : +44-208-1234567
-                        </span>
+                        
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6" data-aos="zoom-in-right" data-aos-duration="1600">
@@ -106,11 +110,9 @@
                             E-mail
                         </h5>
                         <span class="msub d-block mb-2">
-                            Info.company@gmail.com
+                            @DataRequestModel.SiteSetting.Email
                         </span>
-                        <span class="msub">
-                            Info.company@yahoo.com
-                        </span>
+                       
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6" data-aos="zoom-in-right" data-aos-duration="1800">
@@ -124,11 +126,9 @@
                             Lokasyon
                         </h5>
                         <span class="msub d-block mb-2">
-                            Mobile : 85 Ketch Harbour
+                            @DataRequestModel.SiteSetting.Address
                         </span>
-                        <span class="msub">
-                            RoadBensalem, PA 19020
-                        </span>
+                       
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6" data-aos="zoom-in-right" data-aos-duration="2000">
@@ -142,10 +142,10 @@
                             Çalışma Saatleri
                         </h5>
                         <span class="msub d-block mb-2">
-                            Sun - Thu 09 am - 06pm
+                            Pzt - Cum: 09.00 - 18.00
                         </span>
                         <span class="msub">
-                            Fri - Sat 4 pm - 10pm
+                            Cmt - Paz: Kapalı
                         </span>
                     </div>
                 </div>
@@ -153,7 +153,7 @@
             <div class="row g-xxl-7 g-4">
                 <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="2000">
                     <div class="contact-map">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52816169.558200695!2d-161.49265223136007!3d36.102185713814805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sbd!4v1711689726724!5m2!1sen!2sbd"
+                        <iframe src="@DataRequestModel.SiteSetting.mapLink"
                                 allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
@@ -162,29 +162,23 @@
                         <h3 class="white mb-xxl-15 mb-xl-10 mb-lg-7 mb-5">
                             Bize Ulaşın...
                         </h3>
-                        <form action="#">
+                        <form action="#" id="iletisimFormu" method="post">
                             <div class="row g-xxl-8 g-xl-6 g-lg-4 g-4">
-                                <div class="col-lg-6">
-                                    <input type="text" placeholder="Name">
+                                <div class="col-lg-12">
+                                    <input type="text" name="Name" id="Name" placeholder="İsim Soyisim">
                                 </div>
                                 <div class="col-lg-6">
-                                    <input type="email" placeholder="Email">
+                                    <input type="email" name="Email" id="Email" placeholder="Email">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" name="Phone" id="Phone" placeholder="Telefon">
                                 </div>
                                 <div class="col-lg-12">
-                                    <select name="nselect">
-                                        <option value="1">
-                                            Subject
-                                        </option>
-                                        <option value="1">
-                                            Subject.....
-                                        </option>
-                                        <option value="1">
-                                            Subject.....
-                                        </option>
-                                    </select>
+                                    <input type="text" name="Subject" id="Subject" placeholder="Konu">
                                 </div>
+                                
                                 <div class="col-lg-12">
-                                    <textarea name="messages" rows="5" placeholder="Message"></textarea>
+                                    <textarea name="messages" rows="5" name="Message" placeholder="Mesajınız..." id="Message"></textarea>
                                 </div>
                                 <div class="col-lg-5">
                                     <button type="submit" class="submit-btn">
@@ -192,6 +186,9 @@
                                     </button>
                                 </div>
                             </div>
+                            <!-- Mesaj kutuları -->
+                            <div class="alert alert-success sent-message mt-3 text-center" style="display:none;">Mesajınız gönderildi.</div>
+                            <div class="alert alert-danger error-message mt-3 text-center" style="display:none;"></div>
                         </form>
                     </div>
                 </div>
@@ -202,3 +199,38 @@
 
 </main>
 <!-- Main End -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $("#iletisimFormu").submit(function (e) {
+        e.preventDefault();
+
+        var entity = {
+            Name: $("#Name").val(),
+            Phone: $("#Phone").val(),
+            Email: $("#Email").val(),
+            Subject: $("#Subject").val(),
+            Message: $("#Message").val()
+        };
+
+        $.ajax({
+            method: "POST",
+            url: "/Contact/Index",
+            dataType: "json",
+            data: entity,
+            success: function (res) {
+                if (res.success) {
+                    $("#iletisimFormu")[0].reset();
+                    $(".sent-message").show();
+                    $(".error-message").hide();
+                } else {
+                    $(".error-message").show().html(res.message);
+                    $(".sent-message").hide();
+                }
+            },
+            error: function () {
+                $(".error-message").show().html("Sunucu hatası!");
+                $(".sent-message").hide();
+            }
+        });
+    });
+</script>

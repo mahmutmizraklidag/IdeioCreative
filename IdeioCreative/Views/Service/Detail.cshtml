@@ -1,4 +1,14 @@
-﻿  <!-- Main start -->
+﻿@model Service
+
+@{
+    var site = DataRequestModel.SiteSetting;
+
+    ViewData["Title"] = Model?.MetaTitle ?? "Hizmetlerimiz";
+    ViewData["MetaDescription"] = Model?.MetaDescription ?? site?.MetaDescription ?? "Hizmetlerimiz";
+    ViewData["MetaKeywords"] = Model?.Keywords ?? site?.Keywords ?? "Hizmetlerimiz";
+}
+
+  <!-- Main start -->
 <main class="main">
 
     <!-- Breadcrumnd Banner -->
@@ -13,8 +23,8 @@
                         <ul class="breadcrumnd d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
                             data-aos="zoom-in-right" data-aos-duration="2000">
                             <li>
-                                <a href="index.html" class="text-uppercase htheme">
-                                    Home
+                                <a asp-controller="Home" asp-action="Index" class="text-uppercase htheme">
+                                    Anasayfa
                                 </a>
                             </li>
                             <li>
@@ -80,27 +90,10 @@
                 </div>
                 <h3 class="white-clr mb-xxl-9 mb-xl-7 mb-lg-6 mb-4" data-aos="zoom-in-left"
                     data-aos-duration="1600">
-                    World best web design service provider. 
+                    World best web design service provider.
+
                 </h3>
-                <div class="d-flex flex-wrap align-items-center gap-xxl-5 gap-xl-3 gap-2" data-aos="zoom-in-left"
-                     data-aos-duration="1800">
-                    <a href="service-details.html"
-                       class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                        Creative
-                    </a>
-                    <a href="service-details.html"
-                       class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                        Branding
-                    </a>
-                    <a href="service-details.html"
-                       class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                        Analytics
-                    </a>
-                    <a href="service-details.html"
-                       class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                        Audience
-                    </a>
-                </div>
+      
             </div>
             <div class="case-study-detials-inner mt-xxl-10 mt-xl-7 mt-6">
                 <h4 class="mb-xxl-7 mb-4 white-clr">
@@ -181,47 +174,7 @@
                 </div>
             </div>
 
-            <div class="swiper study-slidewrap py-xxl-15 py-xl-10 py-9">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="study-thumb-slide w-100">
-                            <img src="@Url.Content("~/assets/img/service/service-slide1.png")" alt="img" class="w-100">
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="study-thumb-slide w-100">
-                            <img src="@Url.Content("~/assets/img/service/service-slide2.png")" alt="img" class="w-100">
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="study-thumb-slide w-100">
-                            <img src="@Url.Content("~/assets/img/service/service-slide1.png")" alt="img" class="w-100">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="slider-button d-flex align-items-center justify-content-between py-xxl-6 py-xl-5 py-4">
-                <div class="d-flex align-items-center gap-xxl-5 gap-3 gap-2">
-                    <button class="cmn-prev cmn-border d-center" tabindex="0" aria-label="Next slide">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <span class="fw-bold white-clr previus-text text-capitalize">
-                        previous
-                    </span>
-                </div>
-                <h3 class="project-storke">
-                    Services
-                </h3>
-                <div class="d-flex align-items-center gap-xxl-5 gap-3 gap-2">
-                    <span class="fw-bold white-clr previus-text text-capitalize">
-                        Next
-                    </span>
-                    <button class="cmn-next cmn-border d-center" tabindex="0" aria-label="Previous slide">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+      
         </div>
     </section>
     <!-- Service Details End -->

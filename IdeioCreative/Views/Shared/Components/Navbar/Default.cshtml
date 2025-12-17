@@ -92,12 +92,12 @@
                 <div class="d-lg-flex flex-xl-nowrap flex-wrap align-items-center justify-content-lg-between">
                     <div class="d-flex align-items-center justify-content-between">
                         <a asp-controller="Home" asp-action="Index" class="brand-logo">
-                            <img class="logo-img" height="70" src="/img/ideio-logo.png" alt="logo">
+                            <img class="logo-img" height="70" src="/img/@DataRequestModel.SiteSetting.Logo" alt="logo">
                         </a>
                         <div class="d-flex align-items-center gap-xxl-5 gap-5">
-                            <a href="javascript:void(0)" class="search-trigger search-icon d-lg-none d-block">
+                            @* <a href="javascript:void(0)" class="search-trigger search-icon d-lg-none d-block">
                                 <i class="fal fa-search"></i>
-                            </a>
+                            </a> *@
                             <button class="navbar-toggle-btn d-block d-lg-none" type="button">
                                 <span></span>
                                 <span></span>
@@ -143,12 +143,12 @@
                         </ul>
                     </div>
                     <div class="d-lg-flex d-none d-grid justify-content-center ph-clickwrap align-items-center gap-xxl-7 gap-xl-6 gap-lg-5 gap-3">
-                        <div class="search-shopcart d-flex gap-xxl-9 gap-xl-5 gap-3">
+                        @* <div class="search-shopcart d-flex gap-xxl-9 gap-xl-5 gap-3">
                             <a href="javascript:void(0)" class="search-trigger search-icon">
                                 <i class="fal fa-search"></i>
                             </a>
                            
-                        </div>
+                        </div> *@
                         <a href="https://ideiotest.com" target="_blank" class="d-flex align-items-center gap-sm-3 gap-2 touch-btn cmn-btn">
                             <span class="rot60">
                                 <i class="fas fa-arrow-up"></i>

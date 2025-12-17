@@ -18,6 +18,8 @@ namespace IdeioCreative.Entities
         [Display(Name = "Slug")]
         [Required(ErrorMessage = "Lütfen slug giriniz.")]
         public string Slug { get; set; }
+        [Display(Name = "Sıra")]
+        public int OrderNo { get; set; }
         [Display(Name = "Anasayfa'da Gösterilsin Mi?")]
         public bool IsHomePage { get; set; }
         [Display(Name = "Dil")]

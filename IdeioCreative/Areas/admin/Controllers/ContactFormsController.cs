@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IdeioCreative.Data;
 using IdeioCreative.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdeioCreative.Areas.admin.Controllers
 {
-    [Area("admin")]
+    [Area("admin"),Authorize]
     public class ContactFormsController : Controller
     {
         private readonly DatabaseContext _context;

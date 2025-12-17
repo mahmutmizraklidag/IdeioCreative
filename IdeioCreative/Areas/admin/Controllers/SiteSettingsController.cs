@@ -2,6 +2,7 @@
 using IdeioCreative.Data;
 using IdeioCreative.Entities;
 using IdeioCreative.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace IdeioCreative.Areas.admin.Controllers
 {
-    [Area("admin")]
+    [Area("admin"),Authorize]
     public class SiteSettingsController : Controller
     {
         private readonly DatabaseContext _context;

@@ -15,6 +15,7 @@ namespace IdeioCreative.Data
         public DbSet<ContactForm> ContactForms { get; set; }
         public DbSet<About> Abouts { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<Reference> References { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

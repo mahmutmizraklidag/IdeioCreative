@@ -13,46 +13,47 @@ using System.Threading.Tasks;
 namespace IdeioCreative.Areas.admin.Controllers
 {
     [Area("admin"),Authorize]
-    public class TeamsController : Controller
+    public class ReferencesController : Controller
     {
         private readonly DatabaseContext _context;
 
-        public TeamsController(DatabaseContext context)
+        public ReferencesController(DatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: admin/Teams
+        // GET: admin/References
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Teams.ToListAsync());
+            return View(await _context.References.ToListAsync());
         }
 
-       
-        // GET: admin/Teams/Create
+      
+
+        // GET: admin/References/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: admin/Teams/Create
+        // POST: admin/References/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Team team, IFormFile? Image)
+        public async Task<IActionResult> Create(Reference reference,IFormFile? Image)
         {
             if (ModelState.IsValid)
             {
-                if (Image is not null) team.Image = await FileHelper.FileLoaderAsync(Image);
-                _context.Add(team);
+                if (Image is not null) reference.Image = await FileHelper.FileLoaderAsync(Image);
+                _context.Add(reference);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(team);
+            return View(reference);
         }
 
-        // GET: admin/Teams/Edit/5
+        // GET: admin/References/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -60,50 +61,54 @@ namespace IdeioCreative.Areas.admin.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var reference = await _context.References.FindAsync(id);
+            if (reference == null)
             {
                 return NotFound();
             }
-            return View(team);
+            return View(reference);
         }
 
-        // POST: admin/Teams/Edit/5
+        // POST: admin/References/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Team team,IFormFile? Image)
+        public async Task<IActionResult> Edit(int id,Reference reference,IFormFile? Image)
         {
-            if (id != team.Id)
+            if (id != reference.Id)
             {
                 return NotFound();
             }
             if (!ModelState.IsValid)
             {
-                return View(team);
+                return View(reference);
             }
-            var dbTeam = await _context.Teams.FindAsync(id);
-            if (dbTeam is null) return NotFound();
+           var dbReference= await _context.References.FirstOrDefaultAsync(r=>r.Id==id);
+            if (dbReference == null)
+            {
+                return NotFound();
+            }
             if (Image is not null)
             {
-                if (!string.IsNullOrEmpty(dbTeam.Image))
+                if (!string.IsNullOrEmpty(dbReference.Image))
                 {
-                    FileHelper.DeleteFile(dbTeam.Image);
+                    FileHelper.DeleteFile(dbReference.Image);
                 }
-                dbTeam.Image = await FileHelper.FileLoaderAsync(Image);
+                dbReference.Image = await FileHelper.FileLoaderAsync(Image);
             }
-            dbTeam.Name = team.Name;
-            dbTeam.Position = team.Position;
-            dbTeam.Description = team.Description;
-            dbTeam.IsHomePage = team.IsHomePage;
-            dbTeam.OrderNo = team.OrderNo;
-            dbTeam.Language = team.Language;
+            dbReference.Name = reference.Name;
+            dbReference.IsHome = reference.IsHome;
+            dbReference.Keywords = reference.Keywords;
+            dbReference.MetaDescription = reference.MetaDescription;
+            dbReference.MetaTitle = reference.MetaTitle;
+            dbReference.Language = reference.Language;
+            _context.Update(dbReference);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Teams", new { area = "admin" });
+            return RedirectToAction("Index", "References", new { area = "Admin" });
         }
 
-        // GET: admin/Teams/Delete/5
+        // GET: admin/References/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -111,52 +116,38 @@ namespace IdeioCreative.Areas.admin.Controllers
                 return NotFound();
             }
 
-            var team = await _context.Teams
+            var reference = await _context.References
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (team == null)
+            if (reference == null)
             {
                 return NotFound();
             }
 
-            return View(team);
+            return View(reference);
         }
 
-        // POST: admin/Teams/Delete/5
+        // POST: admin/References/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team != null)
+            var reference = await _context.References.FindAsync(id);
+            if (reference != null)
             {
-                if (!string.IsNullOrEmpty(team.Image))
+                if (!string.IsNullOrEmpty(reference.Image))
                 {
-                    FileHelper.DeleteFile(team.Image);
+                    FileHelper.DeleteFile(reference.Image);
                 }
-                _context.Teams.Remove(team);
+                _context.References.Remove(reference);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        [HttpPost]
-        public IActionResult UpdateOrder([FromBody] List<Team> model)
-        {
-            foreach (var item in model)
-            {
-                var team = _context.Teams.FirstOrDefault(x => x.Id == item.Id);
-                if (team != null)
-                {
-                    team.OrderNo = item.OrderNo;
-                }
-            }
 
-            _context.SaveChanges();
-            return Json(true);
-        }
-        private bool TeamExists(int id)
+        private bool ReferenceExists(int id)
         {
-            return _context.Teams.Any(e => e.Id == id);
+            return _context.References.Any(e => e.Id == id);
         }
     }
 }
