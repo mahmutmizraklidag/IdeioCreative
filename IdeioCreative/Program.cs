@@ -53,7 +53,8 @@ app.Use((context, next) =>
         dbcontext.Abouts.FirstOrDefault(x => x.Language.ToString() == lang)
         ?? new About();
     DataRequestModel.Services =
-        dbcontext.Services.Where(x => x.Language.ToString() == lang ).ToList();
+        dbcontext.Services.Where(x => x.Language.ToString() == lang)
+                .OrderBy(s => s.Title).ToList();
     DataRequestModel.References =dbcontext.References
         .Where(x => x.Language.ToString() == lang && x.IsHome).ToList();
     return next();

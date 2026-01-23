@@ -40,6 +40,17 @@
                         <span asp-validation-for="Image" class="text-danger small"></span>
                     </div>
 
+                    <div class="col-md-12">
+                        <label asp-for="Image2" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="Image2" type="file" class="form-control" id="imageInput3" />
+                        </div>
+                        <div class="mt-2">
+                            <img id="previewImage3" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
+                        </div>
+                        <span asp-validation-for="Image2" class="text-danger small"></span>
+                    </div>
+
                     <div class="col-md-6">
                         <label asp-for="HomeTitle" class="form-label fw-semibold"></label>
                         <input asp-for="HomeTitle" class="form-control" placeholder="Anasayfa hakkımızda başlığını giriniz" />
@@ -115,6 +126,16 @@
          document.getElementById("imageInput2").addEventListener("change", function (event) {
             const [file] = event.target.files;
             const preview = document.getElementById("previewImage2");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            } else {
+                preview.classList.add("d-none");
+            }
+        });
+         document.getElementById("imageInput3").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById("previewImage3");
             if (file) {
                 preview.src = URL.createObjectURL(file);
                 preview.classList.remove("d-none");

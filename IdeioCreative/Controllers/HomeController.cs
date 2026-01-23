@@ -17,7 +17,8 @@ namespace IdeioCreative.Controllers
 
         public IActionResult Index()
         {
-            var services = _context.Services.ToList();
+            var services = _context.Services.Where(x=>x.Language.ToString() == "Tr")
+                .OrderBy(s => s.Title).ToList();
             var references = _context.References.ToList();
             var model = new HomePageViewModel
             {

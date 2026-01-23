@@ -1,36 +1,38 @@
 ﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
-    <!-- == Meta Tags == -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Keywords -->
+
     <title>@ViewData["Title"] | İdeio Creative</title>
     <meta name="description" content="@ViewData["MetaDescription"]" />
     <meta name="keywords" content="@ViewData["MetaKeywords"]" />
-    <!-- Favicon/x-icon -->
-    <link rel="shortcut icon" href="@Url.Content("~/assets/img/logo/favicon.png")" type="image/x-icon">
 
-    <!-- Bootstrap Min 5.2.3 Css -->
+    @* <link rel="icon" href="@Url.Content("~/img/fav/dark-favicon.ico")" sizes="any"> *@
+
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/img/fav/dark-favicon-32x32.png")" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/img/fav/dark-favicon-16x16.png")" media="(prefers-color-scheme: light)">
+    <link rel="apple-touch-icon" href="@Url.Content("~/img/fav/dark-apple-touch-icon.png")" media="(prefers-color-scheme: light)">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="@Url.Content("~/img/fav/light-favicon-32x32.png")" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="16x16" href="@Url.Content("~/img/fav/light-favicon-16x16.png")" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="@Url.Content("~/img/fav/light-apple-touch-icon.png")" media="(prefers-color-scheme: dark)">
+
+    <link rel="manifest" href="@Url.Content("~/img/fav/site.webmanifest")">
+
     <link rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap.min.css")">
 
-    <!-- Fontawesome Icons Css -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/all.min.css")">
 
-    <!-- Magnific Popup Css -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/magnific-popup.css")">
 
-    <!-- Nice Select Css -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/nice-select.css")">
 
-    <!-- Swiper Slider Css -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/swiper.min.css")">
 
-    <!-- AOS Animation Css -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")">
 
-    <!-- Main CSS -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">

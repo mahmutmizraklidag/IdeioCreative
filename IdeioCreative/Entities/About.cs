@@ -12,6 +12,9 @@ namespace IdeioCreative.Entities
         public string Description { get; set; }
         [Display(Name = "Resim")]
         public string? Image { get; set; }
+
+        [Display(Name = "Resim2")]
+        public string? Image2 { get; set; }
         [Display(Name = "Anasayfa Başlık")]
         public string? HomeTitle { get; set; }
         [Display(Name = "Anasayfa Açıklama")]

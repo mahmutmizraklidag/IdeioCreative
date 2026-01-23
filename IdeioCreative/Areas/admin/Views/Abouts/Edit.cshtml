@@ -45,6 +45,23 @@
                         </div>
                         <span asp-validation-for="Image" class="text-danger small"></span>
                     </div>
+                    <div class="col-md-12">
+                        <label asp-for="Image2" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="Image2" type="file" class="form-control" id="imageInput3" />
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Image2))
+                        {
+                            <div class="mb-3">
+                                <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
+                                <img src="/img/@Model.Image2" alt="@Model.Title" class="rounded border" width="200" />
+                            </div>
+                        }
+                        <div class="mt-2">
+                            <img id="previewImage3" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
+                        </div>
+                        <span asp-validation-for="Image2" class="text-danger small"></span>
+                    </div>
 
                     <div class="col-md-6">
                         <label asp-for="HomeTitle" class="form-label fw-semibold"></label>
@@ -128,6 +145,16 @@
          document.getElementById("imageInput2").addEventListener("change", function (event) {
             const [file] = event.target.files;
             const preview = document.getElementById("previewImage2");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            } else {
+                preview.classList.add("d-none");
+            }
+        });
+        document.getElementById("imageInput3").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById("previewImage3");
             if (file) {
                 preview.src = URL.createObjectURL(file);
                 preview.classList.remove("d-none");

@@ -35,6 +35,16 @@
                     }
                 </div>
                 <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.Image2))
+                    {
+                        <img src="/img/@Model.Image2" alt="@Model.Title" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light p-5 text-muted">Görsel Yok</div>
+                    }
+                </div>
+                <div class="col-md-4 text-center">
                     @if (!string.IsNullOrEmpty(Model.HomeImage))
                     {
                         <img src="/img/@Model.HomeImage" alt="@Model.Title" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">

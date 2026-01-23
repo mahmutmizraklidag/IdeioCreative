@@ -41,12 +41,13 @@ namespace IdeioCreative.Areas.admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(About about, IFormFile? Image, IFormFile? HomeImage)
+        public async Task<IActionResult> Create(About about, IFormFile? Image, IFormFile? HomeImage, IFormFile? Image2)
         {
             if (ModelState.IsValid)
             {
                 if (Image is not null) about.Image = await FileHelper.FileLoaderAsync(Image);
                 if (HomeImage is not null) about.HomeImage = await FileHelper.FileLoaderAsync(HomeImage);
+                if (Image2 is not null) about.Image2 = await FileHelper.FileLoaderAsync(Image2);
                 _context.Add(about);
                 await _context.SaveChangesAsync();
                
@@ -76,7 +77,7 @@ namespace IdeioCreative.Areas.admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, About about, IFormFile? Image, IFormFile? HomeImage)
+        public async Task<IActionResult> Edit(int id, About about, IFormFile? Image, IFormFile? HomeImage, IFormFile? Image2)
         {
             if (id != about.Id)
             {
@@ -111,6 +112,14 @@ namespace IdeioCreative.Areas.admin.Controllers
                     FileHelper.DeleteFile(dbAbout.HomeImage);
                 }
                 dbAbout.HomeImage = await FileHelper.FileLoaderAsync(HomeImage);
+            }
+            if (Image2 is not null)
+            {
+                if (!string.IsNullOrEmpty(dbAbout.Image2))
+                {
+                    FileHelper.DeleteFile(dbAbout.Image2);
+                }
+                dbAbout.Image2 = await FileHelper.FileLoaderAsync(Image2);
             }
             await _context.SaveChangesAsync();
            
@@ -150,6 +159,10 @@ namespace IdeioCreative.Areas.admin.Controllers
                 if (!string.IsNullOrEmpty(about.HomeImage))
                 {
                     FileHelper.DeleteFile(about.HomeImage);
+                }
+                if (!string.IsNullOrEmpty(about.Image2))
+                {
+                    FileHelper.DeleteFile(about.Image2);
                 }
                 _context.Abouts.Remove(about);
             }

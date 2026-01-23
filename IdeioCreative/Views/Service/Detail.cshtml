@@ -7,7 +7,24 @@
     ViewData["MetaDescription"] = Model?.MetaDescription ?? site?.MetaDescription ?? "Hizmetlerimiz";
     ViewData["MetaKeywords"] = Model?.Keywords ?? site?.Keywords ?? "Hizmetlerimiz";
 }
+<style>
+    /* Preloader ID veya Class'ını hedef alıp gizler */
+    #preloader, .preloader, .loader-wrapper {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        z-index: -9999 !important;
+        width: 0 !important;
+        height: 0 !important;
+        pointer-events: none !important;
+    }
 
+    /* Preloader yüzünden kilitlenen scroll (kaydırma) özelliğini açar */
+    body, html {
+        overflow: auto !important;
+        overflow-y: visible !important;
+    }
+</style>
   <!-- Main start -->
 <main class="main">
 
@@ -41,7 +58,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="img" class="cmn-dots">
+        <img src="@Url.Content("~//img/element/cmn-dost.png")" alt="img" class="cmn-dots">
 
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
@@ -85,7 +102,7 @@
         <div class="container">
             <div class="service-details-header bb-border pb-xxl-9 pb-xl-7 pb-6">
                 <div class="thumb w-100 mb-xxl-12 mb-xl-9 mb-sm-6 mb-5" data-aos="zoom-in" data-aos-duration="1500">
-                    <img src="@Url.Content("~/assets/img/blog/project-slide2.jpg")" alt="img" class="w-100">
+                    <img src="@Url.Content("~/img/"+Model.Image)" alt="img" class="w-100">
 
                 </div>
                 <h3 class="white-clr mb-xxl-9 mb-xl-7 mb-lg-6 mb-4" data-aos="zoom-in-left"
@@ -104,3 +121,16 @@
 
 </main>
 <!-- Main End -->
+
+<script>
+    // Javascript tarafında da sayfa hazır olur olmaz preloader'ı yok edelim
+    document.addEventListener("DOMContentLoaded", function() {
+        var preloader = document.getElementById('preloader') || document.querySelector('.preloader');
+        if (preloader) {
+            preloader.style.display = 'none';
+        }
+        // Body üzerindeki olası scroll kilit class'larını temizle
+        document.body.style.overflow = 'auto';
+        document.body.classList.remove('hidden', 'overflow-hidden');
+    });
+</script>

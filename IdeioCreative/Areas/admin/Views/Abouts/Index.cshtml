@@ -29,6 +29,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Görsel</th>
+                            <th>Görsel-2</th>
                             <th>Başlık</th>
                            
                             <th>Görsel</th>
@@ -47,6 +48,16 @@
                                     @if (!string.IsNullOrEmpty(item.Image))
                                     {
                                         <img src="/img/@item.Image" alt="@item.Title" class="rounded" width="60" height="40" style="object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">Yok</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Image))
+                                    {
+                                        <img src="/img/@item.Image2" alt="@item.Title" class="rounded" width="60" height="40" style="object-fit: cover;">
                                     }
                                     else
                                     {

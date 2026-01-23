@@ -47,25 +47,14 @@
 
                         <div class="hero-sponsor mt-5">
                             <div class="sponsor-inner row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 justify-content-center align-items-center mb-6">
-
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c1.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c2.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c3.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c1.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c2.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
-                                <div class="col">
-                                    <a href="index.html"><img src="assets/img/client/c3.png" alt="img" class="img-fluid" style="max-height: 50px;"></a>
-                                </div>
+                                @foreach(var item in DataRequestModel.References)
+                                {
+                                    <div class="col">
+                                        <a href="index.html"><img src="/img/@item.Image" alt="@item.Name" class="img-fluid" width="270" height="105"></a>
+                                    </div>
+                                }
+                                
+                              
 
                             </div>
                         </div>
@@ -82,11 +71,11 @@
                 <div class="col-lg-6 pe-lg-14">
                     <div class="d-flex gap-xxl-7 gap-xl-5 gap-4 position-relative z-index-1">
                         <div class="about-small-thumb w-100" data-aos="zoom-in" data-aos-duration="1500">
-                            <img src="assets/img/about/about-s1.png" alt="img" class="w-100">
+                            <img src="/img/@Model.About.Image" alt="img" class="w-100">
                         </div>
                         <div class="about-small-thumb w-100 mt-xxl-10 mt-xl-7 mt-lg-5 mt-3" data-aos="zoom-in"
                              data-aos-duration="1800">
-                            <img src="assets/img/about/about-s2.png" alt="img" class="w-100">
+                            <img src="/img/@Model.About.Image2" alt="img" class="w-100">
                         </div>
                         <!--- About Arrow -->
                      @*    <img src="/img/ideio-about.png" height="182" width="182" alt="img" class="about-tumb-arrow"> *@

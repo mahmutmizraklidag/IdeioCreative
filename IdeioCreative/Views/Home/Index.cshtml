@@ -4,6 +4,7 @@
     ViewData["MetaDescription"] = string.IsNullOrEmpty(DataRequestModel.SiteSetting.MetaDescription) ? "Anasayfa İdeio Creative" : DataRequestModel.SiteSetting.MetaDescription;
     ViewData["MetaKeywords"] = string.IsNullOrEmpty(DataRequestModel.SiteSetting.Keywords) ? "Anasayfa İdeio Creative" : DataRequestModel.SiteSetting.Keywords;
 }
+
 <!-- Main start -->
 <main class="main position-relative overflow-hidden" id="mains">
 
@@ -13,7 +14,7 @@
     <!-- Hero Section Version0 -->
     <section class="hero-section-version1 position-relative">
         <div class="container">
-            <div class="row g-5">
+            <div class="row g-5 hero-content-row" >
                 <div class="hero-v1-content position-relative">
                     <div class="d-flex align-items-sm-center align-items-end justify-content-between">
                         <h1 class="white-clr text-uppercase" style="font-weight: 900 !important;">
@@ -40,52 +41,22 @@
                             <img src="/img/play.png" alt="img" class="hero-circle">
                         </a> *@
                     </div>
-                    <div class="hero-sponsor">
-                        <div class="sponsor-inner d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
-                            @foreach(var item in DataRequestModel.References)
-                            {
-                                <a href="#">
-                                    <img src="/img/@item.Image" alt="@item.Name">
-                                </a>
-                            }
-                           
-                         
-                        </div>
-                        @* <div class="brandin-wrap d-block">
-                            <h4 class="white-clr brading-text">
-                                1k + Brands Trust Us
-
-                            </h4>
-                        </div> *@
-                    </div>
+                    
                 </div>
             </div>
         </div>
-        <!-- Hero Exprience box -->
-        @* <div class="hero-expriencebox d-flex align-items-center">
-            <div class="expri-thumb">
-                <img src="assets/img/banner/bn-expri.png" alt="img">
+        <div class="hero-sponsor" style="max-width:1920px !important">
+            <div class="sponsor-inner d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
+                @foreach (var item in DataRequestModel.References)
+                {
+                    <a href="#">
+                        <img src="/img/@item.Image" alt="@item.Name" height="105" width="270" class="sponsor-img">
+                    </a>
+                }
             </div>
-            <div class="expri-content d-flex align-items-center gap-xxl-11 gap-xl-9 gap-lg-7 gap-6">
-                <div class="expri-cont-item">
-                    <h6 class="white-clr mb-2">
-                        12+
-                    </h6>
-                    <span class="yer spantext-clr">
-                        years of experience
-                    </span>
-                </div>
-                <div class="expri-cont-item">
-                    <h6 class="white-clr mb-2">
-                        25K+
-                    </h6>
-                    <span class="yer spantext-clr">
-                        completed projects
-                    </span>
-                </div>
-            </div>
-        </div> *@
-        <!-- Element -->
+           
+        </div>
+       
         <svg width="380" height="380" class="hero-arrow" viewBox="0 0 211 211" fill="none"
              xmlns="http://www.w3.org/2000/svg">
 
@@ -125,7 +96,7 @@
             <div class="row g-xxl-7 g-5">
                 <div class="col-lg-6 col-md-6 col-sm-8">
                     <div class="about-product-thumb w-100" data-aos="zoom-in" data-aos-duration="2000">
-                        <img src="assets/img/about/about-v1thumb.png" alt="img" class="w-100">
+                        <img src="/img/@DataRequestModel.About.HomeImage" alt="img" class="w-100">
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -283,7 +254,7 @@
                         <div class="swiper-slide">
                             <div class="team-common-item">
                                 <div class="thumb position-relative overflow-hidden">
-                                    <img src="/img/@reference.Image" alt="@reference.Name" class="overflow-hidden " height="70" width="180">
+                                    <img src="/img/@reference.Image" alt="@reference.Name" class="overflow-hidden " height="84" width="216">
 
 
                                 </div>
@@ -297,6 +268,7 @@
         </div>
     </section>
     <!-- References End -->
+
     <!-- Cmn Team version01 Start -->
     <section class=
         "team-version01 pt-space pb-space">
@@ -334,7 +306,7 @@
 
                         <div class="team-card01 tilt overflow-hidden">
                             <div class="thumb overflow-hidden w-100 position-relative mb-xxl-7 mb-xl-6 mb-5">
-                                <img src="assets/img/team/team2.png" alt="img" class="w-100">
+                                <img src="/img/@team.Image" alt="img" class="w-100">
                             </div>
 
                             <div class="content">

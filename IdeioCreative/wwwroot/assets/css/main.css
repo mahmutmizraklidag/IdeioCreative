@@ -228,6 +228,43 @@ span {
     border-bottom: 1px solid var(--border1);
 }
 
+/* Mobil (Varsayýlan) - En küçük boþluk */
+.hero-content-row {
+    margin-bottom: 60px; /* Mobilde makul bir boþluk */
+}
+
+/* Tablet ve üzeri (768px'den büyükse) */
+@media (min-width: 768px) {
+    .hero-content-row {
+        margin-bottom: 120px; /* Tablette orta seviye boþluk */
+    }
+}
+
+/* Masaüstü ve üzeri (1200px'den büyükse) */
+@media (min-width: 1200px) {
+    .hero-content-row {
+        margin-bottom: 200px; /* Sizin istediðiniz orijinal deðer */
+    }
+}
+
+/* Resimlerin oranýný koruyarak küçülmesini saðlar */
+.sponsor-img {
+    max-width: 270px; /* Maksimum büyüklük orijinal boyut */
+    width: 100%; /* Kapsayýcý küçülürse resim de küçülür */
+    height: auto; /* Orantýyý korur (basýk olmaz) */
+    object-fit: contain; /* Görüntü kalitesini korur */
+    display: block; /* Link içinde boþluk oluþmasýný engeller */
+}
+
+/* Mobilde logolarýn çok küçülmemesi için link kapsayýcýsýna min-width verebiliriz */
+.sponsor-inner a {
+    display: flex;
+    justify-content: center;
+    /* Ýstersen mobilde logolar çok küçülmesin diye burayý açabilirsin:
+            min-width: 120px;
+            flex: 1 1 auto;
+            */
+}
     .slider-button .cmn-next,
     .slider-button .cmn-prev {
         width: 70px;
@@ -436,6 +473,22 @@ span {
 
 .whitebg {
     background: var(--white);
+}
+
+/* 1. Resimlerin varsayýlan hali: Siyah Beyaz */
+.team-card01 .thumb img {
+    /* Resmi tamamen siyah beyaz yapar */
+    -webkit-filter: grayscale(100%); /* Safari/Chrome desteði için */
+    filter: grayscale(100%);
+    /* Geçiþin yumuþak olmasý için süre tanýmý (0.4 saniye) */
+    transition: all 0.4s ease-in-out;
+}
+
+/* 2. Mouse ile kartýn üzerine gelindiðindeki hali: Renkli */
+.team-card01:hover .thumb img {
+    /* Grayscale filtresini kaldýrarak orijinal renge döndürür */
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
 }
 
 .theme-clr {
