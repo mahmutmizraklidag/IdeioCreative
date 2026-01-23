@@ -23,6 +23,8 @@ namespace IdeioCreative.Entities
         public string? LinkedIn { get; set; }
         [Display(Name = "YouTube")]
         public string? YouTube { get; set; }
+        [Display(Name = "YouTube Tanıtım Videosu")]
+        public string? YouTubeLink { get; set; }
         [Display(Name = "Logo")]
         public string? Logo { get; set; }
         [Display(Name = "SMTP Sunucusu")]

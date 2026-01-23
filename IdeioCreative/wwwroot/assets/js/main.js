@@ -314,7 +314,7 @@ CSS TABLE OF CONTENTS
 
 			breakpoints: {
 				1199: {
-					slidesPerView: 4,
+					slidesPerView: 6,
 				},
 				991: {
 					slidesPerView: 4,
@@ -333,7 +333,7 @@ CSS TABLE OF CONTENTS
 					spaceBetween: 10,
 				},
 				0: {
-					slidesPerView: 1,
+					slidesPerView: 2,
 					spaceBetween: 10,
 				},
 			},

@@ -11,10 +11,10 @@
     <section class="breadcrumnd-banner position-relative">
         <div class="container">
             <div class="row g-5 justify-content-center">
-                <div class="col-lg-5">
+                <div class="col-lg-12">
                     <div class="breadcrumnd-content text-center">
-                        <h1 class="white mb-xxl-10 mb-xl-8 mb-6" data-aos="zoom-in-left" data-aos-duration="1800">
-                            İletişim
+                        <h1 class="white mb-xxl-10 mb-xl-8 mb-6" style="font-size:60px!important" data-aos="zoom-in-left" data-aos-duration="1800">
+                            Uyum İçindeki İki marka, en güçlü ortaklıktır
                         </h1>
                         <ul class="breadcrumnd d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
                             data-aos="zoom-in-right" data-aos-duration="2000">
@@ -160,7 +160,7 @@
                 <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="2000">
                     <div class="contact-content bg1-clr">
                         <h3 class="white mb-xxl-15 mb-xl-10 mb-lg-7 mb-5">
-                            Bize Ulaşın...
+                            Sizinle Tanışmamız İçin İletişime Geçin...
                         </h3>
                         <form action="#" id="iletisimFormu" method="post">
                             <div class="row g-xxl-8 g-xl-6 g-lg-4 g-4">
@@ -172,6 +172,12 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <input type="text" name="Phone" id="Phone" placeholder="Telefon">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" name="Sector" id="Sector" placeholder="Sektör">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input type="text" name="Account" id="Account" placeholder="Instagram Hesabı">
                                 </div>
                                 <div class="col-lg-12">
                                     <input type="text" name="Subject" id="Subject" placeholder="Konu">
@@ -208,6 +214,8 @@
             Name: $("#Name").val(),
             Phone: $("#Phone").val(),
             Email: $("#Email").val(),
+            Sector: $("#Sector").val(),
+            Account: $("#Account").val(),
             Subject: $("#Subject").val(),
             Message: $("#Message").val()
         };

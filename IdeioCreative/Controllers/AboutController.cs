@@ -21,7 +21,7 @@ namespace IdeioCreative.Controllers
                 Services = _context.Services.Where(s => s.Language.ToString() == "Tr").ToList(),
                 About = _context.Abouts.FirstOrDefault(a => a.Language.ToString() == "Tr")
             };
-            return View();
+            return View(AboutViewModel);
         }
     }
 }

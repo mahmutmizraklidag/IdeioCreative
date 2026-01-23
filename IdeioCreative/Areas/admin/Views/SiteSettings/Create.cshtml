@@ -112,7 +112,11 @@
                         <input asp-for="MetaDescription" class="form-control" placeholder="Kısa açıklama (SEO)" />
                         <span asp-validation-for="MetaDescription" class="text-danger small"></span>
                     </div>
-
+                    <div class="col-md-12">
+                        <label asp-for="YouTubeLink" class="form-label fw-semibold"></label>
+                        <input asp-for="YouTubeLink" class="form-control" placeholder="Tanıtım Linki" />
+                        <span asp-validation-for="YouTubeLink" class="text-danger small"></span>
+                    </div>
                     <div class="col-md-12">
                         <label asp-for="Language" class="form-label fw-semibold"></label>
                         <select asp-for="Language" class="form-select" asp-items="Html.GetEnumSelectList<Language>()"></select>

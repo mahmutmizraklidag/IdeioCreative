@@ -32,7 +32,8 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body class="position-relative bg2-clr">
 
@@ -41,7 +42,17 @@
      
             @RenderBody()
        
-    
+    <!-- _Layout.cshtml dosyanızda body etiketi kapandıktan sonra veya uygun bir yerde ekleyebilirsiniz -->
+    <a href="https://wa.me/905544387416?text=Merhaba%2C%20nas%C4%B1l%20yard%C4%B1m%20edebilirim?"
+       target="_blank"
+       class="whatsapp-float"
+       title="WhatsApp ile iletişime geçin">
+        <!-- FontAwesome kullanarak ikon eklemek isterseniz: -->
+        <i class="bi bi-whatsapp"></i>
+        <!-- Veya local bir resim kullanmak için:
+        <img src="~/images/whatsapp-icon.png" alt="WhatsApp İkonu" />
+        -->
+    </a>
 
     @await Component.InvokeAsync("Footer")
 

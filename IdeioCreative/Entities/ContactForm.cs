@@ -11,6 +11,10 @@ namespace IdeioCreative.Entities
         public string Email { get; set; }
         [Display(Name = "Telefon")]
         public string? Phone { get; set; }
+        [Display(Name = "Sektör")]
+        public string? Sector { get; set; }
+        [Display(Name = "İnstagram Hesabı")]
+        public string? Account { get; set; }
         [Display(Name = "Konu")]
         public string? Subject { get; set; }
         [Display(Name = "Mesaj"), Required(ErrorMessage = "{0} alanı boş geçilemez!")]

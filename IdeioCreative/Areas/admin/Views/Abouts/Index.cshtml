@@ -30,13 +30,11 @@
                         <tr>
                             <th>Görsel</th>
                             <th>Başlık</th>
-                            <th>Açıklama</th>
+                           
                             <th>Görsel</th>
-                            <th>Başlık</th>
-                            <th>Açıklama</th>
-                            <th>Meta-Keyword</th>
-                            <th>Meta-Description</th>
-                            <th>Meta-Title</th>
+                            <th>Ana Sayfa Başlık</th>
+                            
+                            
                             <th>Dil</th>
                             <th class="text-end">İşlemler</th>
                         </tr>
@@ -56,7 +54,7 @@
                                     }
                                 </td>
                                 <td class="fw-semibold">@item.Title</td>
-                                <td>@(item.Description?.Length > 60 ? item.Description.Substring(0, 60) + "..." : item.Description)</td>
+                               
                                 <td>
                                     @if (!string.IsNullOrEmpty(item.HomeImage))
                                     {
@@ -68,10 +66,7 @@
                                     }
                                 </td>
                                 <td class="fw-semibold">@item.HomeTitle</td>
-                                <td>@(item.HomeDescription?.Length > 60 ? item.HomeDescription.Substring(0, 60) + "..." : item.Description)</td>
-                                <td>@item.Keywords</td>
-                                <td>@item.MetaDescription</td>
-                                <td>@item.MetaTitle</td>
+                              
                                 <td>@item.Language</td>
                                 <td class="text-end">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">

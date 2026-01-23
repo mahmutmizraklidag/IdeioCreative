@@ -25,7 +25,11 @@ namespace IdeioCreative.Areas.admin.Controllers
         // GET: admin/Teams
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Teams.ToListAsync());
+            var teams = _context.Teams
+        .OrderBy(x => x.OrderNo)
+        .ToList();
+
+            return View(teams);
         }
 
        

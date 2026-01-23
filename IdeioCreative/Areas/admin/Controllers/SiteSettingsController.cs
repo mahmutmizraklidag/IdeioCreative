@@ -94,6 +94,7 @@ namespace IdeioCreative.Areas.admin.Controllers
             dbSiteSetting.Twitter = siteSetting.Twitter;
             dbSiteSetting.LinkedIn = siteSetting.LinkedIn;
             dbSiteSetting.YouTube = siteSetting.YouTube;
+            dbSiteSetting.YouTubeLink = siteSetting.YouTubeLink;
             dbSiteSetting.SmtpServer = siteSetting.SmtpServer;
             dbSiteSetting.SmtpPort = siteSetting.SmtpPort;
             dbSiteSetting.SmtpEmail = siteSetting.SmtpEmail;

@@ -31,8 +31,7 @@
                         <tr>
                             <th>Görsel</th>
                             <th>Başlık</th>
-                            <th>Açıklama</th>
-                            <th>Kısa Açıklama</th>
+                           
                             <th>Slug</th>
                             <th>Dil</th>
                             <th class="text-end">İşlemler</th>
@@ -53,17 +52,14 @@
                                     }
                                 </td>
                                 <td class="fw-semibold">@item.Title</td>
-                                <td>@(item.Description?.Length > 60 ? item.Description.Substring(0, 60) + "..." : item.Description)</td>
-                                <td>@item.HomeDescription</td>
+                               
                                 <td>@item.Slug</td>
                                 <td>@item.Language</td>
                                 <td class="text-end">
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info me-1">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                   
                                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash"></i>
                                     </a>

@@ -15,8 +15,11 @@ namespace IdeioCreative.Controllers
         [Route("ekibimiz")]
         public IActionResult Index()
         {
-            var model=_context.Teams.ToList();
-            return View(model);
+            var teams = _context.Teams
+        .OrderBy(x => x.OrderNo)
+        .ToList();
+
+            return View(teams);
         }
         public IActionResult Detail()
         {

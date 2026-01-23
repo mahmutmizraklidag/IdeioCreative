@@ -26,7 +26,58 @@ namespace IdeioCreative.Areas.admin.Controllers
         {
             return View(await _context.ContactForms.ToListAsync());
         }
+        [HttpPost]
+        public IActionResult GetContactMessages()
+        {
+            try
+            {
+                var draw = Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
 
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                // AsNoTracking performans içindir
+                var customerData = _context.ContactForms.AsNoTracking().AsQueryable();
+
+                // 1. ARAMA
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    customerData = customerData.Where(m =>
+                        (m.Name != null && m.Name.Contains(searchValue)) ||
+                        (m.Email != null && m.Email.Contains(searchValue)) ||
+                        (m.Subject != null && m.Subject.Contains(searchValue)));
+                }
+
+                recordsTotal = customerData.Count();
+
+                // 2. VERİYİ ÇEKME VE FORMATLAMA (Select işlemi kritiktir)
+                var data = customerData
+                    .OrderByDescending(m => m.Id)
+                    .Skip(skip)
+                    .Take(pageSize)
+                    // BURASI YENİ: Veriyi temiz bir anonim objeye çeviriyoruz.
+                    // Küçük harf (name, email) kullanarak JS tarafıyla %100 uyumlu yapıyoruz.
+                    .Select(m => new {
+                        id = m.Id,
+                        name = m.Name,
+                        email = m.Email,
+                        phone = m.Phone,
+                        subject = m.Subject,
+                        message = m.Message
+                    })
+                    .ToList();
+
+                return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
         // GET: admin/ContactForms/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -45,78 +96,7 @@ namespace IdeioCreative.Areas.admin.Controllers
             return View(contactForm);
         }
 
-        // GET: admin/ContactForms/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: admin/ContactForms/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Phone,Subject,Message")] ContactForm contactForm)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(contactForm);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(contactForm);
-        }
-
-        // GET: admin/ContactForms/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var contactForm = await _context.ContactForms.FindAsync(id);
-            if (contactForm == null)
-            {
-                return NotFound();
-            }
-            return View(contactForm);
-        }
-
-        // POST: admin/ContactForms/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Phone,Subject,Message")] ContactForm contactForm)
-        {
-            if (id != contactForm.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(contactForm);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ContactFormExists(contactForm.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(contactForm);
-        }
+       
 
         // GET: admin/ContactForms/Delete/5
         public async Task<IActionResult> Delete(int? id)

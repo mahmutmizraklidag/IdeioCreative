@@ -49,7 +49,13 @@ app.Use((context, next) =>
         ?? new SiteSetting(); // null kalmasýn
     DataRequestModel.Teams =
         dbcontext.Teams.Where(x => x.Language.ToString() == lang && x.IsHomePage).ToList();
-
+    DataRequestModel.About =
+        dbcontext.Abouts.FirstOrDefault(x => x.Language.ToString() == lang)
+        ?? new About();
+    DataRequestModel.Services =
+        dbcontext.Services.Where(x => x.Language.ToString() == lang ).ToList();
+    DataRequestModel.References =dbcontext.References
+        .Where(x => x.Language.ToString() == lang && x.IsHome).ToList();
     return next();
 });
 app.UseHttpsRedirection();

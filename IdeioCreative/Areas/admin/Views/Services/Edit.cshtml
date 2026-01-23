@@ -31,15 +31,16 @@
                         <span asp-validation-for="Slug" class="text-danger small"></span>
                     </div>
                     <div class="col-md-12">
-                        <label asp-for="HomeDescription" class="form-label fw-semibold"></label>
-                        <input asp-for="HomeDescription" class="form-control" placeholder="Hizmet başlığı" />
-                        <span asp-validation-for="HomeDescription" class="text-danger small"></span>
-                    </div>
-                    <div class="col-md-12">
                         <label asp-for="Description" class="form-label fw-semibold"></label>
                         <textarea id="AboutEditor" asp-for="Description" class="form-control" rows="4" placeholder="Blog içeriğini düzenleyin"></textarea>
                         <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
+                    <div class="col-md-12">
+                        <label asp-for="HomeDescription" class="form-label fw-semibold"></label>
+                        <textarea id="AboutEditor2" asp-for="HomeDescription" class="form-control" rows="4" placeholder="Hizmet içeriğini giriniz"></textarea>
+                        <span asp-validation-for="HomeDescription" class="text-danger small"></span>
+                    </div>
+                   
 
                     <div class="col-md-6">
                         <label asp-for="Keywords" class="form-label fw-semibold"></label>
@@ -115,6 +116,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const editor = new Jodit('#AboutEditor', {
+                height: 400,
+                maxLength: 10000
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const editor = new Jodit('#AboutEditor2', {
                 height: 400,
                 maxLength: 10000
             });

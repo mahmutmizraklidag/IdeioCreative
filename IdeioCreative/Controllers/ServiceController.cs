@@ -15,12 +15,19 @@ namespace IdeioCreative.Controllers
         [Route("hizmetlerimiz")]
         public IActionResult Index()
         {
-            var services = _context.Services.Where(s => s.Language.ToString() == "Tr").ToList();
-            return View();
+            var services = _context.Services
+                .Where(s => s.Language.ToString() == "Tr")
+                .OrderBy(s => s.Title) // alfabetik sıralama
+                .ToList();
+
+            return View(services);
         }
-        public IActionResult Detail()
+
+        [Route("hizmetlerimiz/{slug}")]
+        public IActionResult Detail(string slug)
         {
-            return View();
+            var service = _context.Services.FirstOrDefault(s => s.Slug == slug && s.Language.ToString() == "Tr");
+            return View(service);
         }
     }
 }

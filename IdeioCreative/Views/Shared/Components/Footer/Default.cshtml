@@ -23,8 +23,7 @@
 
                         </h5>
                         <p class="pra-clr mb-xxl-7 mb-6" data-aos="zoom-in" data-aos-duration="1600">
-                            Phasellus ultricies aliquam volutpat ullamcorper laoreet neque, a lacinia curabitur
-                            lacinia mollis
+                            Biz, yaratıcı fikirlerin doğru strateji ve güçlü iş birlikleriyle gerçek değere dönüştüğüne inanan 4 kişilik bir kurucu ekip tarafından hayata geçirilmiş, 360° hizmet veren yaratıcı bir reklam ajansıyız.
                         </p>
                         <ul class="common-social d-flex align-items-center gap-2">
                             <li data-aos="zoom-in-right" data-aos-duration="1400">
@@ -164,40 +163,19 @@
 
                         </h5>
                         <ul class="link-footer d-grid gap-xxl-5 gap-4" data-aos="zoom-in" data-aos-duration="1400">
-                            <li>
-                                <a href="service.html" class="d-flex align-items-center gap-2 flink-items pra-clr">
-                                    <span class="ani-icons">
-                                        <i class="fas fa-angle-double-right pra-clr"></i>
-                                    </span>
-                                    UI/UX Experience
-                                </a>
-                            </li>
-                            <li>
-                                <a href="study-grid.html"
-                                   class="d-flex align-items-center gap-2 flink-items pra-clr">
-                                    <span class="ani-icons">
-                                        <i class="fas fa-angle-double-right pra-clr"></i>
-                                    </span>
-                                    Web Development
-                                </a>
-                            </li>
-                            <li>
-                                <a href="study-grid.html"
-                                   class="d-flex align-items-center gap-2 flink-items pra-clr">
-                                    <span class="ani-icons">
-                                        <i class="fas fa-angle-double-right pra-clr"></i>
-                                    </span>
-                                    Product Design
-                                </a>
-                            </li>
-                            <li>
-                                <a href="service.html" class="d-flex align-items-center gap-2 flink-items pra-clr">
-                                    <span class="ani-icons">
-                                        <i class="fas fa-angle-double-right pra-clr"></i>
-                                    </span>
-                                    SEO Optimization
-                                </a>
-                            </li>
+                            @foreach(var service in DataRequestModel.Services.Take(4))
+                            {
+                                <li>
+                                    <a asp-controller="Service" asp-action="Detail" asp-route-slug="@service.Slug" class="d-flex align-items-center gap-2 flink-items pra-clr">
+                                        <span class="ani-icons">
+                                            <i class="fas fa-angle-double-right pra-clr"></i>
+                                        </span>
+                                        @service.Title
+                                    </a>
+                                </li>
+                            }
+
+                           
                         </ul>
                     </div>
                 </div>
@@ -266,10 +244,10 @@
             <a asp-controller="Home" asp-action="Index" class="footer-logov1 m-sm-0 m-auto">
                 <img class="footer-logo-img" src="/img/@DataRequestModel.SiteSetting.Logo" alt="img">
             </a>
-
+          
             
             <p class="pra-clr">
-                &copy; All Copyright 2025 by <a asp-controller="Home" asp-action="Index" class="theme-clr">İdeio Creative</a>
+                &copy; All Copyright 2026 by <a asp-controller="Home" asp-action="Index" class="theme-clr company-link">İdeio Creative</a>
             </p>
         </div>
     </div>

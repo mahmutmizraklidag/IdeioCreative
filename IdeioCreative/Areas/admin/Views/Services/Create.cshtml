@@ -39,9 +39,11 @@
 
                     <div class="col-md-12">
                         <label asp-for="HomeDescription" class="form-label fw-semibold"></label>
-                        <input asp-for="HomeDescription" class="form-control" placeholder="Kısa Açıklama giriniz" />
+                        <textarea id="AboutEditor2" asp-for="HomeDescription" class="form-control" rows="4" placeholder="Hizmet içeriğini giriniz"></textarea>
                         <span asp-validation-for="HomeDescription" class="text-danger small"></span>
                     </div>
+
+                 
 
 
                     <div class="col-md-6">
@@ -109,6 +111,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const editor = new Jodit('#AboutEditor', {
+                height: 400,
+                maxLength: 10000
+            });
+        });
+         document.addEventListener("DOMContentLoaded", function () {
+            const editor = new Jodit('#AboutEditor2', {
                 height: 400,
                 maxLength: 10000
             });

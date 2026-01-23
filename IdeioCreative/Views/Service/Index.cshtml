@@ -80,150 +80,39 @@
     <section class="case-study pt-space pb-space">
         <div class="container">
             <div class="row g-xxl-7 g-xl-6 g-6">
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="1400">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid1.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Creative
-                                </a>
+                @{
+                    var duration = 1400;
+                }
+                @foreach(var item in Model)
+                {
+                    <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="@duration">
+                        <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
+                            <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
+                                <img src="assets/img/case/study-grid1.png" alt="img" class="w-100 overflow-hidden">
                             </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    A Simple Social Media Marketing Checklist
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
+                            <div class="blog-cont">
+                                <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
+                                    <a href="study-details.html"
+                                       class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
+                                        İdeio Creative
+                                    </a>
+                                </div>
+                                <h5 style="text-transform: none !important;">
+                                    <a asp-controller="Service" asp-action="Detail" asp-route-slug="@item.Slug"
+                                       class="white-clr d-flex align-items-center justify-content-between gap-3">
+                                        @item.Title
+                                        <span class="rot60">
+                                            <i class="fas fa-arrow-up theme-clr"></i>
+                                        </span>
+                                    </a>
+                                </h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="1600">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid2.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Branding
-                                </a>
-                            </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    Transforming Challenges into Opportunities
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="1800">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid3.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Creative
-                                </a>
-                            </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    varius suscipit lectus. Suspendisse
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="1900">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid4.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Branding
-                                </a>
-                            </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    Internet tend to repeat predefined
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="2100">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid5.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Creative
-                                </a>
-                            </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    available, but the majority have
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="2200">
-                    <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
-                        <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                            <img src="assets/img/case/study-grid6.png" alt="img" class="w-100 overflow-hidden">
-                        </div>
-                        <div class="blog-cont">
-                            <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                <a href="study-details.html"
-                                   class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
-                                    Branding
-                                </a>
-                            </div>
-                            <h5>
-                                <a href="study-details.html"
-                                   class="white-clr d-flex align-items-center justify-content-between gap-3">
-                                    Transforming Challenges into Opportunities
-                                    <span class="rot60">
-                                        <i class="fas fa-arrow-up theme-clr"></i>
-                                    </span>
-                                </a>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
+                    duration += 200;
+                }
+               
+               
             </div>
         </div>
     </section>

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using IdeioCreative.Data;
 using IdeioCreative.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,15 +8,23 @@ namespace IdeioCreative.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly DatabaseContext _context;
+        public HomeController(ILogger<HomeController> logger, DatabaseContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var services = _context.Services.ToList();
+            var references = _context.References.ToList();
+            var model = new HomePageViewModel
+            {
+                Services = services,
+                References = references
+            };
+            return View(model);
         }
 
         public IActionResult Privacy()
