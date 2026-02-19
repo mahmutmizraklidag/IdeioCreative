@@ -76,7 +76,6 @@
         </div>
     </section>
     <!-- Breadcrumnd Banner -->
-    <!-- Team Start -->
     <section class="team-section pt-space pb-space">
         <div class="container">
             <div class="row g-xxl-7 g-xl-5 g-4 justify-content-center">
@@ -87,15 +86,15 @@
 
                 @foreach (var team in Model)
                 {
-
-
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mt-lg-18"
                          data-aos="fadein"
                          data-aos-duration="1400">
 
-                        <div class="team-card01 tilt overflow-hidden">
+                        <div class="team-card01 tilt overflow-hidden"
+                             style="border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 15px;">
+
                             <div class="thumb overflow-hidden w-100 position-relative mb-xxl-7 mb-xl-6 mb-5">
-                                <img src="/img/@team.Image" alt="img" class="w-100">
+                                <img src="/img/@team.Image" alt="img" class="w-100" style="border-radius: 8px;">
                             </div>
 
                             <div class="content">
@@ -114,12 +113,9 @@
                     index++;
                 }
 
-
-
             </div>
         </div>
     </section>
-    <!-- Team Details End -->
 
 </main>
 <!-- Main End -->

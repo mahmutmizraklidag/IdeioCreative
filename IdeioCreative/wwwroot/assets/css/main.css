@@ -233,6 +233,49 @@ span {
     margin-bottom: 60px; /* Mobilde makul bir boþluk */
 }
 
+/* Ana kapsayýcýyý esnek kutu yapýyoruz */
+.marquee-wrapper {
+    display: flex;
+    width: 100%;
+    overflow: hidden; /* Taþmalarý gizle */
+    user-select: none; /* Seçimi engelle (isteðe baðlý) */
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); /* Kenarlarý yumuþatýr (opsiyonel þýk görünüm) */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Ýçerik gruplarýnýn animasyon ayarlarý */
+.marquee-content {
+    flex-shrink: 0; /* Küçülmeyi engelle */
+    display: flex;
+    justify-content: space-around;
+    min-width: 100%; /* En az ekran kadar geniþ olsun */
+    /* Animasyon Ayarlarý */
+    animation: scroll 60s linear infinite; /* 30s hýzýdýr, artýrýp azaltabilirsiniz */
+}
+
+/* Animasyonun kendisi (Saðdan Sola Kayma) */
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%); /* Tamamen sola kaydýr */
+    }
+}
+
+/* Mobil cihazlarda daha hýzlý akmasýný isterseniz: */
+@media (max-width: 768px) {
+    .marquee-content {
+        animation-duration: 40s;
+    }
+}
+
+/* Üzerine gelince durmasýný isterseniz bu bloðu ekleyin */
+.marquee-wrapper:hover .marquee-content {
+    animation-play-state: paused;
+}
+
 /* Tablet ve üzeri (768px'den büyükse) */
 @media (min-width: 768px) {
     .hero-content-row {

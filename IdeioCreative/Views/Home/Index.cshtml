@@ -45,16 +45,28 @@
                 </div>
             </div>
         </div>
-        <div class="hero-sponsor" style="max-width:1920px !important">
-            <div class="sponsor-inner d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
-                @foreach (var item in DataRequestModel.References)
-                {
-                    <a href="#">
-                        <img src="/img/@item.Image" alt="@item.Name" height="105" width="270" class="sponsor-img">
-                    </a>
-                }
+        <div class="hero-sponsor" style="max-width:1920px !important; overflow: hidden;">
+            <div class="marquee-wrapper">
+
+                <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
+                    @foreach (var item in DataRequestModel.References)
+                    {
+                        <a href="#">
+                            <img src="/img/@item.Image" alt="@item.Name" height="105" width="270" class="sponsor-img">
+                        </a>
+                    }
+                </div>
+
+                <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6" aria-hidden="true">
+                    @foreach (var item in DataRequestModel.References)
+                    {
+                        <a href="#">
+                            <img src="/img/@item.Image" alt="@item.Name" height="105" width="270" class="sponsor-img">
+                        </a>
+                    }
+                </div>
+
             </div>
-           
         </div>
        
         <svg width="380" height="380" class="hero-arrow" viewBox="0 0 211 211" fill="none"
@@ -298,15 +310,15 @@
 
                 @foreach (var team in DataRequestModel.Teams)
                 {
-                   
-
                     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mt-lg-18"
                          data-aos="fadein"
                          data-aos-duration="1400">
 
-                        <div class="team-card01 tilt overflow-hidden">
+                        <div class="team-card01 tilt overflow-hidden"
+                             style="border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px;">
+
                             <div class="thumb overflow-hidden w-100 position-relative mb-xxl-7 mb-xl-6 mb-5">
-                                <img src="/img/@team.Image" alt="img" class="w-100">
+                                <img src="/img/@team.Image" alt="img" class="w-100" style="border-radius: 10px;">
                             </div>
 
                             <div class="content">
@@ -324,8 +336,6 @@
 
                     index++;
                 }
-
-           
 
             </div>
         </div>

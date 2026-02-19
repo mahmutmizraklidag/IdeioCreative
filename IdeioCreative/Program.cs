@@ -48,7 +48,7 @@ app.Use((context, next) =>
         dbcontext.SiteSettings.FirstOrDefault(x => x.Language.ToString() == lang)
         ?? new SiteSetting(); // null kalmasýn
     DataRequestModel.Teams =
-        dbcontext.Teams.Where(x => x.Language.ToString() == lang && x.IsHomePage).ToList();
+        dbcontext.Teams.Where(x => x.Language.ToString() == lang && x.IsHomePage).OrderBy(x=>x.OrderNo).ToList();
     DataRequestModel.About =
         dbcontext.Abouts.FirstOrDefault(x => x.Language.ToString() == lang)
         ?? new About();
@@ -56,7 +56,7 @@ app.Use((context, next) =>
         dbcontext.Services.Where(x => x.Language.ToString() == lang)
                 .OrderBy(s => s.Title).ToList();
     DataRequestModel.References =dbcontext.References
-        .Where(x => x.Language.ToString() == lang && x.IsHome).ToList();
+        .Where(x => x.Language.ToString() == lang).ToList();
     return next();
 });
 app.UseHttpsRedirection();

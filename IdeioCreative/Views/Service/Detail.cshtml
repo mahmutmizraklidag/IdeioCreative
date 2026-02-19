@@ -25,7 +25,7 @@
         overflow-y: visible !important;
     }
 </style>
-  <!-- Main start -->
+<!-- Main start -->
 <main class="main">
 
     <!-- Breadcrumnd Banner -->
@@ -102,22 +102,72 @@
         <div class="container">
             <div class="service-details-header bb-border pb-xxl-9 pb-xl-7 pb-6">
                 <div class="thumb w-100 mb-xxl-12 mb-xl-9 mb-sm-6 mb-5" data-aos="zoom-in" data-aos-duration="1500">
-                    <img src="@Url.Content("~/img/"+Model.Image)" alt="img" class="w-100">
+                    <img src="@Url.Content("~/img/" + Model.Image)" alt="img" class="w-100">
 
                 </div>
                 <h3 class="white-clr mb-xxl-9 mb-xl-7 mb-lg-6 mb-4" data-aos="zoom-in-left"
                     data-aos-duration="1600">
-                   @Model.Title
+                    @Model.Title
 
                 </h3>
-      
+
             </div>
             @Html.Raw(Model.Description)
 
-      
+
         </div>
     </section>
     <!-- Service Details End -->
+    @if (Model.Slug == "marka-danismanligi")
+    {
+        <div class="hero-sponsor" style="max-width:1920px !important; overflow: hidden;">
+            <div class="marquee-wrapper">
+
+                <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
+
+                    <a href="#">
+                        <img src="/img/marka/1.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/2.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/3.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/4.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/5.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+
+                </div>
+
+                <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
+
+                    <a href="#">
+                        <img src="/img/marka/1.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/2.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/3.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/4.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+                    <a href="#">
+                        <img src="/img/marka/5.png" alt="img" height="105" width="270" class="sponsor-img">
+                    </a>
+
+                </div>
+
+
+            </div>
+        </div>
+    }
+
 
 </main>
 <!-- Main End -->
