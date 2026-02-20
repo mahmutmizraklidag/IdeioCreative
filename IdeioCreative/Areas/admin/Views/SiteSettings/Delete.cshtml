@@ -35,6 +35,17 @@
                     }
                 </div>
 
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.BannerImage))
+                    {
+                        <img src="/img/@Model.BannerImage" alt="@Model.MetaTitle" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div class="border rounded bg-light p-5 text-muted">Görsel Yok</div>
+                    }
+                </div>
+
                 <div class="col-md-8">
 
                     <dl class="row mt-3 small">

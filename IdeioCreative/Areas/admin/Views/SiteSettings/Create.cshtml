@@ -122,9 +122,6 @@
                         <select asp-for="Language" class="form-select" asp-items="Html.GetEnumSelectList<Language>()"></select>
                         <span asp-validation-for="Language" class="text-danger small"></span>
                     </div>
-
-
-
                     <div class="col-md-12">
                         <label asp-for="Logo" class="form-label fw-semibold"></label>
                         <div class="input-group">
@@ -134,6 +131,18 @@
                             <img id="previewImage" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
                         </div>
                         <span asp-validation-for="Logo" class="text-danger small"></span>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <label asp-for="BannerImage" class="form-label fw-semibold"></label>
+                        <div class="input-group">
+                            <input asp-for="BannerImage" type="file" class="form-control" id="imageInput2" />
+                        </div>
+                        <div class="mt-2">
+                            <img id="previewImage2" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
+                        </div>
+                        <span asp-validation-for="BannerImage" class="text-danger small"></span>
                     </div>
                 </div>
 
@@ -153,6 +162,18 @@
         document.getElementById("imageInput").addEventListener("change", function (event) {
             const [file] = event.target.files;
             const preview = document.getElementById("previewImage");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            } else {
+                preview.classList.add("d-none");
+
+            }
+        });
+
+        document.getElementById("imageInput2").addEventListener("change", function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById("previewImage2");
             if (file) {
                 preview.src = URL.createObjectURL(file);
                 preview.classList.remove("d-none");

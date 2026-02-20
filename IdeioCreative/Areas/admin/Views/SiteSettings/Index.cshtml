@@ -54,6 +54,16 @@
                                 <span class="text-muted"><i class="bi bi-image-alt"></i> Logo Yok</span>
                             }
                         </div>
+                        <div class="mb-3 p-3 border rounded bg-light d-inline-block" style="background-color:rgb(76 141 205) !important;">
+                            @if (!string.IsNullOrEmpty(ayar.BannerImage))
+                            {
+                                <img src="/img/@ayar.BannerImage" alt="Site Logo" class="img-fluid" style="max-height: 80px;">
+                            }
+                            else
+                            {
+                                <span class="text-muted"><i class="bi bi-image-alt"></i> Logo Yok</span>
+                            }
+                        </div>
                         <ul class="list-group list-group-flush text-start">
                             <li class="list-group-item d-flex justify-content-between">
                                 <span class="text-muted">Dil:</span>

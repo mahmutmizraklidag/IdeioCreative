@@ -42,11 +42,12 @@ namespace IdeioCreative.Areas.admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SiteSetting siteSetting, IFormFile? Logo)
+        public async Task<IActionResult> Create(SiteSetting siteSetting, IFormFile? Logo, IFormFile? BannerImage)
         {
             if (ModelState.IsValid)
             {
                 if (Logo is not null) siteSetting.Logo = await FileHelper.FileLoaderAsync(Logo);
+                if (BannerImage is not null) siteSetting.BannerImage = await FileHelper.FileLoaderAsync(BannerImage);
                 _context.Add(siteSetting);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -75,7 +76,7 @@ namespace IdeioCreative.Areas.admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SiteSetting siteSetting, IFormFile? Logo)
+        public async Task<IActionResult> Edit(int id, SiteSetting siteSetting, IFormFile? Logo ,IFormFile? BannerImage)
         {
             if (id != siteSetting.Id)
             {
@@ -111,6 +112,14 @@ namespace IdeioCreative.Areas.admin.Controllers
                 }
                 dbSiteSetting.Logo = await FileHelper.FileLoaderAsync(Logo);
             }
+            if (BannerImage is not null)
+            {
+                if (!string.IsNullOrEmpty(dbSiteSetting.BannerImage))
+                {
+                    FileHelper.DeleteFile(dbSiteSetting.BannerImage);
+                }
+                dbSiteSetting.BannerImage = await FileHelper.FileLoaderAsync(BannerImage);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", "SiteSettings", new { area = "Admin" });
         }
@@ -144,6 +153,10 @@ namespace IdeioCreative.Areas.admin.Controllers
                 if (!string.IsNullOrEmpty(siteSetting.Logo))
                 {
                     FileHelper.DeleteFile(siteSetting.Logo);
+                }
+                if (!string.IsNullOrEmpty(siteSetting.BannerImage))
+                {
+                    FileHelper.DeleteFile(siteSetting.BannerImage);
                 }
                 _context.SiteSettings.Remove(siteSetting);
             }

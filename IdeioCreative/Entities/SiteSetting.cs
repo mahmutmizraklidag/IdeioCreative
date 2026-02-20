@@ -27,6 +27,8 @@ namespace IdeioCreative.Entities
         public string? YouTubeLink { get; set; }
         [Display(Name = "Logo")]
         public string? Logo { get; set; }
+        [Display(Name = "Banner Resmi")]
+        public string? BannerImage { get; set; }
         [Display(Name = "SMTP Sunucusu")]
         public string? SmtpServer { get; set; }
         [Display(Name = "SMTP Portu")]
