@@ -1375,6 +1375,7 @@ footer {
 }
 
 .hero-section-version1 {
+    /*background: url(../img/banner/ideio-banner1.png) no-repeat center center;*/
     background: url(../img/banner/hero-bg1.png) no-repeat center center;
     background-size: cover;
     padding: 290px 5px 30px;
