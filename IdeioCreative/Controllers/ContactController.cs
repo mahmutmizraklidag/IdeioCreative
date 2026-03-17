@@ -2,6 +2,7 @@
 using IdeioCreative.Entities;
 using IdeioCreative.Tools;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace IdeioCreative.Controllers
 {
@@ -19,32 +20,54 @@ namespace IdeioCreative.Controllers
             return View();
         }
 
+        [EnableRateLimiting("contact-form")]
         [HttpPost]
-        public async Task<IActionResult> Index(ContactForm entity)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(ContactForm entity, string? website, long? formStartedAt)
         {
+            if (!string.IsNullOrWhiteSpace(website))
+                return Json(new { success = false, message = "Geçersiz istek." });
 
+            var elapsedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - formStartedAt;
 
-            if (ModelState.IsValid)
+            if (elapsedMs < 3000)
+                return Json(new { success = false, message = "İstek reddedildi." });
+
+            var exists = _context.ContactForms.Any(x =>
+                x.Name == entity.Name &&
+                x.CreateDate > DateTime.Now.AddMinutes(-10));
+
+            if (exists)
+                return Json(new { success = false, message = "Bu mesaj zaten gönderilmiş." });
+
+            if (!ModelState.IsValid)
+                return Json(new { success = false, message = "Form bilgileri hatalı!" });
+
+            try
             {
-                try
-                {
-                    _context.ContactForms.Add(entity);
-                    int result = await _context.SaveChangesAsync();
+                entity.CreateDate = DateTime.Now;
 
-                    if (result > 0)
-                    {
-                        //var temp = MailTemplates.ContactFormTemplate(entity);
-                        //MailSender mailSender = new MailSender();
-                        //await mailSender.SendMailAsync(entity.Email, "Zoom Danışmanlık iletişim Formu", temp, entity.Name);
-                        return Json(new { success = true, message = "Mesajınız gönderildi." });
-                    }
-                }
-                catch
+                _context.ContactForms.Add(entity);
+                int result = await _context.SaveChangesAsync();
+
+                if (result > 0)
                 {
-                    return Json(new { success = false, message = "Hata oluştu!" });
+                    var temp = MailTemplates.ContactFormTemplate(entity);
+                    var temp2 = MailTemplates.ContactFormAutoReplyTemplate(entity);
+
+                    MailSender mailSender = new MailSender();
+                    await mailSender.SendMailAsync("info@ideiocreative.com", "İdeio Creative Teklif Formu", temp, entity.Name);
+                    await mailSender.SendMailAsync(entity.Email, "İdeio Creative - Talebiniz Alındı", temp2, entity.Name);
+
+                    return Json(new { success = true, message = "Mesajınız gönderildi." });
                 }
+
+                return Json(new { success = false, message = "Mesaj kaydedilemedi." });
             }
-            return Json(new { success = false, message = "Form bilgileri hatalı!" });
+            catch
+            {
+                return Json(new { success = false, message = "Hata oluştu!" });
+            }
         }
     }
 }

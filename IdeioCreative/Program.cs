@@ -3,6 +3,7 @@ using IdeioCreative.Entities;
 using IdeioCreative.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         x.Cookie.SameSite = SameSiteMode.Lax; // ?? None yerine Lax önerilir
         x.Cookie.HttpOnly = true;
     });
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddPolicy("contact-form", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5,                 // 1 dakikada max 5 istek
+                Window = TimeSpan.FromMinutes(1),
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -63,6 +78,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

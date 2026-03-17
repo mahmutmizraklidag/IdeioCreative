@@ -54,25 +54,114 @@
              src="https://www.facebook.com/tr?id=2134362974000929&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TWK3MYG0YK"></script>
+    <!-- Google Tag Manager -->
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-TBJXQ3NM');</script>
+    <!-- End Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18008259244"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-        gtag('config', 'G-TWK3MYG0YK');
-    </script>
+  gtag('config', 'AW-18008259244');
+</script>
 </head>
 <body class="position-relative bg2-clr">
-
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBJXQ3NM"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     @await Component.InvokeAsync("Navbar")
     
      
             @RenderBody()
+
+    <div class="quote-drawer__side-strip"></div>
+    <!-- Sağ dikey teklif al butonu -->
+    <button type="button" id="quoteDrawerToggle" class="quote-drawer__handle">
+        Teklif Al
+    </button>
+
+    <!-- Karanlık arka plan -->
+    <div id="quoteDrawerOverlay" class="quote-drawer__overlay"></div>
+
+    <!-- Sağdan kayan panel -->
+    <div id="quoteDrawer" class="quote-drawer" aria-hidden="true">
+        <div class="quote-drawer-topbar">
+            <div class="quote-drawer-title">Sizinle Tanışmamız İçin İletişime Geçin...</div>
+            <button type="button" id="quoteDrawerClose" class="quote-drawer-close-btn" aria-label="Kapat">
+                ×
+            </button>
+        </div>
+
+        <div class="quote-drawer-content">
+            <form action="#" id="slideQuoteForm" method="post">
+                @Html.AntiForgeryToken()
+                    <input type="hidden" id="FormStartedAt" name="FormStartedAt" value="" />
+                <div class="quote-form-grid">
+                    <div class="quote-form-group quote-form-group--full">
+                        <label for="SlideName">İsim Soyisim</label>
+                        <input type="text" name="Name" id="SlideName" placeholder="İsim Soyisim">
+                    </div>
+
+                    <div class="quote-form-group">
+                        <label for="SlideEmail">Email</label>
+                        <input type="email" name="Email" id="SlideEmail" placeholder="Email">
+                    </div>
+
+                    <div class="quote-form-group">
+                        <label for="SlidePhone">Telefon</label>
+                        <input type="text" name="Phone" id="SlidePhone" placeholder="Telefon">
+                    </div>
+
+                    <div class="quote-form-group">
+                        <label for="SlideSector">Sektör</label>
+                        <input type="text" name="Sector" id="SlideSector" placeholder="Sektör">
+                    </div>
+
+                    <div class="quote-form-group">
+                        <label for="SlideAccount">Web Sitesi</label>
+                        <input type="text" name="Account" id="SlideAccount" placeholder="Web Sitesi">
+                    </div>
+
+                    <div class="quote-form-group quote-form-group--full">
+                        <label for="SlideSubject">Konu</label>
+                        <input type="text" name="Subject" id="SlideSubject" placeholder="Konu">
+                    </div>
+                        <!-- Honeypot alanı -->
+                        <div style="display:none;">
+                            <input type="text" name="Website" id="Website" autocomplete="off">
+                        </div>
+                    <div class="quote-form-group quote-form-group--full">
+                        <label for="SlideMessage">Mesaj</label>
+                        <textarea name="Message" id="SlideMessage" rows="5" placeholder="Mesajınız..."></textarea>
+                    </div>
+
+                    <div class="quote-form-group quote-form-group--full">
+                        <button type="submit" class="quote-submit-btn">Gönder</button>
+                    </div>
+                </div>
+
+                <div id="slideQuoteSuccess" class="alert alert-success mt-3 text-center" style="display:none;">
+                    Mesajınız gönderildi.
+                </div>
+
+                <div id="slideQuoteError" class="alert alert-danger mt-3 text-center" style="display:none;"></div>
+            </form>
+        </div>
+    </div>
+
        
     <!-- _Layout.cshtml dosyanızda body etiketi kapandıktan sonra veya uygun bir yerde ekleyebilirsiniz -->
-    <a href="https://wa.me/905544387416?text=Merhaba%2C%20nas%C4%B1l%20yard%C4%B1m%20edebilirim?"
+    <a href="https://wa.me/905544387416?text=Merhabalar%2C%20Teklif%20almak%20istiyorum."
        target="_blank"
        class="whatsapp-float"
        title="WhatsApp ile iletişime geçin">
@@ -82,7 +171,7 @@
         <img src="~/images/whatsapp-icon.png" alt="WhatsApp İkonu" />
         -->
     </a>
-
+  
     @await Component.InvokeAsync("Footer")
 
     <!-- js Jquery start -->
@@ -114,6 +203,100 @@
 
     <!-- js Main start -->
     <script src="@Url.Content("~/assets/js/main.js")"></script>
+
+    <script>
+        $(document).ready(function () {
+            const $drawer = $("#quoteDrawer");
+            const $overlay = $("#quoteDrawerOverlay");
+            const $body = $("body");
+
+            function openDrawer() {
+                $drawer.addClass("is-open").attr("aria-hidden", "false");
+                $overlay.addClass("is-open");
+                $body.addClass("quote-drawer-open");
+            }
+
+            function closeDrawer() {
+                $drawer.removeClass("is-open").attr("aria-hidden", "true");
+                $overlay.removeClass("is-open");
+                $body.removeClass("quote-drawer-open");
+            }
+
+            $("#quoteDrawerToggle").on("click", function () {
+                openDrawer();
+            });
+
+            $("#quoteDrawerClose, #quoteDrawerOverlay").on("click", function () {
+                closeDrawer();
+            });
+
+            $(document).on("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeDrawer();
+                }
+            });
+            $("#FormStartedAt").val(Date.now());
+            $("#slideQuoteForm").on("submit", function (e) {
+                e.preventDefault();
+
+                const $form = $(this);
+                const $submitBtn = $form.find("button[type='submit']");
+                const token = $form.find("input[name='__RequestVerificationToken']").val();
+
+                const entity = {
+                    __RequestVerificationToken: token,
+                    Name: $("#SlideName").val(),
+                    Phone: $("#SlidePhone").val(),
+                    Email: $("#SlideEmail").val(),
+                    Sector: $("#SlideSector").val(),
+                    Account: $("#SlideAccount").val(),
+                    Subject: $("#SlideSubject").val(),
+                    Message: $("#SlideMessage").val(),
+                    Website: $("#Website").val()
+                };
+
+                $("#slideQuoteSuccess").hide();
+                $("#slideQuoteError").hide().html("");
+
+                $submitBtn.prop("disabled", true).text("Gönderiliyor...");
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Contact/Index",
+                    dataType: "json",
+                    data: entity,
+                    success: function (res) {
+                        if (res.success) {
+                            $("#slideQuoteForm")[0].reset();
+                            $("#slideQuoteSuccess").show();
+                            $("#slideQuoteError").hide();
+
+                            setTimeout(function () {
+                                closeDrawer();
+                                $("#slideQuoteSuccess").hide();
+                            }, 1200);
+                        } else {
+                            $("#slideQuoteError").show().html(res.message || "Bir hata oluştu.");
+                            $("#slideQuoteSuccess").hide();
+                        }
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Sunucu hatası!";
+
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        $("#slideQuoteError").show().html(errorMessage);
+                        $("#slideQuoteSuccess").hide();
+                    },
+                    complete: function () {
+                        $submitBtn.prop("disabled", false).text("Gönder");
+                    }
+                });
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
