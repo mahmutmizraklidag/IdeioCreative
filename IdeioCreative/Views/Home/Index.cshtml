@@ -242,44 +242,286 @@
         </div>
     </div>
     <!-- Watch Version01 End -->
-    <!-- References Start -->
-    <section class="team-details pt-space pb-space">
-        <div class="container">
+<!-- References Start -->
+<section class="references-section pt-space pb-space position-relative overflow-hidden">
+    <div class="container">
 
-            <div class="d-flex align-items-center justify-content-between gap-3">
-                <h3 class="related-title white-clr">
-                    Referanslarımız
-                </h3>
-                <div class="slider-button d-flex gap-xxl-3 gap-2 align-items-center justify-content-between slider-button-60 mt-xxl-15 mt-xl-10 mt-9 mb-xxl-15 mb-xl-10 mb-9">
-                    <button class="cmn-prev cmn-border d-center">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="cmn-next cmn-border d-center">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
+        <div class="references-header d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4 mb-xl-5">
+            <div>
+                <span class="references-subtitle">İş Ortaklarımız</span>
+                <h3 class="references-title white-clr mb-0">Referanslarımız</h3>
             </div>
-            <div class="swiper team-slidewrap">
+
+            <div class="references-nav d-flex align-items-center gap-2">
+                <button type="button" class="references-prev references-nav-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="references-next references-nav-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        @if (Model?.References != null && Model.References.Any())
+        {
+            <div class="swiper references-swiper">
                 <div class="swiper-wrapper">
-                    @foreach(var reference in Model.References)
+                    @foreach (var reference in Model.References)
                     {
                         <div class="swiper-slide">
-                            <div class="team-common-item">
-                                <div class="thumb position-relative overflow-hidden">
-                                    <img src="/img/@reference.Image" alt="@reference.Name" class="overflow-hidden " height="84" width="216">
+                            <div class="reference-card">
+                                <a href="javascript:void(0)" class="reference-card-inner" aria-label="@reference.Name">
+                                    <div class="reference-logo-wrap">
+                                        <img src="/img/@reference.Image"
+                                             alt="@reference.Name"
+                                             class="reference-logo img-fluid" />
+                                    </div>
 
-
-                                </div>
+                                    
+                                </a>
                             </div>
                         </div>
                     }
-                   
-                   
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- References End -->
+        }
+        else
+        {
+            <div class="reference-empty text-center">
+                <p class="mb-0">Henüz referans eklenmemiş.</p>
+            </div>
+        }
+    </div>
+</section>
+<!-- References End -->
+
+<style>
+        .references-section {
+            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.00) 100%);
+        }
+
+        .references-subtitle {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 8px;
+        }
+
+        .references-title {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .references-nav {
+            flex-shrink: 0;
+        }
+
+        .references-nav-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+
+            .references-nav-btn:hover {
+                background: #fff;
+                color: #111;
+                transform: translateY(-2px);
+            }
+
+        .references-swiper {
+            overflow: hidden;
+            padding: 8px 2px 8px 2px;
+        }
+
+        .reference-card {
+            height: 100%;
+        }
+
+        .reference-card-inner {
+            min-height: 190px;
+            height: 100%;
+            border-radius: 24px;
+           /*  background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08); */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            transition: all .35s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .reference-card-inner::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
+                opacity: 0;
+                transition: all .35s ease;
+            }
+
+            .reference-card-inner:hover {
+                transform: translateY(-6px);
+                border-color: rgba(255,255,255,0.18);
+                box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+            }
+
+                .reference-card-inner:hover::before {
+                    opacity: 1;
+                }
+
+        .reference-logo-wrap {
+            width: 100%;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reference-logo {
+            max-width: 100%;
+            max-height: 1000px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: .80;
+            transition: all .35s ease;
+        }
+
+        .reference-card-inner:hover .reference-logo {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .reference-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .reference-name {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .reference-empty {
+            padding: 40px 20px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+        }
+
+        @@media (max-width: 991.98px) {
+            .references-header {
+                align-items: flex-start !important;
+            }
+
+            .references-nav-btn {
+                width: 46px;
+                height: 46px;
+            }
+
+            .reference-card-inner {
+                min-height: 170px;
+                padding: 20px 14px;
+            }
+
+            .reference-logo-wrap {
+                height: 80px;
+                margin-bottom: 14px;
+            }
+
+            .reference-logo {
+                max-height: 70px;
+            }
+        }
+
+        @@media (max-width: 575.98px) {
+            .references-header {
+                gap: 14px !important;
+            }
+
+            .references-nav {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .reference-card-inner {
+                min-height: 155px;
+                border-radius: 18px;
+            }
+
+            .reference-name {
+                font-size: 14px;
+            }
+        }
+</style>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const referencesEl = document.querySelector(".references-swiper");
+
+            if (referencesEl) {
+                new Swiper(".references-swiper", {
+                    slidesPerView: 2,
+                    spaceBetween: 12,
+                    loop: true,
+                    speed: 900,
+                    autoplay: {
+                        delay: 2500,
+                        disableOnInteraction: false
+                    },
+                    navigation: {
+                        nextEl: ".references-next",
+                        prevEl: ".references-prev"
+                    },
+                    breakpoints: {
+                        576: {
+                            slidesPerView: 2,
+                            spaceBetween: 18
+                        },
+                        768: {
+                            slidesPerView: 3,
+                            spaceBetween: 20
+                        },
+                        992: {
+                            slidesPerView: 4,
+                            spaceBetween: 22
+                        },
+                        1200: {
+                            slidesPerView: 5,
+                            spaceBetween: 24
+                        }
+                    }
+                });
+            }
+        });
+</script>
 
     <!-- Cmn Team version01 Start -->
     <section class=
