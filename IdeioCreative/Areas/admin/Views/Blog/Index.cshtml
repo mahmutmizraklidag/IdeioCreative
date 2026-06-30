@@ -1,0 +1,201 @@
+@model IEnumerable<Blog>
+
+@{
+    ViewData["Title"] = "Blog Yönetimi";
+}
+
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.9);
+    }
+
+    body {
+        background-color: #f0f2f5;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .admin-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px;
+    }
+
+    .table thead th {
+        background-color: transparent;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.05rem;
+        font-weight: 700;
+        color: #6c757d;
+        border-bottom: 1px solid #eee;
+        padding: 15px;
+    }
+
+    .blog-preview-img {
+        width: 70px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        transition: 0.3s ease;
+    }
+
+        .blog-preview-img:hover {
+            transform: scale(1.1);
+        }
+
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-edit {
+        background: rgba(67, 97, 238, 0.1);
+        color: #4361ee;
+    }
+
+    .btn-delete {
+        background: rgba(230, 57, 70, 0.1);
+        color: #e63946;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+        filter: brightness(0.9);
+    }
+
+    /* DataTable Stil Düzenlemeleri */
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
+        padding: 5px 15px;
+        background: #fff;
+    }
+</style>
+
+<div class="container-fluid py-5 px-4">
+    <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <h1 class="h3 fw-bold text-dark mb-1">Makale Yönetimi</h1>
+            <p class="text-muted mb-0">Blog yazılarınızı ve SEO ayarlarını buradan yönetin.</p>
+        </div>
+        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+            <a asp-action="Create" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">
+                <i class="bi bi-plus-lg me-2"></i> Yeni Yazı Oluştur
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="admin-card p-3 shadow-sm border-0 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                    <i class="bi bi-file-earmark-post text-success"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold">@Model.Count()</h6>
+                    <small class="text-muted">Aktif Makale</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card shadow-lg border-0">
+        <div class="p-4 bg-white rounded-top-4 border-bottom">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-list-stars me-2 text-primary"></i>İçerik Listesi</h5>
+        </div>
+
+        <div class="table-responsive p-4">
+            <table id="myTable" class="table align-middle table-hover border-0">
+                <thead>
+                    <tr>
+                        <th class="border-0">Görsel</th>
+                        <th class="border-0">Başlık & SEO</th>
+                        <th class="border-0">Tarih</th>
+                        <th class="border-0">Anahtar Kelimeler</th>
+                        <th class="border-0 text-end">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="/img/@item.Image" class="blog-preview-img" alt="">
+                            </td>
+                            <td>
+                                <div class="fw-bold text-dark mb-0">@item.Title</div>
+                                <div class="text-muted xsmall" style="font-size: 0.75rem;">
+                                    <i class="bi bi-link-45deg"></i> @item.Slug
+                                </div>
+                            </td>
+                            <td>
+                                <div class="small fw-semibold">@item.CreatedAt.ToString("dd MMM yyyy")</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">@item.CreatedAt.ToShortTimeString()</div>
+                            </td>
+                            <td>
+                                <div class="text-truncate" style="max-width: 150px;">
+                                    @if (!string.IsNullOrEmpty(item.Keywords))
+                                    {
+                                        @foreach (var tag in item.Keywords.Split(','))
+                                        {
+                                            <span class="badge bg-light text-secondary fw-normal border">@tag.Trim()</span>
+                                        }
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action btn-edit" title="Düzenle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action btn-delete" title="Sil">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                language: {
+                    emptyTable: "Tabloda veri bulunmuyor",
+                    info: "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                    infoEmpty: "Kayıt yok",
+                    infoFiltered: "(_MAX_ kayıt içerisinden bulunan)",
+                    lengthMenu: "_MENU_ kayıt göster",
+                    loadingRecords: "Yükleniyor...",
+                    processing: "İşleniyor...",
+                    search: "Ara:",
+                    zeroRecords: "Eşleşen kayıt bulunamadı",
+                    paginate: {
+                        first: "İlk",
+                        last: "Son",
+                        next: "Sonraki",
+                        previous: "Önceki"
+                    }
+                },
+                pageLength: 10,
+                order: [[2, "desc"]],
+                columnDefs: [
+                    { orderable: false, targets: [0, 4] }
+                ]
+            });
+        });
+    </script>
+}

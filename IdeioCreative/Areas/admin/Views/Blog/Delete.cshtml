@@ -1,0 +1,136 @@
+@model Blog
+
+@{
+    ViewData["Title"] = "İçeriği Sil";
+}
+
+<style>
+    .delete-container {
+        max-width: 850px;
+        margin: auto;
+    }
+
+    .warning-card {
+        background: #fff;
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+    }
+
+    .danger-banner {
+        background: #fff5f5;
+        border-left: 5px solid #e63946;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .blog-info-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #adb5bd;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    .blog-info-value {
+        color: #343a40;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    .preview-image-box {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .action-bar {
+        background: #f8f9fa;
+        padding: 20px 30px;
+        border-top: 1px solid #eee;
+    }
+</style>
+
+<div class="container py-5 delete-container">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-dark">Makaleyi Sil</h2>
+        <p class="text-muted small">Aşağıdaki içeriği sistemden tamamen kaldırmak üzeresiniz.</p>
+    </div>
+
+    <div class="card warning-card">
+        <div class="p-4 p-md-5">
+            <div class="danger-banner d-flex align-items-center mb-5">
+                <div class="bg-danger text-white rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0 fw-bold text-danger">Kalıcı Silme İşlemi</h6>
+                    <small class="text-muted">Bu işlem geri alınamaz. Makale tüm SEO verileri ve görselleriyle birlikte silinecek.</small>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <div class="blog-info-label">Kapak Görseli</div>
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="/img/@Model.Image" class="preview-image-box" alt="blog preview" />
+                    }
+                    else
+                    {
+                        <div class="preview-image-box bg-light d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-image fs-1"></i>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-md-7">
+                    <div class="ps-md-3">
+                        <div class="blog-info-label">Yazı Başlığı</div>
+                        <div class="blog-info-value fs-5 fw-bold">@Model.Title</div>
+
+                        <div class="blog-info-label">URL (Slug)</div>
+                        <div class="blog-info-value text-primary">/blog/@Model.Slug</div>
+
+                        <div class="blog-info-label">Oluşturulma Tarihi</div>
+                        <div class="blog-info-value">@Model.CreatedAt.ToString("dd MMMM yyyy HH:mm")</div>
+
+                        <div class="blog-info-label">SEO Başlığı</div>
+                        <div class="blog-info-value">@(Model.MetaTitle ?? "Belirtilmemiş")</div>
+
+                        <div class="blog-info-label">Anahtar Kelimeler</div>
+                        <div class="blog-info-value">
+                            @if (!string.IsNullOrEmpty(Model.Keywords))
+                            {
+                                foreach (var tag in Model.Keywords.Split(','))
+                                {
+                                    <span class="badge bg-light text-dark border fw-normal me-1">@tag.Trim()</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted italic">Yok</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-bar d-flex justify-content-between align-items-center">
+            <a asp-action="Index" class="btn btn-link text-decoration-none text-secondary fw-semibold">
+                <i class="bi bi-chevron-left me-1"></i> Vazgeç ve Listeye Dön
+            </a>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger px-5 py-2 rounded-pill fw-bold shadow-sm">
+                    <i class="bi bi-trash3-fill me-2"></i> Onayla ve Sil
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,8 @@
 ﻿@model Service
-
+@using IdeioCreative.Seo
+@using Microsoft.Extensions.Options
+@inject IOptions<IdeioSeoOptions> IdeioSeoOptions
+@inject SeoTextFormatter SeoTextFormatter
 @{
     var site = DataRequestModel.SiteSetting;
 
@@ -7,6 +10,29 @@
     ViewData["MetaDescription"] = Model?.MetaDescription ?? site?.MetaDescription ?? "Hizmetlerimiz";
     ViewData["MetaKeywords"] = Model?.Keywords ?? site?.Keywords ?? "Hizmetlerimiz";
 }
+@{
+    var serviceJson = SeoJsonLdBuilder.Service(
+        Model,
+        DataRequestModel.SiteSetting,
+        IdeioSeoOptions.Value,
+        SeoTextFormatter);
+
+    var breadcrumbJson = SeoJsonLdBuilder.Breadcrumb(
+        ("Anasayfa", IdeioSeoOptions.Value.Absolute("/")),
+        ("Hizmetlerimiz",
+            IdeioSeoOptions.Value.Absolute(
+                IdeioSeoOptions.Value.ServicesPath)),
+        (Model.Title, IdeioSeoOptions.Value.ServiceUrl(Model)));
+}
+<link rel="canonical"
+      href="@IdeioSeoOptions.Value.ServiceUrl(Model)" />
+<script type="application/ld+json">
+    @Html.Raw(serviceJson)
+</script>
+
+<script type="application/ld+json">
+    @Html.Raw(breadcrumbJson)
+</script>
 <style>
     /* Preloader ID veya Class'ını hedef alıp gizler */
     #preloader, .preloader, .loader-wrapper {

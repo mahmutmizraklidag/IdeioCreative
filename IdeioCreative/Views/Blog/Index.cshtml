@@ -1,0 +1,134 @@
+﻿@model IEnumerable<Blog>
+@{
+    ViewData["Title"] = "Son Yazılar";
+    ViewData["MetaDescription"] = "İdeio Creative Reklam Ajansı";
+    ViewData["MetaKeywords"] = "İdeio Creative Reklam Ajansı";
+
+}
+<!-- Main start -->
+<main class="main">
+
+    <!-- Breadcrumnd Banner -->
+    <section class="breadcrumnd-banner position-relative">
+        <div class="container">
+            <div class="row g-5 justify-content-center">
+                <div class="col-lg-5">
+                    <div class="breadcrumnd-content text-center">
+                        <h1 class="white mb-xxl-10 mb-xl-8 mb-6" data-aos="zoom-in-left" data-aos-duration="1800">
+                            Son Yazılarmız
+                        </h1>
+                        <ul class="breadcrumnd d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
+                            data-aos="zoom-in-right" data-aos-duration="2000">
+                            <li>
+                                <a href="index.html" class="text-uppercase htheme">
+                                    Anasayfa
+                                </a>
+                            </li>
+                            <li>
+                                <span class="rot60 d-inline-block">
+                                    <i class="fas fa-arrow-up"></i>
+                                </span>
+                            </li>
+                            <li class="theme-clr">
+                                Son Yazılarmız
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Element-->
+        <img src="assets/img/element/cmn-dost.png" alt="img" class="cmn-dots">
+        <div class="cmn-svg-shape cmn-svg">
+            <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <!-- Üst bar -->
+                <rect x="80" y="18" width="51" height="18"
+                      fill="url(#paint0_linear_6584_3026)" />
+
+                <!-- Konuşma balonu -->
+                <path d="M20 60 H191 V170 H105 L55 200 V170 H20 Z"
+                      stroke="url(#paint0_linear_6584_3026)"
+                      stroke-width="12"
+                      fill="none" />
+
+                <!-- Ortadaki halka -->
+                <circle cx="105.5"
+                        cy="118"
+                        r="34"
+                        stroke="url(#paint0_linear_6584_3026)"
+                        stroke-width="14"
+                        fill="none" />
+
+                <defs>
+                    <linearGradient id="paint0_linear_6584_3026"
+                                    x1="416.867" y1="-216.267"
+                                    x2="8.49998" y2="192.1"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#E3FF04" />
+                        <stop offset="1" stop-color="#FF7425" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+
+
+        </div>
+    </section>
+    <!-- Breadcrumnd Banner -->
+    <!-- Blog Grid Start -->
+    <section class="blog-grid pt-space pb-space">
+        <div class="container">
+            <div class="row g-xxl-7 g-xl-6 g-6">
+              @if (Model != null && Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            <div class="blog-widget-item">
+                <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
+                    <img src="/img/@item.Image"
+                         alt="@item.Title"
+                         class="w-100 overflow-hidden">
+                </div>
+
+                <div class="blog-cont">
+                    <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
+                        <span class="bspan-clr">
+                            @item.CreatedAt.ToString(
+                                "dd MMM yyyy",
+                                new System.Globalization.CultureInfo("tr-TR")
+                            )
+                        </span>
+                    </div>
+
+                    <h5>
+                        <a asp-controller="Blog" asp-action="Detail" asp-route-slug="@item.Slug" class="white-clr">
+                            @item.Title
+                        </a>
+                    </h5>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="col-12">
+        <div class="text-center py-5">
+            <h5 class="white-clr mb-2">Henüz bir blog yazısı eklenmemiş.</h5>
+            <p class="bspan-clr mb-0">
+                Yeni içeriklerimiz çok yakında burada yayınlanacaktır.
+            </p>
+        </div>
+    </div>
+}
+               
+              
+            </div>
+        </div>
+    </section>
+    <!-- Blog Grid End -->
+
+</main>
+<!-- Main End -->

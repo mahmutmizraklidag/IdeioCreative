@@ -60,6 +60,23 @@
 	}
 }
 
+.blog-detail-breadcrumb {
+	max-width: 100%;
+	white-space: nowrap;
+
+	.blog-detail-breadcrumb-title {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+@include maxQuery(575) {
+	.blog-detail-breadcrumb {
+		white-space: normal;
+	}
+}
+
 //Banner One text
 .home-onetext {
 	.textitalick {

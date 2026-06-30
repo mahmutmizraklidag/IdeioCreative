@@ -1,0 +1,214 @@
+@model Blog
+
+@{
+    ViewData["Title"] = "Makaleyi Düzenle";
+}
+
+<style>
+    .form-card {
+        background: #fff;
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .nav-pills .nav-link {
+        color: #6c757d;
+        font-weight: 500;
+        padding: 12px 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .nav-pills .nav-link.active {
+            background-color: #4361ee;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid #e9ecef;
+        background-color: #f8f9fa;
+    }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.1);
+        }
+
+    .section-header {
+        border-left: 5px solid #4361ee;
+        padding-left: 15px;
+        margin-bottom: 25px;
+    }
+
+    .current-img-wrapper {
+        position: relative;
+        display: inline-block;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 2px solid #eee;
+    }
+
+    .img-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        backdrop-filter: blur(4px);
+    }
+</style>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Makale Güncelle</h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Blog Listesi</a></li>
+                    <li class="breadcrumb-item active text-primary">Düzenle</li>
+                </ol>
+            </nav>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left me-1"></i> Vazgeç
+        </a>
+    </div>
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 d-none"></div>
+
+        <ul class="nav nav-pills mb-4 gap-2" id="editBlogTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active shadow-sm" data-bs-toggle="pill" data-bs-target="#edit-content" type="button">
+                    <i class="bi bi-pencil-square me-2"></i> İçerik Yönetimi
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link shadow-sm" data-bs-toggle="pill" data-bs-target="#edit-seo" type="button">
+                    <i class="bi bi-search me-2"></i> SEO & Meta Verileri
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="edit-content">
+                <div class="card form-card p-4 p-md-5">
+                    <div class="section-header">
+                        <h5 class="fw-bold mb-0">Makale Bilgileri</h5>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-8">
+                            <label asp-for="Title" class="form-label fw-bold">Yazı Başlığı</label>
+                            <input asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="CreatedAt" class="form-label fw-bold">Kayıt Tarihi</label>
+                            <input asp-for="CreatedAt" class="form-control" type="date" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="Slug" class="form-label fw-bold">URL Yapısı (Slug)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-muted">/blog/</span>
+                                <input asp-for="Slug" class="form-control border-start-0 ps-0" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label asp-for="Description" class="form-label fw-bold">Makale Gövdesi</label>
+                            <textarea id="BlogEditor" asp-for="Description" class="form-control"></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">Görsel Güncelleme</label>
+                            <div class="row align-items-start mt-2">
+                                @if (!string.IsNullOrEmpty(Model.Image))
+                                {
+                                    <div class="col-auto">
+                                        <div class="current-img-wrapper shadow-sm">
+                                            <span class="img-badge">Mevcut</span>
+                                            <img src="/img/@Model.Image" alt="blog" style="max-height: 150px; width: auto;" class="rounded" />
+                                        </div>
+                                    </div>
+                                }
+                                <div class="col">
+                                    <input asp-for="Image" type="file" id="imageInput" class="form-control" />
+                                    <small class="text-muted mt-2 d-block">Yeni bir görsel seçmezseniz mevcut görsel korunacaktır.</small>
+                                    <div class="mt-3">
+                                        <img id="previewImage" src="#" alt="Önizleme" class="rounded shadow-sm d-none" style="max-height: 150px;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="edit-seo">
+                <div class="card form-card p-4 p-md-5">
+                    <div class="section-header">
+                        <h5 class="fw-bold mb-0">SEO Yapılandırması</h5>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-12">
+                            <label asp-for="MetaTitle" class="form-label fw-bold">Meta Başlık</label>
+                            <input asp-for="MetaTitle" class="form-control" />
+                        </div>
+                        <div class="col-md-12">
+                            <label asp-for="Keywords" class="form-label fw-bold">Anahtar Kelimeler</label>
+                            <input asp-for="Keywords" class="form-control" placeholder="Etiketleri virgül ile ayırın" />
+                        </div>
+                        <div class="col-md-12">
+                            <label asp-for="MetaDescription" class="form-label fw-bold">Meta Açıklama</label>
+                            <textarea asp-for="MetaDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary btn-lg rounded-pill px-5 shadow-lg">
+                <i class="bi bi-save2-fill me-2"></i> Güncellemeleri Kaydet
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Önizleme mantığı
+        document.getElementById("imageInput").addEventListener("change", function (e) {
+            const [file] = e.target.files;
+            const preview = document.getElementById("previewImage");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            }
+        });
+
+        // Jodit Editor
+        document.addEventListener("DOMContentLoaded", function () {
+            new Jodit('#BlogEditor', {
+                height: 450,
+                buttons: "bold,italic,underline,strikethrough,|,ul,ol,font,fontsize,paragraph,|,image,table,link,|,align,undo,redo,source"
+            });
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

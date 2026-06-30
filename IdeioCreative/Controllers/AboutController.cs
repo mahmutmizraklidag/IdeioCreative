@@ -1,4 +1,5 @@
 ﻿using IdeioCreative.Data;
+using IdeioCreative.Entities;
 using IdeioCreative.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +19,8 @@ namespace IdeioCreative.Controllers
         {
             var AboutViewModel = new AboutViewModel()
             {
-                Services = _context.Services.Where(s => s.Language.ToString() == "Tr").ToList(),
-                About = _context.Abouts.FirstOrDefault(a => a.Language.ToString() == "Tr")
+                Services = _context.Services.Where(x => x.Language == Language.TR).ToList(),
+                About = _context.Abouts.FirstOrDefault(a => a.Language == Language.TR)
             };
             return View(AboutViewModel);
         }

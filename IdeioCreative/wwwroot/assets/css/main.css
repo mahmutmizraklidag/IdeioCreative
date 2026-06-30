@@ -1358,6 +1358,22 @@ footer {
     font-size: 17px;
 }
 
+.blog-detail-breadcrumb {
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+    .blog-detail-breadcrumb .blog-detail-breadcrumb-title {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 575px) {
+    .blog-detail-breadcrumb {
+        white-space: normal;
+    }
+}
 .home-onetext .textitalick {
     font-style: italic;
     font-family: "Plus Jakarta Sans", sans-serif;

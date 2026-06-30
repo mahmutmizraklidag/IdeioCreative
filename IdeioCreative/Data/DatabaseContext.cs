@@ -16,6 +16,7 @@ namespace IdeioCreative.Data
         public DbSet<About> Abouts { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Reference> References { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using IdeioCreative.Seo
+@using Microsoft.Extensions.Options
+@inject IOptions<IdeioSeoOptions> IdeioSeoOptions
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -71,6 +74,25 @@
 
   gtag('config', 'AW-18008259244');
 </script>
+
+
+        @{
+            var organizationJson = SeoJsonLdBuilder.Organization(
+                DataRequestModel.SiteSetting,
+                IdeioSeoOptions.Value);
+
+            var websiteJson = SeoJsonLdBuilder.WebSite(
+                DataRequestModel.SiteSetting,
+                IdeioSeoOptions.Value);
+        }
+
+        <script type="application/ld+json">
+            @Html.Raw(organizationJson)
+        </script>
+
+        <script type="application/ld+json">
+            @Html.Raw(websiteJson)
+        </script>
 </head>
 <body class="position-relative bg2-clr">
     <!-- Google Tag Manager (noscript) -->

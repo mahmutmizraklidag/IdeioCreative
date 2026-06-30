@@ -1,6 +1,7 @@
 using IdeioCreative.Data;
 using IdeioCreative.Entities;
 using IdeioCreative.Models;
+using IdeioCreative.Seo;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
@@ -41,6 +42,24 @@ builder.Services.AddRateLimiter(options =>
                 AutoReplenishment = true
             }));
 });
+builder.Services.AddIdeioAiSeo(options =>
+{
+    options.BaseUrl = "https://www.ideiocreative.com";
+    options.BrandName = "Ýdeio Creative";
+    options.ImageBasePath = "/img/";
+
+    options.AboutPath = "/hakkimizda";
+    options.ServicesPath = "/hizmetlerimiz";
+    options.TeamPath = "/ekibimiz";
+    options.BlogPath = "/blog";
+    options.ContactPath = "/iletisim";
+
+    options.PreferredLanguageName = "Turkish";
+    options.AllowGptBotForTraining = false;
+
+    // Ekip üyesi detay sayfanýz bulunmuyorsa false kalmalý.
+    options.IncludeTeamDetailPages = false;
+});
 
 var app = builder.Build();
 
@@ -51,28 +70,52 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.Use((context, next) =>
+app.Use(async (context, next) =>
 {
-    var dbcontext = context.RequestServices.GetRequiredService<DatabaseContext>();
+    var dbcontext =
+        context.RequestServices.GetRequiredService<DatabaseContext>();
 
     DataRequestModel.ClearData();
 
-    var lang = context.Request.Path.StartsWithSegments("/en") ? "En" : "Tr";
+    var language = context.Request.Path.StartsWithSegments("/en")
+        ? Language.EN
+        : Language.TR;
 
     DataRequestModel.SiteSetting =
-        dbcontext.SiteSettings.FirstOrDefault(x => x.Language.ToString() == lang)
-        ?? new SiteSetting(); // null kalmasýn
+        dbcontext.SiteSettings
+            .AsNoTracking()
+            .FirstOrDefault(x => x.Language == language)
+        ?? new SiteSetting();
+
     DataRequestModel.Teams =
-        dbcontext.Teams.Where(x => x.Language.ToString() == lang && x.IsHomePage).OrderBy(x=>x.OrderNo).ToList();
+        dbcontext.Teams
+            .AsNoTracking()
+            .Where(x =>
+                x.Language == language &&
+                x.IsHomePage)
+            .OrderBy(x => x.OrderNo)
+            .ToList();
+
     DataRequestModel.About =
-        dbcontext.Abouts.FirstOrDefault(x => x.Language.ToString() == lang)
+        dbcontext.Abouts
+            .AsNoTracking()
+            .FirstOrDefault(x => x.Language == language)
         ?? new About();
+
     DataRequestModel.Services =
-        dbcontext.Services.Where(x => x.Language.ToString() == lang)
-                .OrderBy(s => s.Title).ToList();
-    DataRequestModel.References =dbcontext.References
-        .Where(x => x.Language.ToString() == lang).ToList();
-    return next();
+        dbcontext.Services
+            .AsNoTracking()
+            .Where(x => x.Language == language)
+            .OrderBy(x => x.Title)
+            .ToList();
+
+    DataRequestModel.References =
+        dbcontext.References
+            .AsNoTracking()
+            .Where(x => x.Language == language)
+            .ToList();
+
+    await next();
 });
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -94,4 +137,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapFallbackToController("NotFound", "Home");
+app.MapIdeioAiSeo<DatabaseContext>();
 app.Run();

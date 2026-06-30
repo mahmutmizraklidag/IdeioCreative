@@ -1,0 +1,167 @@
+﻿@model Blog
+@using IdeioCreative.Seo
+@using Microsoft.Extensions.Options
+@inject IOptions<IdeioSeoOptions> IdeioSeoOptions
+@inject SeoTextFormatter SeoTextFormatter
+@{
+    var site = DataRequestModel.SiteSetting;
+
+    ViewData["Title"] = Model?.MetaTitle ?? "Son Yazılar";
+    ViewData["MetaDescription"] = Model?.MetaDescription ?? site?.MetaDescription ?? "Son Yazılar";
+    ViewData["MetaKeywords"] = Model?.Keywords ?? site?.Keywords ?? "Son Yazılar";
+}
+@{
+    var blogJson = SeoJsonLdBuilder.BlogPosting(
+        Model,
+        DataRequestModel.SiteSetting,
+        IdeioSeoOptions.Value,
+        SeoTextFormatter);
+
+    var breadcrumbJson = SeoJsonLdBuilder.Breadcrumb(
+        ("Anasayfa", IdeioSeoOptions.Value.Absolute("/")),
+        ("Blog",
+            IdeioSeoOptions.Value.Absolute(
+                IdeioSeoOptions.Value.BlogPath)),
+        (Model.Title, IdeioSeoOptions.Value.BlogUrl(Model)));
+}
+
+<script type="application/ld+json">
+    @Html.Raw(blogJson)
+</script>
+
+<script type="application/ld+json">
+    @Html.Raw(breadcrumbJson)
+</script>
+<link rel="canonical"
+      href="@IdeioSeoOptions.Value.BlogUrl(Model)" />
+<!-- Main start -->
+<main class="main">
+
+    <!-- Breadcrumnd Banner -->
+    <section class="breadcrumnd-banner position-relative">
+        <div class="container">
+            <div class="row g-5 justify-content-center">
+                <div class="col-lg-10 col-xl-9">
+                    <div class="breadcrumnd-content text-center">
+                        <h1 class="white mb-6" data-aos="zoom-in-left" data-aos-duration="1800">
+                            @Model.Title
+                        </h1>
+                        <ul class="breadcrumnd blog-detail-breadcrumb d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
+                            data-aos="zoom-in-right" data-aos-duration="2000">
+                            <li>
+                                <a asp-controller="Home" asp-action="Index" class="text-uppercase htheme">
+                                    Anasayfa
+                                </a>
+                            </li>
+                            <li>
+                                <span class="rot60 d-inline-block">
+                                    <i class="fas fa-arrow-up"></i>
+                                </span>
+                            </li>
+                            <li class="theme-clr blog-detail-breadcrumb-title">
+                                @Model.Title
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Element-->
+        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="img" class="cmn-dots">
+        <div class="cmn-svg-shape cmn-svg">
+            <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <!-- Üst bar -->
+                <rect x="80" y="18" width="51" height="18"
+                      fill="url(#paint0_linear_6584_3026)" />
+
+                <!-- Konuşma balonu -->
+                <path d="M20 60 H191 V170 H105 L55 200 V170 H20 Z"
+                      stroke="url(#paint0_linear_6584_3026)"
+                      stroke-width="12"
+                      fill="none" />
+
+                <!-- Ortadaki halka -->
+                <circle cx="105.5"
+                        cy="118"
+                        r="34"
+                        stroke="url(#paint0_linear_6584_3026)"
+                        stroke-width="14"
+                        fill="none" />
+
+                <defs>
+                    <linearGradient id="paint0_linear_6584_3026"
+                                    x1="416.867" y1="-216.267"
+                                    x2="8.49998" y2="192.1"
+                                    gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stop-color="#E3FF04" />
+                        <stop offset="1" stop-color="#FF7425" stop-opacity="0" />
+                    </linearGradient>
+                </defs>
+            </svg>
+
+
+        </div>
+    </section>
+    <!-- Breadcrumnd Banner -->
+    <!-- Blog Details Start -->
+    <section class="blog-details pt-space pb-space">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-12 col-lg-12">
+                    <div class="blog-post-details mb-xxl-10 mb-xl-8 mb-lg-7 mb-6">
+                        <div class="single-blog-post">
+                            <div class="post-featured-thumb w-100 mb-xxl-30 mb-xl-6 mb-5" data-aos="zoom-in"
+                                 data-aos-duration="1400">
+                                <img src="@Url.Content("~/img/" + Model.Image)" alt="@Model.Title" class="w-100">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-marry d-flex align-items-center gap-xxl-8 gap-xl-6 gap-4 gap-3 mb-xxl-5 mb-xl-4 mb-lg-3 mb-3"
+                                     data-aos="fade-left" data-aos-duration="1500">
+                                    <i class="fas fa-circle white"></i>
+                                    <span>
+                                        @Model.CreatedAt.ToString(
+                                            "dd MMM yyyy",
+                                            new System.Globalization.CultureInfo("tr-TR")
+                                        )
+                                    </span>
+                                </div>
+                                <div class="mb-xxl-13 mb-xl-10 mb-lg-8 mb-7">
+                                    <h5 class="white mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1600">
+                                        @Model.Title
+                                    </h5>
+                                    @Html.Raw(Model.Description)
+                                   @*  <p class="pra-clr mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1550">
+                                        Proin ultricies ultricies est vitae cursus. Nulla sit amet suscipit tortor.
+                                        Maecenas dui erat, ornare eget tristique
+                                        vitae, rutrum pretium justo. Phasellus vitae consequat nisi, quis luctus
+                                        nisl. Praesent faucibus sem id massa semper
+                                        ornare. Nam eu magna at mi pellentesque mattis. Morbi at condimentum velit.
+                                        Phasellus aliquet, leo auctor volutpat
+                                        ultrices, metus dolor dictum enim, sed convallis lacus urna nec erat.
+                                    </p>
+                                    <p class="pra-clr" data-aos="fade-left" data-aos-duration="1700">
+                                        consectetur adipiscing elit. Etiam at mauris accumsan mi pulvinar lacinia a
+                                        in justo. Ut tempor et libero quis
+                                        dignissim. Nulla at convallis libero, vitae aliquam leo. Etiam ut augue
+                                        nibh. In laoreet neque quis ex ornare, quis
+                                        auctor elit facilisis. Mauris dapibus massa rhoncus ligula luctus vulputate.
+                                        Fusce condimentum placerat vulputate.
+                                        Praesent ullamcorper dui in dui sagittis commodo.
+                                    </p> *@
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                  
+                </div>
+              
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details End -->
+
+</main>
+<!-- Main End -->

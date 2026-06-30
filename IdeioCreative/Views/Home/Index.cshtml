@@ -583,6 +583,71 @@
         </div>
     </section>
     <!-- Cmn Team version01 End -->
+<!-- Version01 BLog One Start -->
+@if (Model?.Blog != null && Model.Blog.Any())
+{
+    <section class="home-blog-version1 pb-space pt-space">
+        <div class="container zindex position-relative">
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-5 mb-xxl-15 mb-xl-12 mb-lg-10 mb-md-10 mb-sm-10 mb-9">
+                <div class="pricing-title">
+                    <div class="radius-btn text-uppercase cmn-border d-inline-flex radius100 py-xxl-2 py-2 px-xxl-4 px-4 theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5">
+                        Son Yazılarımız
+                        <span class="rot60 d-inline-block">
+                            <i class="fas fa-arrow-up theme-clr"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <a asp-controller="Blog"
+                   asp-action="Index"
+                   class="radius-btn d-inline-flex radius100 py-xxl-2 py-2 px-xxl-5 px-5 theme-border theme-clr gap-xxl-4 gap-3 mb-xxl-8 mb-xl-6 mb-5">
+                    Tümünü Gör...
+                </a>
+            </div>
+
+            <div class="row g-xxl-7 g-xl-6 g-4">
+                @foreach (var item in Model.Blog)
+                {
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="blog-widget-item">
+
+                            <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
+                                <img src="/img/@item.Image"
+                                     alt="@item.Title"
+                                     class="w-100 overflow-hidden">
+                            </div>
+
+                            <div class="blog-cont">
+                                <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
+                                    <span class="bspan-clr">
+                                        @item.CreatedAt.ToString(
+                                            "dd MMM yyyy",
+                                            new System.Globalization.CultureInfo("tr-TR")
+                                        )
+                                    </span>
+                                </div>
+
+                                <h5>
+                                    <a asp-controller="Blog"
+                                       asp-action="Detail"
+                                       asp-route-slug="@item.Slug"
+                                       class="white-clr">
+                                        @item.Title
+                                    </a>
+                                </h5>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </section>
+}
+<!-- Version01 BLog One End -->
+
     <!-- Text SLider Start -->
     <div class="digital-solution testi-italic mb-xxl-4 pb-lg-0 pb-15">
         <div class="mycustom-marque">

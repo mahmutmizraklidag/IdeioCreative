@@ -1,4 +1,5 @@
 ﻿using IdeioCreative.Data;
+using IdeioCreative.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdeioCreative.Controllers
@@ -16,7 +17,7 @@ namespace IdeioCreative.Controllers
         public IActionResult Index()
         {
             var services = _context.Services
-                .Where(s => s.Language.ToString() == "Tr")
+                .Where(s => s.Language == Language.TR)
                 .OrderBy(s => s.Title) // alfabetik sıralama
                 .ToList();
 
@@ -26,7 +27,7 @@ namespace IdeioCreative.Controllers
         [Route("hizmetlerimiz/{slug}")]
         public IActionResult Detail(string slug)
         {
-            var service = _context.Services.FirstOrDefault(s => s.Slug == slug && s.Language.ToString() == "Tr");
+            var service = _context.Services.FirstOrDefault(s => s.Slug == slug && s.Language == Language.TR);
             return View(service);
         }
     }
