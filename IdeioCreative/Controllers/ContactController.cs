@@ -9,10 +9,12 @@ namespace IdeioCreative.Controllers
     public class ContactController : Controller
     {
         private readonly DatabaseContext _context;
+        private readonly ContactSecurityQuestionService _securityQuestionService;
 
-        public ContactController(DatabaseContext context)
+        public ContactController(DatabaseContext context, ContactSecurityQuestionService securityQuestionService)
         {
             _context = context;
+            _securityQuestionService = securityQuestionService;
         }
         [Route("iletisim")]
         public IActionResult Index()
@@ -23,12 +25,20 @@ namespace IdeioCreative.Controllers
         [EnableRateLimiting("contact-form")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ContactForm entity, string? website, long? formStartedAt)
+        public async Task<IActionResult> Index(ContactForm entity, string? website, long? formStartedAt, string? securityAnswer, string? securityQuestionToken)
         {
             if (!string.IsNullOrWhiteSpace(website))
                 return Json(new { success = false, message = "Geçersiz istek." });
 
-            var elapsedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - formStartedAt;
+            // Guvenlik sorusu basit botlarin formu otomatik gondermesini engellemek icin server tarafinda da kontrol edilir.
+            if (!_securityQuestionService.Validate(securityQuestionToken, securityAnswer))
+                return Json(new { success = false, message = "Güvenlik sorusunun cevabı hatalı." });
+
+            // Form doldurma suresi kontrolu, botlarin sayfayi acmadan direkt POST atmasini azaltmak icin kullanilir.
+            if (!formStartedAt.HasValue)
+                return Json(new { success = false, message = "İstek reddedildi." });
+
+            var elapsedMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - formStartedAt.Value;
 
             if (elapsedMs < 3000)
                 return Json(new { success = false, message = "İstek reddedildi." });
@@ -52,12 +62,20 @@ namespace IdeioCreative.Controllers
 
                 if (result > 0)
                 {
-                    var temp = MailTemplates.ContactFormTemplate(entity);
-                    var temp2 = MailTemplates.ContactFormAutoReplyTemplate(entity);
+                    try
+                    {
+                        var temp = MailTemplates.ContactFormTemplate(entity);
+                        var temp2 = MailTemplates.ContactFormAutoReplyTemplate(entity);
 
-                    MailSender mailSender = new MailSender();
-                    await mailSender.SendMailAsync("info@ideiocreative.com", "İdeio Creative Teklif Formu", temp, entity.Name);
-                    await mailSender.SendMailAsync(entity.Email, "İdeio Creative - Talebiniz Alındı", temp2, entity.Name);
+                        MailSender mailSender = new MailSender();
+                        await mailSender.SendMailAsync("info@ideiocreative.com", "İdeio Creative Teklif Formu", temp, entity.Name);
+                        await mailSender.SendMailAsync(entity.Email, "İdeio Creative - Talebiniz Alındı", temp2, entity.Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Form veritabanina kaydedildikten sonra mail hatasi kullaniciya hata olarak dondurulmez.
+                        Console.WriteLine($"İletişim formu kaydedildi ancak mail gönderilemedi: {ex.Message}");
+                    }
 
                     return Json(new { success = true, message = "Mesajınız gönderildi." });
                 }

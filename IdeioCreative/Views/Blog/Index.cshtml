@@ -87,9 +87,11 @@
         <div class="col-lg-4 col-md-6 col-sm-6">
             <div class="blog-widget-item">
                 <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                    <img src="/img/@item.Image"
-                         alt="@item.Title"
-                         class="w-100 overflow-hidden">
+                    <a href="@Url.Action("Detail", "Blog", new { slug = item.Slug })">
+                        <img src="/img/@item.Image"
+                             alt="@item.Title"
+                             class="w-100 overflow-hidden">
+                    </a>
                 </div>
 
                 <div class="blog-cont">

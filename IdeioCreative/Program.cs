@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDataProtection();
+builder.Services.AddSingleton<IdeioCreative.Tools.ContactSecurityQuestionService>();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {

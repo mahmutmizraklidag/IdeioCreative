@@ -1,6 +1,10 @@
 ﻿@using IdeioCreative.Seo
 @using Microsoft.Extensions.Options
 @inject IOptions<IdeioSeoOptions> IdeioSeoOptions
+@inject IdeioCreative.Tools.ContactSecurityQuestionService ContactSecurityQuestionService
+@{
+    var slideSecurityQuestion = ContactSecurityQuestionService.CreateQuestion();
+}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -127,7 +131,8 @@
         <div class="quote-drawer-content">
             <form action="#" id="slideQuoteForm" method="post">
                 @Html.AntiForgeryToken()
-                    <input type="hidden" id="FormStartedAt" name="FormStartedAt" value="" />
+                <!-- Formun ne zaman acildigini tutar; botlarin sayfayi acmadan direkt POST atmasini zorlastirmak icin eklendi. -->
+                <input type="hidden" id="SlideFormStartedAt" name="FormStartedAt" value="" />
                 <div class="quote-form-grid">
                     <div class="quote-form-group quote-form-group--full">
                         <label for="SlideName">İsim Soyisim</label>
@@ -160,11 +165,17 @@
                     </div>
                         <!-- Honeypot alanı -->
                         <div style="display:none;">
-                            <input type="text" name="Website" id="Website" autocomplete="off">
+                            <input type="text" name="Website" id="SlideWebsite" autocomplete="off">
                         </div>
                     <div class="quote-form-group quote-form-group--full">
                         <label for="SlideMessage">Mesaj</label>
                         <textarea name="Message" id="SlideMessage" rows="5" placeholder="Mesajınız..."></textarea>
+                    </div>
+                    <div class="quote-form-group quote-form-group--full">
+                        <label for="SlideSecurityAnswer">@slideSecurityQuestion.Question</label>
+                        <!-- Guvenlik sorusu, basit botlarin formu otomatik doldurup gondermesini azaltmak icin eklendi. -->
+                        <input type="hidden" id="SlideSecurityQuestionToken" name="SecurityQuestionToken" value="@slideSecurityQuestion.Token">
+                        <input type="text" name="SecurityAnswer" id="SlideSecurityAnswer" placeholder="Cevabınız" required>
                     </div>
 
                     <div class="quote-form-group quote-form-group--full">
@@ -236,6 +247,7 @@
                 $drawer.addClass("is-open").attr("aria-hidden", "false");
                 $overlay.addClass("is-open");
                 $body.addClass("quote-drawer-open");
+                $("#SlideFormStartedAt").val(Date.now());
             }
 
             function closeDrawer() {
@@ -257,7 +269,7 @@
                     closeDrawer();
                 }
             });
-            $("#FormStartedAt").val(Date.now());
+            $("#SlideFormStartedAt").val(Date.now());
             $("#slideQuoteForm").on("submit", function (e) {
                 e.preventDefault();
 
@@ -274,7 +286,10 @@
                     Account: $("#SlideAccount").val(),
                     Subject: $("#SlideSubject").val(),
                     Message: $("#SlideMessage").val(),
-                    Website: $("#Website").val()
+                    Website: $("#SlideWebsite").val(),
+                    FormStartedAt: $("#SlideFormStartedAt").val(),
+                    SecurityAnswer: $("#SlideSecurityAnswer").val(),
+                    SecurityQuestionToken: $("#SlideSecurityQuestionToken").val()
                 };
 
                 $("#slideQuoteSuccess").hide();
@@ -290,6 +305,7 @@
                     success: function (res) {
                         if (res.success) {
                             $("#slideQuoteForm")[0].reset();
+                            $("#SlideFormStartedAt").val(Date.now());
                             $("#slideQuoteSuccess").show();
                             $("#slideQuoteError").hide();
 

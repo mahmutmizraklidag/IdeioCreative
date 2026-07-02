@@ -4,6 +4,10 @@
     ViewData["MetaKeywords"] = "Bizimle iletişime geçin";
 
 }
+@inject IdeioCreative.Tools.ContactSecurityQuestionService ContactSecurityQuestionService
+@{
+    var contactSecurityQuestion = ContactSecurityQuestionService.CreateQuestion();
+}
 <!-- Main start -->
 <main class="main">
 
@@ -165,7 +169,8 @@
                             </h3>
                             <form action="#" id="iletisimFormu" method="post">
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" id="FormStartedAt" name="FormStartedAt" value="" />
+                                <!-- Formun ne zaman acildigini tutar; botlarin sayfayi acmadan direkt POST atmasini zorlastirmak icin eklendi. -->
+                                <input type="hidden" id="ContactFormStartedAt" name="FormStartedAt" value="" />
                                 <div class="row g-xxl-8 g-xl-6 g-lg-4 g-4">
                                     <div class="col-lg-12">
                                         <input type="text" name="Name" id="Name" placeholder="İsim Soyisim">
@@ -187,10 +192,15 @@
                                     </div>
                                     <!-- Honeypot alanı -->
                                     <div style="display:none;">
-                                        <input type="text" name="Website" id="Website" autocomplete="off">
+                                        <input type="text" name="Website" id="ContactWebsite" autocomplete="off">
                                     </div>
                                     <div class="col-lg-12">
                                         <textarea rows="5" name="Message" placeholder="Mesajınız..." id="Message"></textarea>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <!-- Guvenlik sorusu, basit botlarin formu otomatik doldurup gondermesini azaltmak icin eklendi. -->
+                                        <input type="hidden" name="SecurityQuestionToken" value="@contactSecurityQuestion.Token">
+                                        <input type="text" name="SecurityAnswer" id="ContactSecurityAnswer" placeholder="@contactSecurityQuestion.Question" required>
                                     </div>
                                     <div class="col-lg-5">
                                         <button type="submit" class="submit-btn">
@@ -215,7 +225,7 @@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $("#FormStartedAt").val(Date.now());
+        $("#ContactFormStartedAt").val(Date.now());
 
         $("#iletisimFormu").on("submit", function (e) {
             e.preventDefault();
@@ -230,7 +240,7 @@
                 success: function (res) {
                     if (res.success) {
                         $("#iletisimFormu")[0].reset();
-                        $("#FormStartedAt").val(Date.now());
+                        $("#ContactFormStartedAt").val(Date.now());
                         $(".sent-message").show();
                         $(".error-message").hide().html("");
                     } else {
