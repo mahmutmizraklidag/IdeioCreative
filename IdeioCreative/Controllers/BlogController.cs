@@ -14,7 +14,11 @@ namespace IdeioCreative.Controllers
 
         public IActionResult Index()
         {
-            var blogs = _context.Blogs.OrderByDescending(b => b.CreatedAt).ToList();
+            var blogs = _context.Blogs
+                     .Where(b => b.CreatedAt <= DateTime.Now)
+                     .OrderByDescending(b => b.CreatedAt)
+                     .ToList();
+
             return View(blogs);
         }
         [Route("blog/{slug}")]
