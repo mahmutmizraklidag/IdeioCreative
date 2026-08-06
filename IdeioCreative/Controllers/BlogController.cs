@@ -18,7 +18,10 @@ namespace IdeioCreative.Controllers
                      .Where(b => b.CreatedAt <= DateTime.Now)
                      .OrderByDescending(b => b.CreatedAt)
                      .ToList();
-
+            if(!blogs.Any())
+            {
+                return View("NoBlogs");
+            }
             return View(blogs);
         }
         [Route("blog/{slug}")]
