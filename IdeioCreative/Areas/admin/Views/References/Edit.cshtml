@@ -46,17 +46,27 @@
                     <div class="col-md-12">
                         <label asp-for="Image" class="form-label fw-semibold"></label>
                         <div class="input-group">
-                            <input asp-for="Image" type="file" class="form-control" id="imageInput" />
+                            <input asp-for="Image" type="file" class="form-control" id="imageInput" accept="image/png,image/webp" />
                         </div>
+                        <div class="alert alert-info py-2 px-3 mt-2 mb-0 small">
+                            <strong>Logo standardı:</strong> 600 × 240 px şeffaf PNG veya WebP.
+                            Logoyu ortalayın ve 520 × 160 px güvenli alan içinde tutun
+                            (her kenarda 40 px boşluk).
+                        </div>
+                        <div id="imageSizeMessage" class="small mt-2"></div>
                         @if (!string.IsNullOrEmpty(Model.Image))
                         {
                             <div class="mb-3">
                                 <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
-                                <img src="/img/@Model.Image" alt="" class="rounded border" width="200" />
+                                <div class="rounded border bg-dark p-2" style="width: 300px; max-width: 100%; aspect-ratio: 5 / 2;">
+                                    <img src="/img/@Model.Image" alt="" class="w-100 h-100" style="object-fit: contain;" />
+                                </div>
                             </div>
                         }
                         <div class="mt-2">
-                            <img id="previewImage" src="#" alt="Önizleme" class="rounded border d-none" width="200" />
+                            <div class="rounded border bg-dark p-2" style="width: 300px; max-width: 100%; aspect-ratio: 5 / 2;">
+                                <img id="previewImage" src="#" alt="Önizleme" class="d-none w-100 h-100" style="object-fit: contain;" />
+                            </div>
                         </div>
                         <span asp-validation-for="Image" class="text-danger small"></span>
                     </div>
@@ -78,11 +88,22 @@
         document.getElementById("imageInput").addEventListener("change", function (event) {
             const [file] = event.target.files;
             const preview = document.getElementById("previewImage");
+            const message = document.getElementById("imageSizeMessage");
             if (file) {
                 preview.src = URL.createObjectURL(file);
                 preview.classList.remove("d-none");
+                preview.onload = function () {
+                    const isValidSize = preview.naturalWidth === 600 && preview.naturalHeight === 240;
+                    event.target.setCustomValidity(isValidSize ? "" : "Logo görseli 600 × 240 px olmalıdır.");
+                    message.className = isValidSize ? "small mt-2 text-success" : "small mt-2 text-danger";
+                    message.textContent = isValidSize
+                        ? "Ölçü uygun: 600 × 240 px"
+                        : `Geçersiz ölçü: ${preview.naturalWidth} × ${preview.naturalHeight} px. Görsel 600 × 240 px olmalıdır.`;
+                };
             } else {
                 preview.classList.add("d-none");
+                event.target.setCustomValidity("");
+                message.textContent = "";
             }
         });
     </script>

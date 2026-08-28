@@ -46,11 +46,13 @@
                         </ul>
 
                         <div class="hero-sponsor mt-5">
-                            <div class="sponsor-inner row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4 justify-content-center align-items-center mb-6">
+                            <div class="sponsor-inner row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4 justify-content-center align-items-center mb-6">
                                 @foreach(var item in DataRequestModel.References)
                                 {
-                                    <div class="col">
-                                       <img src="/img/@item.Image" alt="@item.Name" class="img-fluid" >
+                                    <div class="col d-flex justify-content-center">
+                                        <div class="reference-logo-frame reference-logo-frame--plain">
+                                            <img src="/img/@item.Image" alt="@item.Name" class="reference-logo-image">
+                                        </div>
                                     </div>
                                 }
                                 
