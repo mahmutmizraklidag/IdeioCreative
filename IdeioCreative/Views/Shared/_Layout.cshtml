@@ -40,8 +40,9 @@
 
     <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")">
 
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")" asp-append-version="true">
     <link rel="stylesheet" href="@Url.Content("~/css/reference-logos.css")" asp-append-version="true">
+    <link rel="stylesheet" href="@Url.Content("~/css/home-hero.css")" asp-append-version="true">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <!-- Meta Pixel Code -->
@@ -63,22 +64,17 @@
     </noscript>
     <!-- End Meta Pixel Code -->
     <!-- Google Tag Manager -->
-    <script>
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-TBJXQ3NM');</script>
+   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18008259244"></script>
+   <script> 
+       window.dataLayer = window.dataLayer || []; 
+       function gtag(){dataLayer.push(arguments);} 
+   
+       gtag('js', new Date()); 
+       gtag('config', 'AW-18008259244'); 
+   </script>
     <!-- End Google Tag Manager -->
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18008259244"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'AW-18008259244');
-</script>
 
 
         @{
@@ -98,6 +94,29 @@
         <script type="application/ld+json">
             @Html.Raw(websiteJson)
         </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+            (function(w,d,s,l,i){
+              w[l]=w[l]||[];
+              w[l].push({
+                'gtm.start': new Date().getTime(),
+                event:'gtm.js'
+              });
+              var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),
+                  dl=l!='dataLayer'?'&l='+l:'';
+              j.async=true;
+              j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+              f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-TBJXQ3NM');
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Event snippet for Kişi (1) conversion page -->
+    <script>
+            gtag('event', 'conversion', {'send_to': 'AW-18008259244/qVNKCInLy5UdEKz1gItD'});
+    </script>
 </head>
 <body class="position-relative bg2-clr">
     <!-- Google Tag Manager (noscript) -->
@@ -194,6 +213,13 @@
     </div>
 
        
+    <a href="tel:@DataRequestModel.SiteSetting.Phone"
+       class="phone-float"
+       title="Hemen arayın"
+       aria-label="Telefon ile arayın">
+        <i class="bi bi-telephone-fill" aria-hidden="true"></i>
+    </a>
+
     <!-- _Layout.cshtml dosyanızda body etiketi kapandıktan sonra veya uygun bir yerde ekleyebilirsiniz -->
     <a href="https://wa.me/905544387416?text=Merhabalar%2C%20Teklif%20almak%20istiyorum."
        target="_blank"

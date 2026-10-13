@@ -440,6 +440,7 @@ span {
     width: 100%;
 }
 
+.phone-float,
 .whatsapp-float {
     position: fixed;
     width: 60px;
@@ -455,6 +456,22 @@ span {
     box-shadow: 2px 2px 3px #999;
     z-index: 100;
     text-decoration: none;
+}
+
+.phone-float {
+    bottom: 112px;
+    background-color: #f47e3e;
+}
+
+    .phone-float:hover {
+        background-color: #d96b2f;
+        color: #FFF;
+    }
+
+.phone-float:focus-visible,
+.whatsapp-float:focus-visible {
+    outline: 3px solid #FFF;
+    outline-offset: 3px;
 }
 
     .whatsapp-float:hover {
@@ -1394,7 +1411,7 @@ footer {
     /*background: url(../img/banner/ideio-banner1.png) no-repeat center center;*/
     background: url(../img/banner/hero-bg1.png) no-repeat center center;
     background-size: cover;
-    padding: 290px 5px 30px;
+    padding: 520px 5px 30px;
     z-index: 1;
 }
 
@@ -5690,6 +5707,9 @@ textarea::placeholder {
     width: 440px;
     max-width: 100%;
     height: 100vh !important;
+    /* Match the visible viewport while mobile browser bars are open. */
+    height: 100svh !important;
+    height: 100dvh !important;
     background: #f47e3e !important;
     transform: translateX(100%);
     transition: transform .35s ease;
@@ -5766,7 +5786,9 @@ textarea::placeholder {
     right: 0 !important;
     bottom: 0 !important;
     overflow-y: auto !important;
+    overscroll-behavior-y: contain;
     padding: 18px !important;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)) !important;
     background: #f47e3e !important;
     box-sizing: border-box !important;
 }
@@ -5882,6 +5904,7 @@ body.quote-drawer-open {
     .quote-drawer-content {
         top: 84px !important;
         padding: 14px !important;
+        padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
     }
 
     .quote-drawer__handle {

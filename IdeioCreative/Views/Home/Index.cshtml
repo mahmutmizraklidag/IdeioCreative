@@ -13,34 +13,13 @@
     <!-- Custom Line Shape -->
     <!-- Hero Section Version0 -->
     <section class="hero-section-version1 position-relative">
+        <video class="hero-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+            <source src="/video/reklam_1080p.mp4" type="video/mp4">
+        </video>
         <div class="container">
             <div class="row g-5 hero-content-row" >
                 <div class="hero-v1-content position-relative">
-                    <div class="d-flex align-items-sm-center align-items-end justify-content-between">
-                        <h1 class="white-clr text-uppercase" style="font-weight: 900 !important;">
-                            <span class="d-block" data-aos="zoom-in-left" data-aos-duration="1800">
-                                Ideıo Creatıve
-                            </span>
-                            <span>
-                                @* <span class="text-italic" data-aos="zoom-in-right" data-aos-duration="2100">
-                                    Creative
-                                </span> *@
-                                <span class="designers" data-text="#GösterKendini" data-aos="zoom-in"
-                                      data-aos-duration="2000">#GösterKendini</span>
-                            </span>
-                            <span class="d-block sub-title-home"  data-aos="zoom-in-left" data-aos-duration="1800">
-                                Reklam Ve Pazarlama Ajansı
-                            </span>
-                        </h1>
-
-                       @*  VİDEO SEMBOLÜ *@
-                      @*   <a href="https://www.youtube.com/watch?v=lMJImKo-eZU" class="video-popup">
-                            <span class="icon">
-                                <i class="fas fa-play"></i>
-                            </span>
-                            <img src="/img/play.png" alt="img" class="hero-circle">
-                        </a> *@
-                    </div>
+            
                     
                 </div>
             </div>
@@ -52,7 +31,7 @@
                     @foreach (var item in DataRequestModel.References)
                     {
                         <a href="#" class="reference-logo-frame reference-logo-frame--plain">
-                            <img src="/img/@item.Image" alt="@item.Name" class="reference-logo-image">
+                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@item.Name" class="reference-logo-image" decoding="async" draggable="false">
                         </a>
                     }
                 </div>
@@ -61,7 +40,7 @@
                     @foreach (var item in DataRequestModel.References)
                     {
                         <a href="#" class="reference-logo-frame reference-logo-frame--plain">
-                            <img src="/img/@item.Image" alt="@item.Name" class="reference-logo-image">
+                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@item.Name" class="reference-logo-image" decoding="async" draggable="false">
                         </a>
                     }
                 </div>
@@ -69,7 +48,7 @@
             </div>
         </div>
        
-        <svg width="380" height="380" class="hero-arrow" viewBox="0 0 211 211" fill="none"
+       @* <svg width="380" height="380" class="hero-arrow" viewBox="0 0 211 211" fill="none"
              xmlns="http://www.w3.org/2000/svg">
 
             <!-- Üst bar -->
@@ -100,6 +79,7 @@
                 </linearGradient>
             </defs>
         </svg>
+        *@
     </section>
     <!-- Hero Section Version0 -->
     <!-- Product That Start -->
@@ -548,9 +528,9 @@
                                     @team.Position
                                 </span>
                                 <h5 class="white-clr whitehover">
-                                    <a href="team-details.html" class="white-clr whitehover">
-                                        @team.Name
-                                    </a>
+                                    <a href="javascript:void(0);" class="white-clr whitehover">
+    @team.Name
+</a>
                                 </h5>
                             </div>
                         </div>

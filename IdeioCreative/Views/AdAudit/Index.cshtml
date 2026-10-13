@@ -1,0 +1,257 @@
+@model AdAuditViewModel
+@using IdeioCreative.Seo
+@inject IdeioCreative.Tools.ContactSecurityQuestionService SecurityQuestions
+@{
+    Layout = "_AdAuditLayout";
+    ViewData["Title"] = "Ücretsiz Reklam Denetimi";
+    ViewData["MetaDescription"] = "Google Ads ve Meta reklamlarınızda bütçe, hedefleme, kreatif ve dönüşüm takibini birlikte değerlendirelim. İdeio Creative ücretsiz reklam denetimi için başvurun.";
+    var question = SecurityQuestions.CreateQuestion();
+    var formatter = new SeoTextFormatter();
+    var aboutDescription = formatter.OneLine(Model.About.HomeDescription, 460);
+    var scopes = new[]
+    {
+        ("01", "fa-bullseye", "Doğru kitleye mi ulaşıyorsunuz?", "Hedefleme & kitle", "Hedef kitle seçimi, yeniden pazarlama ve kitle çakışmalarını birlikte değerlendiriyoruz."),
+        ("02", "fa-coins", "Bütçeniz nerede değer üretiyor?", "Bütçe & kampanya yapısı", "Bütçe dağılımı, kampanya hedefleri ve teklif stratejilerindeki iyileştirme alanlarını inceliyoruz."),
+        ("03", "fa-pen-nib", "Reklamınız harekete geçiriyor mu?", "Kreatif & mesaj", "Görsel, video, reklam metni ve teklifinizin hedef kitlenizle ne kadar örtüştüğüne bakıyoruz."),
+        ("04", "fa-chart-line", "Sonuçları doğru ölçüyor musunuz?", "Dönüşüm & ölçümleme", "Dönüşüm olayları ve izleme kurulumlarını kontrol ederek ölçümdeki eksikleri belirliyoruz."),
+        ("05", "fa-mouse-pointer", "Tıklamadan sonra ne oluyor?", "Açılış sayfası deneyimi", "Mobil deneyim, mesaj uyumu ve başvuru akışını dönüşüme giden yolun bir parçası olarak inceliyoruz."),
+        ("06", "fa-search", "Bir sonraki adımınız ne olmalı?", "Fırsatlar & öncelikler", "Bulguları önceliklendirip önce hangi alanlara odaklanmanız gerektiğini netleştiriyoruz.")
+    };
+}
+<main id="audit-main">
+    <section class="audit-hero" aria-labelledby="audit-title">
+        <div class="audit-shell audit-hero-grid">
+            <div class="audit-hero-copy">
+                <div class="audit-eyebrow"><span class="audit-dot" aria-hidden="true"></span> ÜCRETSİZ REKLAM DENETİMİ</div>
+                <h1 id="audit-title">Reklam bütçeniz<br><span>doğru yere</span><br>gidiyor mu?</h1>
+                <p class="audit-hero-description">Daha fazla harcamadan önce, mevcut reklamlarınızın potansiyelini görün. Google Ads ve Meta kampanyalarınızı birlikte inceleyip gelişim alanlarını ortaya çıkaralım.</p>
+                <div class="audit-hero-actions">
+                    <a href="#basvuru" class="audit-button">Ücretsiz denetim talep et <span aria-hidden="true">↗</span></a>
+                    <a href="#denetim-kapsami" class="audit-text-link">Neleri inceliyoruz? <span aria-hidden="true">↓</span></a>
+                </div>
+                <ul class="audit-assurances" aria-label="Başvuru bilgileri">
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Ücretsiz ön değerlendirme</li>
+                    <li><i class="fas fa-check" aria-hidden="true"></i> Satın alma zorunluluğu yok</li>
+                </ul>
+                <div class="audit-platforms" aria-label="Denetlenen reklam platformları">
+                    <span><i class="fab fa-google" aria-hidden="true"></i> Google Ads</span>
+                    <span><i class="fab fa-facebook" aria-hidden="true"></i> Meta Ads</span>
+                    <span><i class="fab fa-instagram" aria-hidden="true"></i> Instagram</span>
+                </div>
+            </div>
+            <div class="audit-hero-media">
+                <div class="audit-video-frame">
+                    <video id="audit-hero-video" class="audit-hero-video" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback preload="metadata" aria-label="İdeio Creative tanıtım videosu">
+                        <source src="@Url.Content("~/video/reklam_1080p.mp4")" type="video/mp4">
+                        Tarayıcınız videoyu oynatmayı desteklemiyor. <a href="@Url.Content("~/video/reklam_1080p.mp4")">Tanıtım videomuzu izleyin.</a>
+                    </video>
+                    <button id="audit-video-sound" class="audit-video-sound" type="button" aria-controls="audit-hero-video" aria-label="Videonun sesini aç" aria-pressed="false" title="Videonun sesini aç" hidden>
+                        <i class="fas fa-volume-mute" aria-hidden="true"></i>
+                        <span>Sesi aç</span>
+                    </button>
+                </div>
+                <div class="audit-video-caption"><span>İDEİO CREATIVE</span><span>Fikirden etkiye. <span aria-hidden="true">↗</span></span></div>
+            </div>
+        </div>
+    </section>
+    @if (Model.References.Count > 0)
+    {
+        <section class="audit-references" aria-label="Birlikte çalıştığımız markalar">
+            <div class="audit-shell">
+                <div class="audit-reference-label"><span>BİRLİKTE ÜRETTİĞİMİZ MARKALAR</span><span class="audit-reference-line" aria-hidden="true"></span></div>
+                <div class="audit-logo-carousel" role="region" aria-label="Referans logoları" tabindex="0" style="--audit-logo-duration: @(Math.Max(30, Model.References.Count * 5))s;">
+                    @for (var copy = 0; copy < 2; copy++)
+                    {
+                        <ul class="audit-logo-list" aria-hidden="@(copy == 0 ? "false" : "true")">
+                            @foreach (var reference in Model.References)
+                            {
+                                <li><img src="@Url.Content($"~/img/{Uri.EscapeDataString(reference.Image!)}")" alt="@(copy == 0 ? reference.Name : "")" decoding="async" draggable="false" width="180" height="70"></li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+    <section class="audit-section audit-scope" id="denetim-kapsami" aria-labelledby="scope-title">
+        <div class="audit-shell">
+            <div class="audit-section-heading">
+                <div><span class="audit-eyebrow">01 / DENETİM KAPSAMI</span><h2 id="scope-title">Sadece rakamlara değil,<br><span>resmin tamamına bakıyoruz.</span></h2></div>
+                <p>Bir reklamın performansı tek bir ayara bağlı değil. Hedef kitleden açılış sayfasına kadar, dönüşüme giden yolu birlikte değerlendiriyoruz.</p>
+            </div>
+            <div class="audit-scope-grid">
+                @foreach (var scope in scopes)
+                {
+                    <article class="audit-scope-item">
+                        <div class="audit-scope-top"><i class="fas @scope.Item2" aria-hidden="true"></i><span>@scope.Item1</span></div>
+                        <span class="audit-scope-label">@scope.Item4</span>
+                        <h3>@scope.Item3</h3>
+                        <p>@scope.Item5</p>
+                    </article>
+                }
+            </div>
+            <div class="audit-scope-bottom"><p><span aria-hidden="true">↗</span> Daha çok bütçeden önce, daha net bir yol haritası.</p><a href="#basvuru" class="audit-text-link">Markam için başvur <span aria-hidden="true">↗</span></a></div>
+        </div>
+    </section>
+    <section class="audit-section audit-process" id="nasil-calisir" aria-labelledby="process-title">
+        <div class="audit-shell">
+            <div class="audit-section-heading">
+                <div><span class="audit-eyebrow">02 / NASIL İLERLİYORUZ?</span><h2 id="process-title">Karmaşık değil.<br><span>Üç net adım.</span></h2></div>
+                <p>Markanızı tanıyalım, mevcut durumu inceleyelim, sonraki adımı birlikte netleştirelim.</p>
+            </div>
+            <ol class="audit-steps">
+                <li><div class="audit-step-number">01 <span aria-hidden="true">↗</span></div><h3>Markanızla tanışalım.</h3><p>Kısa başvuru formunu doldurun. İhtiyacınızı ve reklam hedeflerinizi konuşmak için sizinle iletişime geçelim.</p><span class="audit-step-tag">Kısa bir başvuru</span></li>
+                <li><div class="audit-step-number">02 <span aria-hidden="true">↗</span></div><h3>Mevcut durumu inceleyelim.</h3><p>İnceleme kapsamını ve gerekli görüntüleme erişimlerini birlikte belirleyelim. Kampanyalarınızı hedeflerinizle karşılaştıralım.</p><span class="audit-step-tag">Hedefinize göre değerlendirme</span></li>
+                <li><div class="audit-step-number">03 <span aria-hidden="true">↗</span></div><h3>Öncelikleri netleştirelim.</h3><p>Gelişim alanlarını sizinle paylaşalım. Bütçe, kreatif ve ölçüm tarafında hangi adımlara öncelik vermeniz gerektiğini konuşalım.</p><span class="audit-step-tag">Uygulanabilir sonraki adımlar</span></li>
+            </ol>
+        </div>
+    </section>
+    <section class="audit-section audit-application" aria-labelledby="application-title">
+        <div class="audit-shell audit-application-grid">
+            <div class="audit-application-copy">
+                <span class="audit-eyebrow">ÜCRETSİZ DENETİM BAŞVURUSU</span>
+                <h2 id="application-title">Şimdi markanızı<br><span>konuşalım.</span></h2>
+                <p>Reklam hedeflerinizi ve mevcut durumunuzu birlikte değerlendirelim. Formu doldurun, size uygun sonraki adımı netleştirmek için iletişime geçelim.</p>
+                <div class="audit-hero-insight">
+                    <svg viewBox="0 0 88 88" width="88" height="88" aria-hidden="true" fill="none">
+                        <circle cx="44" cy="44" r="38" stroke="currentColor" stroke-opacity=".2" />
+                        <circle cx="44" cy="44" r="23" stroke="currentColor" stroke-opacity=".45" />
+                        <path d="M44 2v20m0 44v20M2 44h20m44 0h20M44 44l24-24" stroke="currentColor" />
+                        <circle cx="44" cy="44" r="6" fill="currentColor" />
+                        <circle cx="68" cy="20" r="4" fill="currentColor" />
+                    </svg>
+                    <div><span>DAHA NET VERİ. DAHA DOĞRU KARAR.</span><p>Tıklamaları değil,<br>işinize katkısını konuşalım.</p></div>
+                </div>
+            </div>
+            <div class="audit-form-card" id="basvuru">
+                <div class="audit-form-top"><span>BİRLİKTE BAKALIM</span><span class="audit-free-badge">ÜCRETSİZ</span></div>
+                <h2>İlk adım, <span>net bir bakış.</span></h2>
+                <p class="audit-form-intro">Markanızdan kısaca bahsedin. Denetim için sizinle iletişime geçelim.</p>
+                <form id="audit-form" action="@Url.Content("~/Contact/Index")" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="Subject" value="Ücretsiz Reklam Denetimi">
+                    <input type="hidden" name="Message" value="Ücretsiz reklam denetimi talep ediyorum.">
+                    <input type="hidden" name="FormStartedAt" value="@DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()">
+                    <input type="hidden" name="SecurityQuestionToken" value="@question.Token">
+                    <div class="audit-honeypot" aria-hidden="true">
+                        <label for="audit-website">Bu alanı boş bırakın</label>
+                        <input type="text" name="Website" id="audit-website" tabindex="-1" autocomplete="off">
+                    </div>
+                    <fieldset id="audit-form-fields">
+                        <legend class="audit-visually-hidden">Denetim başvuru bilgileri</legend>
+                        <div class="audit-form-grid">
+                            <div class="audit-field">
+                                <label for="audit-name">Adınız soyadınız <span>*</span></label>
+                                <input id="audit-name" name="Name" autocomplete="name" placeholder="Ad Soyad" maxlength="120" required>
+                            </div>
+                            <div class="audit-field">
+                                <label for="audit-phone">Telefonunuz <span>*</span></label>
+                                <input id="audit-phone" name="Phone" type="tel" autocomplete="tel" placeholder="05XX XXX XX XX" maxlength="30" required>
+                            </div>
+                            <div class="audit-field audit-field-full">
+                                <label for="audit-email">E-posta adresiniz <span>*</span></label>
+                                <input id="audit-email" name="Email" type="email" autocomplete="email" placeholder="siz@markaniz.com" maxlength="200" required>
+                            </div>
+                            <div class="audit-field audit-field-full">
+                                <label for="audit-account">Web siteniz / sosyal medya hesabınız <span>*</span></label>
+                                <input id="audit-account" name="Account" placeholder="markaniz.com veya @@markaniz" maxlength="250" required>
+                            </div>
+                            <div class="audit-field">
+                                <label for="audit-sector">Sektörünüz</label>
+                                <input id="audit-sector" name="Sector" placeholder="Örn. e-ticaret" maxlength="120">
+                            </div>
+                            <div class="audit-field">
+                                <label for="audit-budget">Aylık reklam bütçeniz</label>
+                                <select id="audit-budget" name="AuditBudget">
+                                    <option value="Belirtilmedi">Seçiniz (isteğe bağlı)</option>
+                                    <option>10.000 TL altı</option>
+                                    <option>10.000 – 30.000 TL</option>
+                                    <option>30.000 – 100.000 TL</option>
+                                    <option>100.000 TL üzeri</option>
+                                    <option>Henüz reklam vermiyorum</option>
+                                </select>
+                            </div>
+                            <fieldset class="audit-platform-choice audit-field-full">
+                                <legend>Hangi platformda reklam veriyorsunuz?</legend>
+                                <label><input type="checkbox" name="AuditPlatforms" value="Google Ads"> Google Ads</label>
+                                <label><input type="checkbox" name="AuditPlatforms" value="Meta Ads"> Meta Ads</label>
+                                <label><input type="checkbox" name="AuditPlatforms" value="Henüz reklam vermiyorum"> Henüz başlamadım</label>
+                            </fieldset>
+                            <details class="audit-note audit-field-full">
+                                <summary>Eklemek istediğiniz bir not var mı? <span aria-hidden="true">+</span></summary>
+                                <label class="audit-visually-hidden" for="audit-notes">Beklentiniz veya yaşadığınız sorun</label>
+                                <textarea id="audit-notes" name="AuditNotes" rows="3" maxlength="2000" placeholder="Beklentinizden veya yaşadığınız sorundan bahsedebilirsiniz."></textarea>
+                            </details>
+                            <div class="audit-field audit-field-full audit-security">
+                                <label for="audit-security">@question.Question <span>*</span></label>
+                                <input id="audit-security" name="SecurityAnswer" inputmode="numeric" autocomplete="off" placeholder="Cevabınız" maxlength="10" required>
+                            </div>
+                        </div>
+                        <button class="audit-button audit-submit" type="submit">Ücretsiz denetim talep et <span aria-hidden="true">↗</span></button>
+                        <p class="audit-form-fineprint"><i class="fas fa-lock" aria-hidden="true"></i> Şifre veya ödeme bilgisi istemiyoruz. Başvurunuz bir satın alma yükümlülüğü oluşturmaz.</p>
+                    </fieldset>
+                    <div id="audit-form-error" class="audit-form-error" role="alert" tabindex="-1" hidden></div>
+                    <div id="audit-form-success" class="audit-form-success" role="status" tabindex="-1" hidden>
+                        <span class="audit-success-icon" aria-hidden="true">✓</span>
+                        <h3>Başvurunuz alındı.</h3>
+                        <p>İdeio Creative ekibi, paylaştığınız iletişim bilgileri üzerinden sizinle iletişime geçecek.</p>
+                        <a asp-controller="Home" asp-action="Index" class="audit-button">İdeio Creative’i keşfet <span aria-hidden="true">↗</span></a>
+                    </div>
+                    <noscript><style>.audit-submit { display: none; }</style><p class="audit-form-fineprint">Başvurunuzu bu sayfadan göndermek için JavaScript’i etkinleştirin veya <a asp-controller="Contact" asp-action="Index">iletişim bilgilerimiz</a> üzerinden bize ulaşın.</p></noscript>
+                </form>
+            </div>
+        </div>
+    </section>
+    @if (!string.IsNullOrWhiteSpace(aboutDescription) || Model.Services.Count > 0)
+    {
+        <section class="audit-section audit-agency" aria-labelledby="agency-title">
+            <div class="audit-shell audit-agency-grid">
+                <div class="audit-agency-visual">
+                    @if (!string.IsNullOrWhiteSpace(Model.About.HomeImage))
+                    {
+                        <img src="@Url.Content($"~/img/{Uri.EscapeDataString(Model.About.HomeImage)}")" alt="İdeio Creative" width="600" height="600" loading="lazy" decoding="async">
+                    }
+                    else
+                    {
+                        <div class="audit-agency-wordmark" aria-hidden="true">Fikir.<br>Strateji.<br><span>Etki.</span><span class="audit-agency-arrow">↗</span></div>
+                    }
+                    <span class="audit-image-caption">İDEİO CREATIVE / YARATICILIK + STRATEJİ</span>
+                </div>
+                <div class="audit-agency-copy">
+                    <span class="audit-eyebrow">03 / İDEİO CREATIVE</span>
+                    <h2 id="agency-title">Markanıza<br><span>bütün olarak bakıyoruz.</span></h2>
+                    @if (!string.IsNullOrWhiteSpace(aboutDescription))
+                    {
+                        <p>@aboutDescription</p>
+                    }
+                    <ul class="audit-service-links">
+                        @foreach (var service in Model.Services.Take(6))
+                        {
+                            <li><a asp-controller="Service" asp-action="Detail" asp-route-slug="@service.Slug">@service.Title <span aria-hidden="true">↗</span></a></li>
+                        }
+                    </ul>
+                    <a asp-controller="About" asp-action="Index" class="audit-text-link">Bizi daha yakından tanıyın <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </section>
+    }
+    <section class="audit-section audit-faq" id="sik-sorulan-sorular" aria-labelledby="faq-title">
+        <div class="audit-shell audit-faq-grid">
+            <div><span class="audit-eyebrow">MERAK ETTİKLERİNİZ</span><h2 id="faq-title">Önce soruları<br><span>netleştirelim.</span></h2><p>Aklınızda başka bir soru varsa<br><a asp-controller="Contact" asp-action="Index" class="audit-text-link">bizimle iletişime geçin <span aria-hidden="true">↗</span></a></p></div>
+            <div class="audit-faq-items">
+                <details open><summary>Reklam denetimi gerçekten ücretsiz mi?<span aria-hidden="true">+</span></summary><p>Evet. Bu sayfadan talep ettiğiniz ön değerlendirme ücretsizdir. Sonrasında birlikte çalışmaya karar verirseniz, hizmet kapsamı ve ücretlendirme ayrıca konuşulur.</p></details>
+                <details><summary>Hangi reklam platformlarını inceliyorsunuz?<span aria-hidden="true">+</span></summary><p>Google Ads ve Meta Ads üzerinden yayınlanan Facebook ve Instagram reklamlarını değerlendiriyoruz. Mevcut kampanyalarınıza ve hedeflerinize göre inceleme kapsamını birlikte belirliyoruz.</p></details>
+                <details><summary>Reklam hesabımın şifresini paylaşmam gerekir mi?<span aria-hidden="true">+</span></summary><p>Hayır. Başvuru sırasında şifre istemiyoruz. İnceleme için erişim gerektiğinde, platformun yetkilendirme araçlarıyla gerekli görüntüleme erişimini nasıl verebileceğinizi konuşuyoruz.</p></details>
+                <details><summary>Henüz reklam vermiyorum. Başvurabilir miyim?<span aria-hidden="true">+</span></summary><p>Evet. Mevcut bir kampanyanız yoksa hesabınızın performansını denetlemek yerine, markanızın hedeflerini ve reklam vermeden önce hazırlanması gereken alanları konuşabiliriz.</p></details>
+                <details><summary>Başvurudan sonra ne olacak?<span aria-hidden="true">+</span></summary><p>Ekibimiz formda paylaştığınız iletişim bilgileri üzerinden sizinle iletişime geçer. İhtiyacınızı, inceleme kapsamını ve uygun zamanlamayı birlikte netleştiririz.</p></details>
+                <details><summary>Denetimden sonra hizmet almak zorunda mıyım?<span aria-hidden="true">+</span></summary><p>Hayır. Başvurunuz bir hizmet satın alma zorunluluğu oluşturmaz. Değerlendirmenin ardından nasıl ilerleyeceğinize siz karar verirsiniz.</p></details>
+            </div>
+        </div>
+    </section>
+    <section class="audit-final-cta" aria-labelledby="final-title">
+        <div class="audit-shell audit-final-inner">
+            <div><span class="audit-eyebrow">BİR SONRAKİ ADIM</span><h2 id="final-title">Bütçeyi artırmadan önce,<br>bakış açınızı genişletin.</h2><p>Reklamlarınızın bugününü anlayalım. Yarın için daha net bir yol çizelim.</p></div>
+            <a href="#basvuru" class="audit-cta-circle"><span>Ücretsiz<br>denetim talep et</span><span aria-hidden="true">↗</span></a>
+        </div>
+    </section>
+</main>

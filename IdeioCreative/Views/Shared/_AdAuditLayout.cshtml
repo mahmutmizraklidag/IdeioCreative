@@ -1,0 +1,106 @@
+@model AdAuditViewModel
+@using IdeioCreative.Seo
+@using Microsoft.Extensions.Options
+@inject IOptions<IdeioSeoOptions> SeoOptions
+@{
+    var settings = Model.SiteSetting;
+    var canonical = SeoOptions.Value.Absolute("/ucretsiz-reklam-denetimi");
+    var logo = string.IsNullOrWhiteSpace(settings.Logo) ? "ideio-logo.png" : settings.Logo;
+    var logoUrl = Url.Content($"~/img/{Uri.EscapeDataString(logo)}");
+    var phone = new string((settings.Phone ?? "").Where(c => char.IsDigit(c) || c == '+').ToArray());
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#161616">
+    <title>@ViewData["Title"] | İdeio Creative</title>
+    <meta name="description" content="@ViewData["MetaDescription"]">
+    <link rel="canonical" href="@canonical">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:site_name" content="İdeio Creative">
+    <meta property="og:title" content="@ViewData["Title"] | İdeio Creative">
+    <meta property="og:description" content="@ViewData["MetaDescription"]">
+    <meta property="og:url" content="@canonical">
+    <meta property="og:image" content="@SeoOptions.Value.ImageUrl(logo)">
+    <link rel="icon" href="@Url.Content("~/img/fav/dark-favicon-32x32.png")" type="image/png">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")" asp-append-version="true">
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/all.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/css/ad-audit.css")" asp-append-version="true">
+    <script type="application/ld+json">@Html.Raw(SeoJsonLdBuilder.Organization(settings, SeoOptions.Value))</script>
+    @* Keep the existing site's tracking IDs; lead events are emitted only after a saved application. *@
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18008259244"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'AW-18008259244');
+        (function(w,d,s,l,i) {
+            w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+            var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+            j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-TBJXQ3NM');
+        !function(f,b,e,v,n,t,s) {
+            if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];
+            t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s);
+        }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2134362974000929');
+        fbq('track', 'PageView');
+    </script>
+</head>
+<body class="audit-page">
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBJXQ3NM" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
+    <a class="audit-skip" href="#audit-main">İçeriğe geç</a>
+    <header class="audit-header">
+        <div class="audit-shell audit-header-inner">
+            <a asp-controller="Home" asp-action="Index" class="audit-brand" aria-label="İdeio Creative anasayfa">
+                <img src="@logoUrl" alt="İdeio Creative" width="160" height="60">
+            </a>
+            <nav class="audit-nav" aria-label="Sayfa menüsü">
+                <a href="#denetim-kapsami">Neleri inceliyoruz?</a>
+                <a href="#nasil-calisir">Nasıl ilerliyoruz?</a>
+                <a href="#sik-sorulan-sorular">Sıkça sorulanlar</a>
+            </nav>
+            <a href="#basvuru" class="audit-button audit-button-small">Ücretsiz denetim <span aria-hidden="true">↗</span></a>
+        </div>
+    </header>
+    @RenderBody()
+    <footer class="audit-footer">
+        <div class="audit-shell">
+            <div class="audit-footer-top">
+                <a asp-controller="Home" asp-action="Index" class="audit-brand" aria-label="İdeio Creative anasayfa">
+                    <img src="@logoUrl" alt="İdeio Creative" width="160" height="60" loading="lazy">
+                </a>
+                <p>Yaratıcı fikirler.<br><span>Ölçülebilir bir sonraki adım.</span></p>
+                <div class="audit-footer-contact">
+                    @if (!string.IsNullOrWhiteSpace(settings.Email))
+                    {
+                        <a href="mailto:@settings.Email">@settings.Email <span aria-hidden="true">↗</span></a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(phone))
+                    {
+                        <a href="tel:@phone">@settings.Phone</a>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(settings.Address))
+                    {
+                        <span>@settings.Address</span>
+                    }
+                </div>
+            </div>
+            <div class="audit-footer-bottom">
+                <span>© @DateTime.Now.Year İdeio Creative. Tüm hakları saklıdır.</span>
+                <div>
+                    <a asp-controller="About" asp-action="Index">Hakkımızda</a>
+                    <a asp-controller="Service" asp-action="Index">Hizmetlerimiz</a>
+                    <a asp-controller="Contact" asp-action="Index">İletişim</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <a class="audit-mobile-cta audit-button" href="#basvuru">Ücretsiz denetim talep et <span aria-hidden="true">↗</span></a>
+    <script src="@Url.Content("~/js/ad-audit.js")" asp-append-version="true" defer></script>
+</body>
+</html>

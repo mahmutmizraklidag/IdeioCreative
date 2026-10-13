@@ -44,6 +44,58 @@
     min-width: 220px;
 }
 
+/* Cross-browser marquee overrides for the legacy rules in main.css. */
+.marquee-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
+.marquee-wrapper .marquee-content {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-start !important;
+    width: max-content;
+    min-width: 100%;
+    box-sizing: border-box;
+    padding-inline: clamp(16px, 3vw, 48px);
+    column-gap: clamp(32px, 5vw, 96px) !important;
+    animation: reference-logo-scroll 60s linear infinite;
+    -webkit-animation: reference-logo-scroll 60s linear infinite;
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.marquee-wrapper:hover .marquee-content {
+    animation-play-state: paused;
+    -webkit-animation-play-state: paused;
+}
+
+@keyframes reference-logo-scroll {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+@-webkit-keyframes reference-logo-scroll {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        -webkit-transform: translate3d(-100%, 0, 0);
+    }
+}
+
 @media (max-width: 767px) {
     .reference-logo-frame {
         width: 150px;

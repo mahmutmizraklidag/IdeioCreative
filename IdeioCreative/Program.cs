@@ -55,6 +55,7 @@ builder.Services.AddIdeioAiSeo(options =>
     options.TeamPath = "/ekibimiz";
     options.BlogPath = "/blog";
     options.ContactPath = "/iletisim";
+    options.AdditionalStaticPaths.Add("/ucretsiz-reklam-denetimi");
 
     options.PreferredLanguageName = "Turkish";
     options.AllowGptBotForTraining = false;
