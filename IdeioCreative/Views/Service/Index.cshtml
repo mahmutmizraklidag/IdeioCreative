@@ -1,6 +1,13 @@
 ﻿@model IEnumerable<Service>
+@using IdeioCreative.Seo
+@using Microsoft.Extensions.Options
+@inject IOptions<IdeioSeoOptions> IdeioSeoOptions
 @{
-    ViewData["Title"] = "Hizmetlerimiz";
+    var isSectorPage = ViewData["IsSectorPage"] is true;
+    var pageTitle = isSectorPage ? "Sektörler" : "Hizmetlerimiz";
+    ViewData["CanonicalPath"] = isSectorPage ? IdeioSeoOptions.Value.SectorsPath : IdeioSeoOptions.Value.ServicesPath;
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
+    ViewData["Title"] = pageTitle;
     ViewData["MetaDescription"] = "İdeio Creative Reklam Ajansı";
     ViewData["MetaKeywords"] = "İdeio Creative Reklam Ajansı";
 
@@ -15,7 +22,7 @@
                 <div class="col-lg-7">
                     <div class="breadcrumnd-content text-center">
                         <h1 class="white mb-xxl-10 mb-xl-8 mb-6" data-aos="zoom-in-left" data-aos-duration="1800">
-                            Hizmetlerimiz
+                            @pageTitle
                         </h1>
                         <ul class="breadcrumnd d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
                             data-aos="zoom-in-right" data-aos-duration="2000">
@@ -30,7 +37,7 @@
                                 </span>
                             </li>
                             <li class="theme-clr">
-                                Hizmetlerimiz
+                                @pageTitle
                             </li>
                         </ul>
                     </div>
@@ -38,7 +45,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="assets/img/element/cmn-dost.png" alt="img" class="cmn-dots">
+        <img src="assets/img/element/cmn-dost.png" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -85,20 +92,22 @@
                 }
                 @foreach(var item in Model)
                 {
+                    var itemController = item.PageType == ServicePageType.Sector ? "Sector" : "Service";
+                    var imageRole = item.PageType == ServicePageType.Sector ? "sektör görseli" : "hizmet görseli";
                     <div class="col-lg-6 col-md-6" data-aos="zoom-in-left" data-aos-duration="@duration">
                         <div class="blog-widget-item bb-border pb-xxl-7 pb-xl-6 pb-4">
                             <div class="thumb w-100 overflow-hidden mb-xxl-7 mb-xl-6 mb-4">
-                                <img src="/img/@item.Image" alt="img" class="w-100 overflow-hidden">
+                                <img src="/img/@item.Image" alt="@(string.IsNullOrWhiteSpace(item.Title) ? $"İdeio Creative {imageRole}" : $"{item.Title} {imageRole}")" class="w-100 overflow-hidden">
                             </div>
                             <div class="blog-cont">
                                 <div class="d-flex align-items-center gap-xxl-5 gap-xl-4 gap-3 mb-xxl-5 mb-xl-4 mb-3">
-                                    <a href="study-details.html"
+                                    <a asp-controller="@itemController" asp-action="Detail" asp-route-slug="@item.Slug"
                                        class="radius-btn cmn-border radius100 py-xxl-2 py-2 px-xxl-4 px-3 theme-clr">
                                         İdeio Creative
                                     </a>
                                 </div>
                                 <h5 style="text-transform: none !important;">
-                                    <a asp-controller="Service" asp-action="Detail" asp-route-slug="@item.Slug"
+                                    <a asp-controller="@itemController" asp-action="Detail" asp-route-slug="@item.Slug"
                                        class="white-clr d-flex align-items-center justify-content-between gap-3">
                                         @item.Title
                                         <span class="rot60">

@@ -1,0 +1,75 @@
+@model IdeioCreative.Areas.admin.Models.ServiceEditViewModel
+
+<section class="card border mt-4" data-faq-editor aria-label="Sıkça sorulan sorular">
+    <div class="card-header bg-light d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <h2 class="h5 mb-0">Sıkça Sorulan Sorular</h2>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-faq-add>
+            <i class="bi bi-plus-circle me-1" aria-hidden="true"></i> Soru ekle
+        </button>
+    </div>
+    <div class="card-body">
+        <p class="small text-muted">Bu hizmet için istediğiniz kadar soru ve yanıt ekleyebilirsiniz. Yayında olmayan sorular taslak olarak saklanır. Değişiklikler hizmeti kaydettiğinizde uygulanır.</p>
+        <p class="small text-muted mb-0" data-faq-empty hidden="@(Model.Faqs.Count > 0)">Henüz soru eklenmedi.</p>
+        <div data-faq-list>
+            @for (var index = 0; index < Model.Faqs.Count; index++)
+            {
+                <div class="border rounded p-3 mb-3" data-faq-row>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <h3 class="h6 mb-0">Soru <span data-faq-number>@(index + 1)</span></h3>
+                        <div class="btn-group btn-group-sm" role="group" aria-label="Soru sıralaması ve silme">
+                            <button type="button" class="btn btn-outline-secondary" data-faq-up aria-label="Soruyu yukarı taşı"><i class="bi bi-arrow-up" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-outline-secondary" data-faq-down aria-label="Soruyu aşağı taşı"><i class="bi bi-arrow-down" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-outline-danger" data-faq-remove>Soruyu kaldır</button>
+                        </div>
+                    </div>
+                    <input asp-for="Faqs[index].Id" type="hidden" data-faq-field="Id" />
+                    <span asp-validation-for="Faqs[index].Id" class="text-danger small d-block" data-faq-validation="Id"></span>
+                    <div class="mb-3">
+                        <label asp-for="Faqs[index].Question" class="form-label fw-semibold" data-faq-label="Question">Soru</label>
+                        <input asp-for="Faqs[index].Question" class="form-control" data-faq-field="Question" />
+                        <span asp-validation-for="Faqs[index].Question" class="text-danger small" data-faq-validation="Question"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Faqs[index].Answer" class="form-label fw-semibold" data-faq-label="Answer">Yanıt</label>
+                        <textarea asp-for="Faqs[index].Answer" class="form-control" rows="4" data-faq-field="Answer"></textarea>
+                        <span asp-validation-for="Faqs[index].Answer" class="text-danger small" data-faq-validation="Answer"></span>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="@($"Faqs_{index}__IsPublished")" name="@($"Faqs[{index}].IsPublished")" value="true" checked="@Model.Faqs[index].IsPublished" data-faq-field="IsPublished" />
+                        <label class="form-check-label" for="@($"Faqs_{index}__IsPublished")" data-faq-label="IsPublished">Yayında</label>
+                        <input type="hidden" name="@($"Faqs[{index}].IsPublished")" value="false" data-faq-field="IsPublished" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <template data-faq-template>
+        <div class="border rounded p-3 mb-3" data-faq-row>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h3 class="h6 mb-0">Soru <span data-faq-number></span></h3>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Soru sıralaması ve silme">
+                    <button type="button" class="btn btn-outline-secondary" data-faq-up aria-label="Soruyu yukarı taşı"><i class="bi bi-arrow-up" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-secondary" data-faq-down aria-label="Soruyu aşağı taşı"><i class="bi bi-arrow-down" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-outline-danger" data-faq-remove>Soruyu kaldır</button>
+                </div>
+            </div>
+            <input type="hidden" value="0" data-faq-field="Id" />
+            <span class="text-danger small d-block" data-faq-validation="Id"></span>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" data-faq-label="Question">Soru</label>
+                <input type="text" class="form-control" data-faq-field="Question" />
+                <span class="text-danger small" data-faq-validation="Question"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold" data-faq-label="Answer">Yanıt</label>
+                <textarea class="form-control" rows="4" data-faq-field="Answer"></textarea>
+                <span class="text-danger small" data-faq-validation="Answer"></span>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" value="true" checked data-faq-field="IsPublished" />
+                <label class="form-check-label" data-faq-label="IsPublished">Yayında</label>
+                <input type="hidden" value="false" data-faq-field="IsPublished" />
+            </div>
+        </div>
+    </template>
+</section>

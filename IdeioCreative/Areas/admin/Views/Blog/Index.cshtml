@@ -128,7 +128,7 @@
                     {
                         <tr>
                             <td>
-                                <img src="/img/@item.Image" class="blog-preview-img" alt="">
+                                <img src="/img/@item.Image" class="blog-preview-img" alt="@(string.IsNullOrWhiteSpace(item.Title) ? "Makale görseli" : item.Title)">
                             </td>
                             <td>
                                 <div class="fw-bold text-dark mb-0">@item.Title</div>

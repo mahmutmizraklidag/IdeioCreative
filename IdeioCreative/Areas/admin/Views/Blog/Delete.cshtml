@@ -57,7 +57,7 @@
 
 <div class="container py-5 delete-container">
     <div class="text-center mb-5">
-        <h2 class="fw-bold text-dark">Makaleyi Sil</h2>
+        <h1 class="h2 fw-bold text-dark">Makaleyi Sil</h1>
         <p class="text-muted small">Aşağıdaki içeriği sistemden tamamen kaldırmak üzeresiniz.</p>
     </div>
 
@@ -78,7 +78,7 @@
                     <div class="blog-info-label">Kapak Görseli</div>
                     @if (!string.IsNullOrEmpty(Model.Image))
                     {
-                        <img src="/img/@Model.Image" class="preview-image-box" alt="blog preview" />
+                        <img src="/img/@Model.Image" class="preview-image-box" alt="@(string.IsNullOrWhiteSpace(Model.Title) ? "Makale görseli" : Model.Title)" />
                     }
                     else
                     {

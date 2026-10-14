@@ -92,7 +92,7 @@
                 <div class="d-lg-flex flex-xl-nowrap flex-wrap align-items-center justify-content-lg-between">
                     <div class="d-flex align-items-center justify-content-between">
                         <a asp-controller="Home" asp-action="Index" class="brand-logo">
-                            <img class="logo-img" height="70" src="/img/@DataRequestModel.SiteSetting.Logo" alt="logo">
+                            <img class="logo-img" height="70" src="/img/@DataRequestModel.SiteSetting.Logo" alt="İdeio Creative logosu">
                         </a>
                         <div class="d-flex align-items-center gap-xxl-5 gap-5">
                             @* <a href="javascript:void(0)" class="search-trigger search-icon d-lg-none d-block">
@@ -127,6 +127,14 @@
                                 </button>
                                
                             </li>
+                            @if (DataRequestModel.Sectors.Any())
+                            {
+                                <li class="menu-item position-relative">
+                                    <button onclick="window.location.href='@Url.Action("Index", "Sector")'" class="position-relative ps-5 fw_500 white-clr cus-z1" type="button">
+                                        Sektörler
+                                    </button>
+                                </li>
+                            }
                             <li class="menu-item position-relative">
                                 <button onclick="window.location.href='@Url.Action("Index", "Team")'" class="position-relative  ps-5 fw_500 white-clr cus-z1">
                                     Ekip

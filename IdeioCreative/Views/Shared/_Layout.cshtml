@@ -12,9 +12,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@ViewData["Title"] | İdeio Creative</title>
+    <title>@ViewData["Title"] | İzmir İdeio Creative Reklam Ajansı</title>
     <meta name="description" content="@ViewData["MetaDescription"]" />
     <meta name="keywords" content="@ViewData["MetaKeywords"]" />
+    @if (ViewData["Robots"] is string robots)
+    {
+        <meta name="robots" content="@robots" />
+    }
+    @if (ViewData["CanonicalPath"] is string canonicalPath && !string.IsNullOrWhiteSpace(canonicalPath))
+    {
+        <link rel="canonical" href="@IdeioSeoOptions.Value.Absolute(canonicalPath)" />
+    }
 
     
 
@@ -28,23 +36,15 @@
 
     <link rel="manifest" href="@Url.Content("~/img/fav/site.webmanifest")">
 
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/bootstrap.min.css")">
+    @if (ViewData["HeroImagePath"] is string heroImagePath)
+    {
+        <link rel="preload" as="image" href="@Url.Content(heroImagePath)" fetchpriority="high">
+    }
+    <link rel="stylesheet" href="@Url.Content("~/assets/css/site.bundle.min.css")" asp-append-version="true">
+    @await RenderSectionAsync("Styles", required: false)
+    <script src="@Url.Content("~/assets/js/site.bundle.min.js")" asp-append-version="true" defer></script>
 
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/all.min.css")">
-
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/magnific-popup.css")">
-
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/nice-select.css")">
-
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/swiper.min.css")">
-
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/aos.css")">
-
-    <link rel="stylesheet" href="@Url.Content("~/assets/css/main.css")" asp-append-version="true">
-    <link rel="stylesheet" href="@Url.Content("~/css/reference-logos.css")" asp-append-version="true">
-    <link rel="stylesheet" href="@Url.Content("~/css/home-hero.css")" asp-append-version="true">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+     <script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"Tf98pgbgZgCvJzfuLhvhuU",debug:true});</script>
     <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
@@ -59,7 +59,7 @@
         fbq('track', 'PageView');
     </script>
     <noscript>
-        <img height="1" width="1" style="display:none"
+        <img height="1" width="1" style="display:none" alt="Sayfa görüntüleme ölçüm pikseli" loading="eager" decoding="async"
              src="https://www.facebook.com/tr?id=2134362974000929&ev=PageView&noscript=1" />
     </noscript>
     <!-- End Meta Pixel Code -->
@@ -80,7 +80,8 @@
         @{
             var organizationJson = SeoJsonLdBuilder.Organization(
                 DataRequestModel.SiteSetting,
-                IdeioSeoOptions.Value);
+                IdeioSeoOptions.Value,
+                includeLocalBusiness: ViewData["IncludeLocalBusiness"] is true);
 
             var websiteJson = SeoJsonLdBuilder.WebSite(
                 DataRequestModel.SiteSetting,
@@ -233,136 +234,6 @@
     </a>
   
     @await Component.InvokeAsync("Footer")
-
-    <!-- js Jquery start -->
-    <script src="@Url.Content("~/assets/js/jquery.js")"></script>
-
-    <!-- js Bootstrap start -->
-    <script src="@Url.Content("~/assets/js/bootstrap.bundle.min.js")"></script>
-
-    <!-- js Waypoints start -->
-    <script src="@Url.Content("~/assets/js/jquery.waypoints.js")"></script>
-
-    <!-- js Magnific popup start -->
-    <script src="@Url.Content("~/assets/js/magnific-popup.js")"></script>
-
-    <!-- js Nice Select start -->
-    <script src="@Url.Content("~/assets/js/jquery.nice-select.min.js")"></script>
-
-    <!-- js Swiper start -->
-    <script src="@Url.Content("~/assets/js/swiper.js")"></script>
-
-    <!-- js CounterUp start -->
-    <script src="@Url.Content("~/assets/js/jquery.counterup.min.js")"></script>
-
-    <!-- js AOS Animation start -->
-    <script src="@Url.Content("~/assets/js/aos.js")"></script>
-
-    <!-- js Tilt start -->
-    <script src="@Url.Content("~/assets/js/vanilla-tilt.min.js")"></script>
-
-    <!-- js Main start -->
-    <script src="@Url.Content("~/assets/js/main.js")"></script>
-
-    <script>
-        $(document).ready(function () {
-            const $drawer = $("#quoteDrawer");
-            const $overlay = $("#quoteDrawerOverlay");
-            const $body = $("body");
-
-            function openDrawer() {
-                $drawer.addClass("is-open").attr("aria-hidden", "false");
-                $overlay.addClass("is-open");
-                $body.addClass("quote-drawer-open");
-                $("#SlideFormStartedAt").val(Date.now());
-            }
-
-            function closeDrawer() {
-                $drawer.removeClass("is-open").attr("aria-hidden", "true");
-                $overlay.removeClass("is-open");
-                $body.removeClass("quote-drawer-open");
-            }
-
-            $("#quoteDrawerToggle").on("click", function () {
-                openDrawer();
-            });
-
-            $("#quoteDrawerClose, #quoteDrawerOverlay").on("click", function () {
-                closeDrawer();
-            });
-
-            $(document).on("keydown", function (e) {
-                if (e.key === "Escape") {
-                    closeDrawer();
-                }
-            });
-            $("#SlideFormStartedAt").val(Date.now());
-            $("#slideQuoteForm").on("submit", function (e) {
-                e.preventDefault();
-
-                const $form = $(this);
-                const $submitBtn = $form.find("button[type='submit']");
-                const token = $form.find("input[name='__RequestVerificationToken']").val();
-
-                const entity = {
-                    __RequestVerificationToken: token,
-                    Name: $("#SlideName").val(),
-                    Phone: $("#SlidePhone").val(),
-                    Email: $("#SlideEmail").val(),
-                    Sector: $("#SlideSector").val(),
-                    Account: $("#SlideAccount").val(),
-                    Subject: $("#SlideSubject").val(),
-                    Message: $("#SlideMessage").val(),
-                    Website: $("#SlideWebsite").val(),
-                    FormStartedAt: $("#SlideFormStartedAt").val(),
-                    SecurityAnswer: $("#SlideSecurityAnswer").val(),
-                    SecurityQuestionToken: $("#SlideSecurityQuestionToken").val()
-                };
-
-                $("#slideQuoteSuccess").hide();
-                $("#slideQuoteError").hide().html("");
-
-                $submitBtn.prop("disabled", true).text("Gönderiliyor...");
-
-                $.ajax({
-                    method: "POST",
-                    url: "/Contact/Index",
-                    dataType: "json",
-                    data: entity,
-                    success: function (res) {
-                        if (res.success) {
-                            $("#slideQuoteForm")[0].reset();
-                            $("#SlideFormStartedAt").val(Date.now());
-                            $("#slideQuoteSuccess").show();
-                            $("#slideQuoteError").hide();
-
-                            setTimeout(function () {
-                                closeDrawer();
-                                $("#slideQuoteSuccess").hide();
-                            }, 1200);
-                        } else {
-                            $("#slideQuoteError").show().html(res.message || "Bir hata oluştu.");
-                            $("#slideQuoteSuccess").hide();
-                        }
-                    },
-                    error: function (xhr) {
-                        let errorMessage = "Sunucu hatası!";
-
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            errorMessage = xhr.responseJSON.message;
-                        }
-
-                        $("#slideQuoteError").show().html(errorMessage);
-                        $("#slideQuoteSuccess").hide();
-                    },
-                    complete: function () {
-                        $submitBtn.prop("disabled", false).text("Gönder");
-                    }
-                });
-            });
-        });
-    </script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

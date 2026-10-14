@@ -7,9 +7,9 @@
 <div class="container mt-5">
     <div class="card shadow border-0 rounded-3">
         <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">
+            <h1 class="h4 mb-0">
                 <i class="bi bi-trash3 me-2"></i> Personel Sil
-            </h4>
+            </h1>
             <a asp-action="Index" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Geri Dön
             </a>
@@ -27,7 +27,7 @@
                 <div class="col-md-4 text-center">
                     @if (!string.IsNullOrEmpty(Model.Image))
                     {
-                        <img src="/img/@Model.Image" alt="" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
+                        <img src="/img/@Model.Image" alt="@(string.IsNullOrWhiteSpace(Model.Name) ? "Ekip üyesi portresi" : Model.Name)" class="rounded shadow-sm" width="100%" style="max-width: 250px; object-fit: cover;">
                     }
                     else
                     {
@@ -37,7 +37,7 @@
 
                 <div class="col-md-8">
                     <h5 class="fw-bold">@Model.Name</h5>
-                    <p class="text-muted mb-1">@Html.Raw(Model.Description)</p>
+                    <p class="text-muted mb-1">@Html.Raw(ImageHtml.PrepareContent(Model.Description, Model.Name))</p>
                     <dl class="row mt-3 small">
                         <dt class="col-sm-4">Anasayfa?</dt>
                         <dd class="col-sm-9">

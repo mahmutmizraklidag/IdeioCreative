@@ -25,7 +25,8 @@ namespace IdeioCreative.Controllers
         [EnableRateLimiting("contact-form")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ContactForm entity, string? website, long? formStartedAt, string? securityAnswer, string? securityQuestionToken)
+        public async Task<IActionResult> Index(ContactForm entity, string? website, long? formStartedAt, string? securityAnswer,
+            string? securityQuestionToken, string? leadSource)
         {
             if (!string.IsNullOrWhiteSpace(website))
                 return Json(new { success = false, message = "Geçersiz istek." });
@@ -62,6 +63,10 @@ namespace IdeioCreative.Controllers
 
                 if (result > 0)
                 {
+                    var conversionEventId = leadSource == "free_ad_audit"
+                        ? $"free-ad-audit-lead-{entity.Id}"
+                        : null;
+
                     try
                     {
                         var temp = MailTemplates.ContactFormTemplate(entity);
@@ -77,7 +82,7 @@ namespace IdeioCreative.Controllers
                         Console.WriteLine($"İletişim formu kaydedildi ancak mail gönderilemedi: {ex.Message}");
                     }
 
-                    return Json(new { success = true, message = "Mesajınız gönderildi." });
+                    return Json(new { success = true, message = "Mesajınız gönderildi.", conversionEventId });
                 }
 
                 return Json(new { success = false, message = "Mesaj kaydedilemedi." });

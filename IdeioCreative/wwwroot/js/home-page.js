@@ -1,0 +1,38 @@
+document.addEventListener("DOMContentLoaded", function() {
+            const referencesEl = document.querySelector(".references-swiper");
+
+            if (referencesEl) {
+                new Swiper(".references-swiper", {
+                    slidesPerView: 2,
+                    spaceBetween: 12,
+                    loop: true,
+                    speed: 900,
+                    autoplay: {
+                        delay: 2500,
+                        disableOnInteraction: false
+                    },
+                    navigation: {
+                        nextEl: ".references-next",
+                        prevEl: ".references-prev"
+                    },
+                    breakpoints: {
+                        576: {
+                            slidesPerView: 2,
+                            spaceBetween: 18
+                        },
+                        768: {
+                            slidesPerView: 3,
+                            spaceBetween: 20
+                        },
+                        992: {
+                            slidesPerView: 4,
+                            spaceBetween: 22
+                        },
+                        1200: {
+                            slidesPerView: 5,
+                            spaceBetween: 24
+                        }
+                    }
+                });
+            }
+        });

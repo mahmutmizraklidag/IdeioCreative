@@ -1,4 +1,14 @@
 ﻿  <!-- Main start -->
+@model NotFoundPageViewModel
+@{
+    ViewData["Title"] = "Sayfa Bulunamadı";
+    ViewData["MetaDescription"] = "Aradığınız sayfa bulunamadı. Hizmetlerimizi keşfedin, sitede arama yapın veya bizimle iletişime geçin.";
+    ViewData["Robots"] = "noindex, follow";
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/css/recovery.min.css")" asp-append-version="true" />
+}
 <main class="main">
 
     <!-- Breadcrumnd Banner -->
@@ -31,7 +41,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="assets/img/element/cmn-dost.png" alt="img" class="cmn-dots">
+        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -72,21 +82,62 @@
     <section class="blog-grid pt-space pb-space">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="error-content text-center">
-                        <div class="thumb mb-xxl-15 mb-xl-10 mb-lg-8 mb-md-6 mb-5 w-100" data-aos="zoom-in"
+                        <div class="thumb recovery-illustration mb-6" data-aos="zoom-in"
                              data-aos-duration="1400">
-                            <img src="assets/img/error/opps.png" alt="img" class="w-100">
+                            <img src="@Url.Content("~/assets/img/error/opps.png")" alt="404: Aradığınız sayfa bulunamadı" class="w-100">
                         </div>
                         <h2 class="white-clr mb-xxl-7 mb-xl-6 mb-5">
-                            <span class="theme-clr">Oops!</span> Sayfa Bulunamadı...
+                            Aradığınız sayfayı bulamadık
                         </h2>
                         <p class="white-clr mb-xxl-12 mb-xl-9 mb-lg-8 mb-5">
-                            Ulaşmak istediğiniz sayfa bulunamadı...
+                            Sayfa taşınmış veya kaldırılmış olabilir. Arama yapabilir ya da aşağıdaki bağlantılardan devam edebilirsiniz.
                         </p>
-                        <a asp-controller="Home" asp-action="Index" class="cmn-btn themebg py-xxl-4 py-3 px-xxl-6 px-5 text-whitess">
-                            Anasayfaya Dön
-                        </a>
+                        <div class="recovery-panel text-start">
+                            <form asp-controller="Search" asp-action="Index" method="get" role="search" class="site-search-form">
+                                <label for="recovery-search" class="white-clr">Sitede ara</label>
+                                <div class="site-search-controls">
+                                    <input id="recovery-search" type="search" name="q" required
+                                           maxlength="@SearchPageViewModel.MaxQueryLength"
+                                           placeholder="Hizmet veya blog yazısı arayın" />
+                                    <button type="submit" class="site-search-submit">
+                                        <i class="fas fa-search" aria-hidden="true"></i> Ara
+                                    </button>
+                                </div>
+                            </form>
+
+                            <nav class="recovery-services" aria-labelledby="recovery-services-title">
+                                <h3 id="recovery-services-title" class="white-clr">Hizmetlerimizi keşfedin</h3>
+                                <ul class="recovery-links">
+                                    @foreach (var service in Model.Services)
+                                    {
+                                        <li>
+                                            <a asp-controller="Service" asp-action="Detail" asp-route-slug="@service.Slug">
+                                                @service.Title <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                    <li><a asp-controller="Service" asp-action="Index">Tüm hizmetlerimiz <i class="fas fa-arrow-right" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </nav>
+
+                            <div class="recovery-contact">
+                                <p class="pra-clr">Birlikte doğru çözümü bulalım.</p>
+                                @if (!string.IsNullOrWhiteSpace(Model.PhoneNumber))
+                                {
+                                    <a class="recovery-phone" href="tel:@Model.PhoneNumber">
+                                        <i class="fas fa-phone" aria-hidden="true"></i>
+                                        <span><span class="recovery-phone-label">Bizi arayın</span>@Model.Phone</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Contact" asp-action="Index" class="theme-clr">Bizimle iletişime geçin</a>
+                                }
+                            </div>
+                        </div>
+                        <a asp-controller="Home" asp-action="Index" class="recovery-home-link theme-clr">Anasayfaya dön <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>

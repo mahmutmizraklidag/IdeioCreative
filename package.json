@@ -1,0 +1,16 @@
+{
+  "name": "ideio-creative-assets",
+  "private": true,
+  "scripts": {
+    "build:assets": "node tools/build-assets.mjs",
+    "check:assets": "node tools/build-assets.mjs --check",
+    "test:assets": "node tools/test-assets.mjs",
+    "test:ad-audit": "node tools/ad-audit.test.cjs",
+    "test:faq-editor": "node tools/test-faq-editor.mjs"
+  },
+  "devDependencies": {
+    "acorn": "8.18.0",
+    "postcss": "8.5.28",
+    "terser": "5.51.1"
+  }
+}

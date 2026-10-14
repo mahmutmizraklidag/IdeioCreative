@@ -1,5 +1,7 @@
 ﻿@model HomePageViewModel
 @{
+    ViewData["CanonicalPath"] = "/";
+    ViewData["IncludeLocalBusiness"] = true;
     ViewData["Title"] = string.IsNullOrEmpty(DataRequestModel.SiteSetting.MetaTitle) ? "Anasayfa" : DataRequestModel.SiteSetting.MetaTitle;
     ViewData["MetaDescription"] = string.IsNullOrEmpty(DataRequestModel.SiteSetting.MetaDescription) ? "Anasayfa İdeio Creative" : DataRequestModel.SiteSetting.MetaDescription;
     ViewData["MetaKeywords"] = string.IsNullOrEmpty(DataRequestModel.SiteSetting.Keywords) ? "Anasayfa İdeio Creative" : DataRequestModel.SiteSetting.Keywords;
@@ -31,7 +33,7 @@
                     @foreach (var item in DataRequestModel.References)
                     {
                         <a href="#" class="reference-logo-frame reference-logo-frame--plain">
-                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@item.Name" class="reference-logo-image" decoding="async" draggable="false">
+                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@(string.IsNullOrWhiteSpace(item.Name) ? "Referans marka logosu" : $"{item.Name} logosu")" class="reference-logo-image" decoding="async" draggable="false">
                         </a>
                     }
                 </div>
@@ -40,7 +42,7 @@
                     @foreach (var item in DataRequestModel.References)
                     {
                         <a href="#" class="reference-logo-frame reference-logo-frame--plain">
-                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@item.Name" class="reference-logo-image" decoding="async" draggable="false">
+                            <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@(string.IsNullOrWhiteSpace(item.Name) ? "Referans marka logosu" : $"{item.Name} logosu")" class="reference-logo-image" decoding="async" draggable="false">
                         </a>
                     }
                 </div>
@@ -88,34 +90,35 @@
             <div class="row g-xxl-7 g-5">
                 <div class="col-lg-6 col-md-6 col-sm-8">
                     <div class="about-product-thumb w-100" data-aos="zoom-in" data-aos-duration="2000">
-                        <img src="/img/@DataRequestModel.About.HomeImage" alt="img" class="w-100">
+                        <img src="/img/@DataRequestModel.About.HomeImage" alt="İdeio Creative ajans tanıtımı" class="w-100">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-product-content ps-xxl-10">
                         <div class="pricing-title">
                         
-                            <h2 class="stitle mb-xxl-8 mb-xl-7 mb-xl-5 mb-4" style="color:#f47e3e !important" data-aos="fade-up"
+                            <h1 class="h2 stitle mb-xxl-8 mb-xl-7 mb-xl-5 mb-4" style="color:#f47e3e !important; font-weight:700; line-height:125%" data-aos="fade-up"
                                 data-aos-duration="1600">
                                 @{
                                     var title = DataRequestModel.About?.HomeTitle;
-                                    var parts = !string.IsNullOrEmpty(title)
+                                    var parts = !string.IsNullOrWhiteSpace(title)
                                     ? title.Split(',', 2)
                                     : Array.Empty<string>();
                                 }
 
                                 @if (parts.Length > 0)
                                 {
-                                    @parts[0]@if (parts.Length > 1){
-                                    <text>, </text>
+                                    @parts[0]
+                                    if (parts.Length > 1)
+                                    {
+                                        <text>, </text><span class="fw-400 theme-clr">@parts[1]</span>
+                                    }
                                 }
-
-                                if (parts.Length > 1)
+                                else
                                 {
-                                    <span class="fw-400 theme-clr">@parts[1]</span>
+                                    <text>İzmir Reklam Ajansı – İdeio Creative</text>
                                 }
-                                                                }
-                            </h2>
+                            </h1>
                             <p class="white-clr mb-xxl-9 mb-xl-7 mb-xl-6 mb-6" data-aos="fade-up"
                                data-aos-duration="1900">
                                 @DataRequestModel.About?.HomeDescription
@@ -199,7 +202,7 @@
                         var html = (service.HomeDescription ?? "")
                         .Replace("{{SERVICE_IMAGE}}", Url.Content("~/img/" + service.Image ?? "~/img/" + service.Image))
                         .Replace("{{LINK}}", Url.Action("Detail", "Service", new { slug = service.Slug }));
-                        @Html.Raw(html)
+                        @Html.Raw(ImageHtml.PrepareContent(html, service.Title))
                     }
 
                 </div>
@@ -216,7 +219,7 @@
                     <span class="icons themebg radius100 d-center">
                         <i class="fas fa-play"></i>
                     </span>
-                    <img src="/img/agency.png" alt="img" class="circle">
+                    <img src="/img/agency.png" alt="İdeio Creative reklam ajansı simgesi" class="circle">
                 </a> *@
             </div>
         </div>
@@ -253,7 +256,7 @@
                                 <a href="javascript:void(0)" class="reference-card-inner" aria-label="@reference.Name">
                                     <div class="reference-logo-wrap reference-logo-frame reference-logo-frame--plain">
                                         <img src="/img/@reference.Image"
-                                             alt="@reference.Name"
+                                             alt="@(string.IsNullOrWhiteSpace(reference.Name) ? "Referans marka logosu" : $"{reference.Name} logosu")"
                                              class="reference-logo reference-logo-image" />
                                     </div>
 
@@ -275,213 +278,9 @@
 </section>
 <!-- References End -->
 
-<style>
-        .references-section {
-            background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.00) 100%);
-        }
 
-        .references-subtitle {
-            display: inline-block;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.65);
-            margin-bottom: 8px;
-        }
 
-        .references-title {
-            font-size: clamp(28px, 4vw, 42px);
-            font-weight: 700;
-            line-height: 1.2;
-        }
 
-        .references-nav {
-            flex-shrink: 0;
-        }
-
-        .references-nav-btn {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.04);
-            color: #fff;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all .3s ease;
-        }
-
-            .references-nav-btn:hover {
-                background: #fff;
-                color: #111;
-                transform: translateY(-2px);
-            }
-
-        .references-swiper {
-            overflow: hidden;
-            padding: 8px 2px 8px 2px;
-        }
-
-        .reference-card {
-            height: 100%;
-        }
-
-        .reference-card-inner {
-            min-height: 190px;
-            height: 100%;
-            border-radius: 24px;
-           /*  background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08); */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 24px 18px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            text-decoration: none;
-            transition: all .35s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-            .reference-card-inner::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0));
-                opacity: 0;
-                transition: all .35s ease;
-            }
-
-            .reference-card-inner:hover {
-                transform: translateY(-6px);
-                border-color: rgba(255,255,255,0.18);
-                box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-            }
-
-                .reference-card-inner:hover::before {
-                    opacity: 1;
-                }
-
-        .reference-logo-wrap {
-            position: relative;
-            z-index: 1;
-        }
-
-        .reference-logo {
-            filter: grayscale(100%);
-            opacity: .80;
-            transition: all .35s ease;
-        }
-
-        .reference-card-inner:hover .reference-logo {
-            filter: grayscale(0%);
-            opacity: 1;
-        }
-
-        .reference-info {
-            position: relative;
-            z-index: 1;
-        }
-
-        .reference-name {
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            line-height: 1.4;
-            margin: 0;
-        }
-
-        .reference-empty {
-            padding: 40px 20px;
-            border-radius: 20px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.7);
-        }
-
-        @@media (max-width: 991.98px) {
-            .references-header {
-                align-items: flex-start !important;
-            }
-
-            .references-nav-btn {
-                width: 46px;
-                height: 46px;
-            }
-
-            .reference-card-inner {
-                min-height: 170px;
-                padding: 20px 14px;
-            }
-
-        }
-
-        @@media (max-width: 575.98px) {
-            .references-header {
-                gap: 14px !important;
-            }
-
-            .references-nav {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            .reference-card-inner {
-                min-height: 155px;
-                border-radius: 18px;
-            }
-
-            .reference-name {
-                font-size: 14px;
-            }
-        }
-</style>
-
-<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const referencesEl = document.querySelector(".references-swiper");
-
-            if (referencesEl) {
-                new Swiper(".references-swiper", {
-                    slidesPerView: 2,
-                    spaceBetween: 12,
-                    loop: true,
-                    speed: 900,
-                    autoplay: {
-                        delay: 2500,
-                        disableOnInteraction: false
-                    },
-                    navigation: {
-                        nextEl: ".references-next",
-                        prevEl: ".references-prev"
-                    },
-                    breakpoints: {
-                        576: {
-                            slidesPerView: 2,
-                            spaceBetween: 18
-                        },
-                        768: {
-                            slidesPerView: 3,
-                            spaceBetween: 20
-                        },
-                        992: {
-                            slidesPerView: 4,
-                            spaceBetween: 22
-                        },
-                        1200: {
-                            slidesPerView: 5,
-                            spaceBetween: 24
-                        }
-                    }
-                });
-            }
-        });
-</script>
 
     <!-- Cmn Team version01 Start -->
     <section class=
@@ -520,7 +319,7 @@
                              style="border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px;">
 
                             <div class="thumb overflow-hidden w-100 position-relative mb-xxl-7 mb-xl-6 mb-5">
-                                <img src="/img/@team.Image" alt="img" class="w-100" style="border-radius: 10px;">
+                                <img src="/img/@team.Image" alt="@(string.IsNullOrWhiteSpace(team.Name) ? "İdeio Creative ekip üyesi" : $"{team.Name} portresi")" class="w-100" style="border-radius: 10px;">
                             </div>
 
                             <div class="content">
@@ -614,23 +413,23 @@
             <div class="scrolling-wrap">
                 <div class="comm">
                     <div class="cmn-textslide textitalick">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide text-custom-storke">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide textitalick">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide text-custom-storke">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                 </div>
                 <div class="comm">
                     <div class="cmn-textslide textitalick">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide text-custom-storke">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide textitalick">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                     <div class="cmn-textslide text-custom-storke">#GösterKendini</div>
-                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="img"></div>
+                    <div><img height="100" width="100" src="assets/img/client/testi.png" alt="Göster Kendini kampanya simgesi"></div>
                 </div>
             </div>
         </div>
@@ -738,3 +537,11 @@
 
 </main>
 <!-- Main End -->
+
+@section Scripts {
+    <script src="@Url.Content("~/js/home-page.min.js")" asp-append-version="true" defer></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/css/home-page.min.css")" asp-append-version="true" />
+}

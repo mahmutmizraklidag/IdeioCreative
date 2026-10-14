@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <div class="card shadow border-0 rounded-3">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-journal-plus me-2"></i>Personel Düzenle</h4>
+            <h1 class="h4 mb-0"><i class="bi bi-journal-plus me-2"></i>Personel Düzenle</h1>
             <a asp-action="Index" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Geri Dön
             </a>
@@ -74,7 +74,7 @@
                         {
                             <div class="mb-3">
                                 <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
-                                <img src="/img/@Model.Image" alt="" class="rounded border" width="200" />
+                                <img src="/img/@Model.Image" alt="@(string.IsNullOrWhiteSpace(Model.Name) ? "Ekip üyesi portresi" : Model.Name)" class="rounded border" width="200" />
                             </div>
                         }
                         <div class="mt-2">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using IdeioCreative.Entities;
+using IdeioCreative.Models;
 
 namespace IdeioCreative.Seo;
 
@@ -15,7 +16,7 @@ public static class SeoJsonLdBuilder
         WriteIndented = false
     };
 
-    public static string Organization(SiteSetting? site, IdeioSeoOptions options)
+    public static string Organization(SiteSetting? site, IdeioSeoOptions options, bool includeLocalBusiness = false)
     {
         var sameAs = site is null
             ? Array.Empty<string>()
@@ -27,45 +28,104 @@ public static class SeoJsonLdBuilder
                 site.LinkedIn,
                 site.YouTube
             }
-            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(x => x?.Trim())
+            .Where(IsWebUrl)
             .Cast<string>()
+            .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToArray();
+
+        var local = options.LocalBusiness;
+        var name = string.IsNullOrWhiteSpace(local.Name) ? options.BrandName : local.Name.Trim();
+        var address = string.IsNullOrWhiteSpace(site?.Address)
+            ? null
+            : new Dictionary<string, object?>
+            {
+                ["@type"] = "PostalAddress",
+                ["streetAddress"] = site.Address.Trim(),
+                ["addressCountry"] = local.AddressCountry
+            };
+        if (includeLocalBusiness && address is not null)
+        {
+            address["addressLocality"] = NullIfBlank(local.AddressLocality);
+            address["addressRegion"] = NullIfBlank(local.AddressRegion);
+            address["postalCode"] = NullIfBlank(local.PostalCode);
+        }
 
         var data = new Dictionary<string, object?>
         {
             ["@context"] = "https://schema.org",
-            ["@type"] = "Organization",
+            ["@type"] = includeLocalBusiness
+                ? new[] { "Organization", "LocalBusiness", "ProfessionalService" }
+                : (object)"Organization",
             ["@id"] = options.Absolute("/#organization"),
-            ["name"] = options.BrandName,
+            ["name"] = name,
+            ["alternateName"] = name == options.BrandName ? null : options.BrandName,
             ["url"] = options.Absolute("/"),
             ["logo"] = string.IsNullOrWhiteSpace(site?.Logo) ? null : options.ImageUrl(site.Logo),
-            ["description"] = site?.MetaDescription,
-            ["email"] = site?.Email,
-            ["telephone"] = site?.Phone,
+            ["description"] = NullIfBlank(site?.MetaDescription),
+            ["email"] = NullIfBlank(site?.Email),
+            ["telephone"] = NullIfBlank(site?.Phone),
             ["sameAs"] = sameAs.Length == 0 ? null : sameAs,
-            ["hasMap"] = site?.mapLink,
-            ["address"] = string.IsNullOrWhiteSpace(site?.Address)
-                ? null
-                : new Dictionary<string, object?>
-                {
-                    ["@type"] = "PostalAddress",
-                    ["streetAddress"] = site.Address,
-                    ["addressCountry"] = "TR"
-                },
+            ["hasMap"] = includeLocalBusiness && IsWebUrl(local.MapUrl)
+                ? local.MapUrl!.Trim()
+                : IsWebUrl(site?.mapLink) ? site!.mapLink!.Trim() : null,
+            ["address"] = address is null ? null : WithoutNullValues(address),
             ["contactPoint"] = string.IsNullOrWhiteSpace(site?.Phone) && string.IsNullOrWhiteSpace(site?.Email)
                 ? null
                 : new Dictionary<string, object?>
                 {
                     ["@type"] = "ContactPoint",
-                    ["telephone"] = site?.Phone,
-                    ["email"] = site?.Email,
+                    ["telephone"] = NullIfBlank(site?.Phone),
+                    ["email"] = NullIfBlank(site?.Email),
                     ["contactType"] = "customer service",
                     ["availableLanguage"] = new[] { "tr", "en" }
                 }
         };
 
-        return JsonSerializer.Serialize(data, JsonOptions);
+        if (includeLocalBusiness)
+        {
+            var image = string.IsNullOrWhiteSpace(site?.BannerImage) ? site?.Logo : site.BannerImage;
+            if (!string.IsNullOrWhiteSpace(image))
+                data["image"] = options.ImageUrl(image);
+
+            if (local.Latitude is double latitude && local.Longitude is double longitude &&
+                double.IsFinite(latitude) && double.IsFinite(longitude) &&
+                latitude is >= -90 and <= 90 && longitude is >= -180 and <= 180)
+            {
+                data["geo"] = new Dictionary<string, object?>
+                {
+                    ["@type"] = "GeoCoordinates",
+                    ["latitude"] = latitude,
+                    ["longitude"] = longitude
+                };
+            }
+
+            var hours = local.OpeningHours.Where(group => group.IsValid)
+                .Select(group => new Dictionary<string, object?>
+                {
+                    ["@type"] = "OpeningHoursSpecification",
+                    ["dayOfWeek"] = group.Days
+                        .Select(day => Enum.Parse<DayOfWeek>(day, ignoreCase: true).ToString()).Distinct().ToArray(),
+                    ["opens"] = group.Opens,
+                    ["closes"] = group.Closes
+                }).ToArray();
+            if (hours.Length > 0)
+                data["openingHoursSpecification"] = hours;
+        }
+
+        if (data["contactPoint"] is Dictionary<string, object?> contactPoint)
+            data["contactPoint"] = WithoutNullValues(contactPoint);
+
+        return JsonSerializer.Serialize(WithoutNullValues(data), JsonOptions);
     }
+
+    private static string? NullIfBlank(string? value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+    private static bool IsWebUrl(string? value) => Uri.TryCreate(value?.Trim(), UriKind.Absolute, out var uri)
+        && uri.Scheme is "https" or "http";
+
+    private static Dictionary<string, object?> WithoutNullValues(Dictionary<string, object?> data) =>
+        data.Where(item => item.Value is not null).ToDictionary(item => item.Key, item => item.Value);
 
     public static string WebSite(SiteSetting? site, IdeioSeoOptions options)
     {
@@ -208,6 +268,34 @@ public static class SeoJsonLdBuilder
                 ["position"] = index + 1,
                 ["name"] = item.Name,
                 ["item"] = item.Url
+            }).ToArray()
+        };
+
+        return JsonSerializer.Serialize(data, JsonOptions);
+    }
+
+    public static string FaqPage(FaqSectionViewModel section)
+    {
+        var url = FaqContent.CanonicalPageUrl(section.PageUrl);
+        if (section.Items.Count == 0 || string.IsNullOrEmpty(url))
+            return string.Empty;
+
+        var data = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "FAQPage",
+            ["@id"] = url + "#faq",
+            ["url"] = url,
+            ["name"] = "Sık Sorulan Sorular",
+            ["mainEntity"] = section.Items.Select(item => new Dictionary<string, object?>
+            {
+                ["@type"] = "Question",
+                ["name"] = item.Question,
+                ["acceptedAnswer"] = new Dictionary<string, object?>
+                {
+                    ["@type"] = "Answer",
+                    ["text"] = item.Answer
+                }
             }).ToArray()
         };
 

@@ -1,0 +1,64 @@
+@model SearchPageViewModel
+@inject IdeioCreative.Seo.SeoTextFormatter SeoTextFormatter
+@{
+    ViewData["Title"] = "Arama";
+    ViewData["MetaDescription"] = "İdeio Creative hizmetleri ve blog yazılarında arama yapın.";
+    ViewData["Robots"] = "noindex, follow";
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/css/recovery.min.css")" asp-append-version="true" />
+}
+<main class="main">
+    <section class="breadcrumnd-banner position-relative">
+        <div class="container text-center">
+            <h1 class="white-clr mb-5">Sitede ara</h1>
+            <p class="pra-clr">Hizmetlerimizde ve blog yazılarında aradığınızı bulun.</p>
+        </div>
+    </section>
+    <section class="pt-space pb-space">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <form asp-controller="Search" asp-action="Index" method="get" role="search" class="site-search-form">
+                        <label for="page-search" class="white-clr">Arama kelimesi</label>
+                        <div class="site-search-controls">
+                            <input id="page-search" type="search" name="q" value="@Model.Query" required
+                                   maxlength="@SearchPageViewModel.MaxQueryLength" placeholder="Hizmet veya blog yazısı arayın" />
+                            <button type="submit" class="site-search-submit"><i class="fas fa-search" aria-hidden="true"></i> Ara</button>
+                        </div>
+                    </form>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Query))
+                    {
+                        <p class="pra-clr search-summary">“@Model.Query” için @Model.Results.Count sonuç bulundu.</p>
+                        @if (Model.Results.Count == 0)
+                        {
+                            <div class="recovery-panel">
+                                <h2 class="white-clr">Bir sonuç bulamadık</h2>
+                                <p class="pra-clr">Başka bir kelimeyle arayabilir veya tüm hizmetlerimizi inceleyebilirsiniz.</p>
+                                <a asp-controller="Service" asp-action="Index" class="theme-clr">Hizmetlerimiz <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                            </div>
+                        }
+                        else
+                        {
+                            <ul class="search-results">
+                                @foreach (var result in Model.Results)
+                                {
+                                    <li>
+                                        <span class="theme-clr">@result.Category</span>
+                                        <h2><a asp-controller="@result.Controller" asp-action="Detail" asp-route-slug="@result.Slug">@result.Title</a></h2>
+                                        @if (!string.IsNullOrWhiteSpace(result.Description))
+                                        {
+                                            <p class="pra-clr">@SeoTextFormatter.OneLine(result.Description, 200)</p>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

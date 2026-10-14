@@ -1,0 +1,35 @@
+{
+  "LocalBusiness": {
+    "Name": "İdeio Creative Reklam Ajansı",
+    "AddressLocality": "Bayraklı",
+    "AddressRegion": "İzmir",
+    "PostalCode": "35530",
+    "AddressCountry": "TR",
+    "Latitude": 38.4505697,
+    "Longitude": 27.1840711,
+    "MapUrl": "https://www.google.com/maps?cid=8636504799359170430",
+    "OpeningHours": [
+      {
+        "Days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "Opens": "09:00",
+        "Closes": "18:00",
+        "Label": "Pzt - Cum"
+      },
+      {
+        "Days": [
+          "Saturday",
+          "Sunday"
+        ],
+        "Opens": "00:00",
+        "Closes": "00:00",
+        "Label": "Cmt - Paz"
+      }
+    ]
+  }
+}

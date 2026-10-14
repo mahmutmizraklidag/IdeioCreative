@@ -1,0 +1,83 @@
+(function () {
+    "use strict";
+
+    document.querySelectorAll("[data-faq-editor]").forEach(function (editor) {
+        const list = editor.querySelector("[data-faq-list]");
+        const template = editor.querySelector("[data-faq-template]");
+        const empty = editor.querySelector("[data-faq-empty]");
+        const form = editor.closest("form");
+        if (!list || !template || !form) return;
+
+        function validateRow(row) {
+            const question = row.querySelector('[data-faq-field="Question"]');
+            const answer = row.querySelector('[data-faq-field="Answer"]');
+            const hasQuestion = question.value.trim().length > 0;
+            const hasAnswer = answer.value.trim().length > 0;
+            question.setCustomValidity(hasAnswer && !hasQuestion ? "Lütfen soru giriniz." : "");
+            answer.setCustomValidity(hasQuestion && !hasAnswer ? "Lütfen yanıt giriniz." : "");
+        }
+
+        function reindex() {
+            const rows = Array.from(list.querySelectorAll("[data-faq-row]"));
+            rows.forEach(function (row, index) {
+                row.querySelector("[data-faq-number]").textContent = String(index + 1);
+                row.querySelectorAll("[data-faq-field]").forEach(function (field) {
+                    const key = field.dataset.faqField;
+                    field.name = "Faqs[" + index + "]." + key;
+                    if (key !== "IsPublished" || field.type !== "hidden") {
+                        field.id = "Faqs_" + index + "__" + key;
+                    }
+                });
+                row.querySelectorAll("[data-faq-label]").forEach(function (label) {
+                    label.htmlFor = "Faqs_" + index + "__" + label.dataset.faqLabel;
+                });
+                row.querySelectorAll("[data-faq-validation]").forEach(function (message) {
+                    message.setAttribute("data-valmsg-for", "Faqs[" + index + "]." + message.dataset.faqValidation);
+                    message.setAttribute("data-valmsg-replace", "true");
+                });
+                row.querySelector("[data-faq-up]").disabled = index === 0;
+                row.querySelector("[data-faq-down]").disabled = index === rows.length - 1;
+                validateRow(row);
+            });
+            if (empty) empty.hidden = rows.length > 0;
+        }
+
+        editor.addEventListener("click", function (event) {
+            const target = event.target.closest("button");
+            if (!target || !editor.contains(target)) return;
+            if (target.hasAttribute("data-faq-add")) {
+                const row = template.content.firstElementChild.cloneNode(true);
+                list.appendChild(row);
+                reindex();
+                row.querySelector('[data-faq-field="Question"]').focus();
+                return;
+            }
+
+            const row = target.closest("[data-faq-row]");
+            if (!row) return;
+            if (target.hasAttribute("data-faq-remove")) {
+                row.remove();
+            } else if (target.hasAttribute("data-faq-up") && row.previousElementSibling) {
+                list.insertBefore(row, row.previousElementSibling);
+            } else if (target.hasAttribute("data-faq-down") && row.nextElementSibling) {
+                list.insertBefore(row.nextElementSibling, row);
+            }
+            reindex();
+        });
+
+        editor.addEventListener("input", function (event) {
+            const row = event.target.closest("[data-faq-row]");
+            if (row) validateRow(row);
+        });
+
+        form.addEventListener("submit", function (event) {
+            reindex();
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                form.reportValidity();
+            }
+        });
+
+        reindex();
+    });
+})();

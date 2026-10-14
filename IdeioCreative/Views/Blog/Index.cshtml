@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Blog>
 @{
+    ViewData["CanonicalPath"] = "/blog";
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
     ViewData["Title"] = "Son Yazılar";
     ViewData["MetaDescription"] = "İdeio Creative Reklam Ajansı";
     ViewData["MetaKeywords"] = "İdeio Creative Reklam Ajansı";
@@ -38,7 +40,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="assets/img/element/cmn-dost.png" alt="img" class="cmn-dots">
+        <img src="assets/img/element/cmn-dost.png" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">

@@ -1,10 +1,14 @@
 ﻿@{
     ViewData["Title"] = "İletişim";
+    ViewData["CanonicalPath"] = "/iletisim";
+    ViewData["IncludeLocalBusiness"] = true;
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
     ViewData["MetaDescription"] = "Bizimle iletişime geçin";
     ViewData["MetaKeywords"] = "Bizimle iletişime geçin";
 
 }
 @inject IdeioCreative.Tools.ContactSecurityQuestionService ContactSecurityQuestionService
+@inject Microsoft.Extensions.Options.IOptions<IdeioCreative.Seo.IdeioSeoOptions> IdeioSeoOptions
 @{
     var contactSecurityQuestion = ContactSecurityQuestionService.CreateQuestion();
 }
@@ -41,7 +45,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="assets/img/element/cmn-dost.png" alt="img" class="cmn-dots">
+        <img src="assets/img/element/cmn-dost.png" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -145,12 +149,10 @@
                         <h5 class="white mt-xxl-7 mt-6 mb-xxl-7 mb-6">
                             Çalışma Saatleri
                         </h5>
-                        <span class="msub d-block mb-2">
-                            Pzt - Cum: 09.00 - 18.00
-                        </span>
-                        <span class="msub">
-                            Cmt - Paz: Kapalı
-                        </span>
+                        @foreach (var hours in IdeioSeoOptions.Value.LocalBusiness.OpeningHours.Where(group => group.IsValid))
+                        {
+                            <span class="msub d-block mb-2">@hours.DisplayText</span>
+                        }
                     </div>
                 </div>
             </div>
@@ -222,44 +224,9 @@
 
 </main>
 <!-- Main End -->
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#ContactFormStartedAt").val(Date.now());
 
-        $("#iletisimFormu").on("submit", function (e) {
-            e.preventDefault();
 
-            var form = $(this);
-            var formData = form.serialize();
 
-            $.ajax({
-                type: "POST",
-                url: "/Contact/Index",
-                data: formData,
-                success: function (res) {
-                    if (res.success) {
-                        $("#iletisimFormu")[0].reset();
-                        $("#ContactFormStartedAt").val(Date.now());
-                        $(".sent-message").show();
-                        $(".error-message").hide().html("");
-                    } else {
-                        $(".error-message").show().html(res.message);
-                        $(".sent-message").hide();
-                    }
-                },
-                error: function (xhr) {
-                    $(".sent-message").hide();
-
-                    if (xhr.status === 400) {
-                        $(".error-message").show().html("Güvenlik doğrulaması başarısız oldu.");
-                    } else if (xhr.status === 429) {
-                        $(".error-message").show().html("Çok fazla istek gönderdiniz. Lütfen biraz bekleyin.");
-                    } else {
-                        $(".error-message").show().html("Sunucu hatası!");
-                    }
-                }
-            });
-        });
-    });
-</script>
+@section Scripts {
+    <script src="@Url.Content("~/js/contact.min.js")" asp-append-version="true" defer></script>
+}

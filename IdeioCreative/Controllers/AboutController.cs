@@ -19,7 +19,7 @@ namespace IdeioCreative.Controllers
         {
             var AboutViewModel = new AboutViewModel()
             {
-                Services = _context.Services.Where(x => x.Language == Language.TR).ToList(),
+                Services = _context.Services.Where(x => x.Language == Language.TR && x.PageType == ServicePageType.Service).ToList(),
                 About = _context.Abouts.FirstOrDefault(a => a.Language == Language.TR)
             };
             return View(AboutViewModel);

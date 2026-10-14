@@ -26,5 +26,7 @@ namespace IdeioCreative.Entities
         [Display(Name = "Dil")]
         [Required(ErrorMessage = "Lütfen bir dil seçiniz.")]
         public Language Language { get; set; }
+        public ServicePageType PageType { get; set; } = ServicePageType.Service;
+        public ICollection<ServiceFaq> Faqs { get; set; } = new List<ServiceFaq>();
     }
 }

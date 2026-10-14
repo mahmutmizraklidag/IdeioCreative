@@ -2,6 +2,8 @@ using IdeioCreative.Data;
 using IdeioCreative.Entities;
 using IdeioCreative.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace IdeioCreative.Controllers
@@ -18,7 +20,7 @@ namespace IdeioCreative.Controllers
 
         public IActionResult Index()
         {
-            var services = _context.Services.Where(x => x.Language == Language.TR)
+            var services = _context.Services.Where(x => x.Language == Language.TR && x.PageType == ServicePageType.Service)
                 .OrderBy(s => s.Title).ToList();
             var references = _context.References.ToList();
             var blogs = _context.Blogs.OrderByDescending(b => b.CreatedAt).Take(3).ToList();
@@ -35,10 +37,25 @@ namespace IdeioCreative.Controllers
         {
             return View();
         }
-        [Route("404")]
-        public IActionResult NotFound()
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public new IActionResult NotFound()
         {
-            return View();
+            // Preserve the server-error status when the exception handler uses this view.
+            Response.StatusCode = HttpContext.Features.Get<IExceptionHandlerFeature>() is null
+                ? StatusCodes.Status404NotFound
+                : StatusCodes.Status500InternalServerError;
+
+            var model = new NotFoundPageViewModel
+            {
+                Services = _context.Services.AsNoTracking()
+                    .Where(service => service.Language == Language.TR && service.PageType == ServicePageType.Service)
+                    .OrderBy(service => service.Title).ToList(),
+                Phone = _context.SiteSettings.AsNoTracking()
+                    .Where(settings => settings.Language == Language.TR)
+                    .OrderBy(settings => settings.Id)
+                    .Select(settings => settings.Phone).FirstOrDefault()
+            };
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

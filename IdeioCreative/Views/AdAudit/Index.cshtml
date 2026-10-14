@@ -65,7 +65,7 @@
                         <ul class="audit-logo-list" aria-hidden="@(copy == 0 ? "false" : "true")">
                             @foreach (var reference in Model.References)
                             {
-                                <li><img src="@Url.Content($"~/img/{Uri.EscapeDataString(reference.Image!)}")" alt="@(copy == 0 ? reference.Name : "")" decoding="async" draggable="false" width="180" height="70"></li>
+                                <li><img src="@Url.Content($"~/img/{Uri.EscapeDataString(reference.Image!)}")" alt="@(string.IsNullOrWhiteSpace(reference.Name) ? "Referans marka logosu" : $"{reference.Name} logosu")" decoding="async" draggable="false" width="180" height="70"></li>
                             }
                         </ul>
                     }
@@ -129,6 +129,7 @@
                 <p class="audit-form-intro">Markanızdan kısaca bahsedin. Denetim için sizinle iletişime geçelim.</p>
                 <form id="audit-form" action="@Url.Content("~/Contact/Index")" method="post">
                     @Html.AntiForgeryToken()
+                    <input type="hidden" name="LeadSource" value="free_ad_audit">
                     <input type="hidden" name="Subject" value="Ücretsiz Reklam Denetimi">
                     <input type="hidden" name="Message" value="Ücretsiz reklam denetimi talep ediyorum.">
                     <input type="hidden" name="FormStartedAt" value="@DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()">

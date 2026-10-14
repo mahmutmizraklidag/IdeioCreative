@@ -11,6 +11,11 @@
     <Folder Include="Areas\admin\Models\" />
   </ItemGroup>
 
+  <Target Name="BuildClientAssets" BeforeTargets="PrepareForBuild"
+          Condition="Exists('$(MSBuildProjectDirectory)\..\node_modules\terser\package.json')">
+    <Exec Command="node tools/build-assets.mjs" WorkingDirectory="$(MSBuildProjectDirectory)\.." />
+  </Target>
+
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.28" />

@@ -19,7 +19,7 @@ public sealed class AdAuditController(DatabaseContext context) : Controller
             .Where(x => x.Language == Language.TR && x.Image != null && x.Image != "")
             .OrderBy(x => x.Id).ToListAsync(cancellationToken);
         var services = await context.Services.AsNoTracking()
-            .Where(x => x.Language == Language.TR)
+            .Where(x => x.Language == Language.TR && x.PageType == ServicePageType.Service)
             .OrderBy(x => x.Title).ToListAsync(cancellationToken);
 
         return View(new AdAuditViewModel

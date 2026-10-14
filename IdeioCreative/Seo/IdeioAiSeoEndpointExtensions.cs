@@ -58,7 +58,12 @@ public static class IdeioAiSeoEndpointExtensions
             CancellationToken cancellationToken) =>
         {
             var data = await LoadData(db, int.MaxValue, cancellationToken);
-            return Xml(BuildSitemap(data, options.Value));
+            var modifications = await db.Set<SeoPageModification>().AsNoTracking()
+                .GroupBy(modification => modification.PagePath)
+                .Select(group => new { PagePath = group.Key, LastModifiedUtc = group.Max(item => item.LastModifiedUtc) })
+                .ToDictionaryAsync(item => item.PagePath, item => item.LastModifiedUtc,
+                    StringComparer.OrdinalIgnoreCase, cancellationToken);
+            return Xml(BuildSitemap(data, options.Value, modifications));
         }).ExcludeFromDescription();
 
         app.MapGet("/ai/home.md", async (
@@ -279,28 +284,34 @@ public static class IdeioAiSeoEndpointExtensions
     private static string BuildRobots(IdeioSeoOptions options)
     {
         var sb = new StringBuilder();
+        // A named group does not inherit wildcard rules. Keep every allowed
+        // crawler in the same group so the private paths apply to all of them.
         sb.AppendLine("User-agent: *");
-        sb.AppendLine("Allow: /");
-        sb.AppendLine("Disallow: /admin/");
-        sb.AppendLine("Disallow: /Admin/");
-        sb.AppendLine("Disallow: /account/");
-        sb.AppendLine("Disallow: /Account/");
-        sb.AppendLine();
+        sb.AppendLine("User-agent: Googlebot");
         sb.AppendLine("User-agent: OAI-SearchBot");
-        sb.AppendLine("Allow: /");
-        sb.AppendLine();
         sb.AppendLine("User-agent: ChatGPT-User");
-        sb.AppendLine("Allow: /");
-        sb.AppendLine();
         sb.AppendLine("User-agent: ClaudeBot");
-        sb.AppendLine("Allow: /");
-        sb.AppendLine();
         sb.AppendLine("User-agent: PerplexityBot");
+        sb.AppendLine("User-agent: Perplexity-User");
+        if (options.AllowGptBotForTraining)
+            sb.AppendLine("User-agent: GPTBot");
+
         sb.AppendLine("Allow: /");
+        foreach (var path in new[] { "/admin", "/Admin", "/account", "/Account" })
+        {
+            sb.AppendLine($"Disallow: {path}$");
+            sb.AppendLine($"Disallow: {path}?");
+            sb.AppendLine($"Disallow: {path}/");
+        }
         sb.AppendLine();
-        sb.AppendLine("User-agent: GPTBot");
-        sb.AppendLine(options.AllowGptBotForTraining ? "Allow: /" : "Disallow: /");
-        sb.AppendLine();
+
+        if (!options.AllowGptBotForTraining)
+        {
+            sb.AppendLine("User-agent: GPTBot");
+            sb.AppendLine("Disallow: /");
+            sb.AppendLine();
+        }
+
         sb.AppendLine($"Sitemap: {options.Absolute("/sitemap.xml")}");
         return sb.ToString();
     }
@@ -503,31 +514,37 @@ public static class IdeioAiSeoEndpointExtensions
         return sb.ToString();
     }
 
-    private static string BuildSitemap(SeoData data, IdeioSeoOptions options)
+    private static string BuildSitemap(SeoData data, IdeioSeoOptions options,
+        IReadOnlyDictionary<string, DateTime> modifications)
     {
         var entries = new Dictionary<string, DateTime?>(StringComparer.OrdinalIgnoreCase);
+        var publishedBlogs = data.Blogs.Where(blog => blog.CreatedAt <= DateTime.Now).ToList();
+        var latestPublication = publishedBlogs.Select(blog => (DateTime?)blog.CreatedAt).Max();
 
-        AddSitemapEntry(entries, options.Absolute("/"), null);
-        AddSitemapEntry(entries, options.Absolute(options.AboutPath), null);
-        AddSitemapEntry(entries, options.Absolute(options.ServicesPath), null);
-        AddSitemapEntry(entries, options.Absolute(options.TeamPath), null);
-        AddSitemapEntry(entries, options.Absolute(options.BlogPath), null);
-        AddSitemapEntry(entries, options.Absolute(options.ContactPath), null);
+        AddPage(options.Absolute("/"), latestPublication);
+        AddPage(options.Absolute(options.AboutPath));
+        AddPage(options.Absolute(options.ServicesPath));
+        if (data.Services.Any(service => service.PageType == ServicePageType.Sector
+            && options.IsPreferredLanguage(service.Language)))
+            AddPage(options.Absolute(options.SectorsPath));
+        AddPage(options.Absolute(options.TeamPath));
+        AddPage(options.Absolute(options.BlogPath), latestPublication);
+        AddPage(options.Absolute(options.ContactPath));
 
         foreach (var path in options.AdditionalStaticPaths)
-            AddSitemapEntry(entries, options.Absolute(path), null);
+            AddPage(options.Absolute(path));
 
-        foreach (var service in data.Services)
-            AddSitemapEntry(entries, options.ServiceUrl(service), null);
+        foreach (var service in data.Services.Where(service => options.IsPreferredLanguage(service.Language)))
+            AddPage(options.ServiceUrl(service));
 
         if (options.IncludeTeamDetailPages)
         {
             foreach (var member in data.Teams)
-                AddSitemapEntry(entries, options.TeamUrl(member), null);
+                AddPage(options.TeamUrl(member));
         }
 
-        foreach (var blog in data.Blogs)
-            AddSitemapEntry(entries, options.BlogUrl(blog), blog.CreatedAt);
+        foreach (var blog in publishedBlogs)
+            AddPage(options.BlogUrl(blog), blog.CreatedAt);
 
         XNamespace ns = "http://www.sitemaps.org/schemas/sitemap/0.9";
         var document = new XDocument(
@@ -541,6 +558,25 @@ public static class IdeioAiSeoEndpointExtensions
                             : null))));
 
         return document.ToString();
+
+        void AddPage(string url, DateTime? publishedAt = null)
+        {
+            var canonical = new Uri(url);
+            var path = canonical.AbsolutePath;
+            var lastModified = options.PageTemplatesLastModified;
+
+            if (publishedAt.HasValue && (!lastModified.HasValue || publishedAt > lastModified))
+                lastModified = publishedAt;
+
+            foreach (var key in new[] { SeoPageModificationTracker.SharedPagePath, path })
+            {
+                if (modifications.TryGetValue(key, out var modifiedAt) &&
+                    (!lastModified.HasValue || modifiedAt > lastModified))
+                    lastModified = modifiedAt;
+            }
+
+            AddSitemapEntry(entries, canonical.GetLeftPart(UriPartial.Path), lastModified);
+        }
     }
 
     private static List<T> Preferred<T>(

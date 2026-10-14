@@ -23,6 +23,9 @@
             IdeioSeoOptions.Value.Absolute(
                 IdeioSeoOptions.Value.BlogPath)),
         (Model.Title, IdeioSeoOptions.Value.BlogUrl(Model)));
+
+    ViewData["CanonicalPath"] = IdeioSeoOptions.Value.BlogUrl(Model);
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
 }
 
 <script type="application/ld+json">
@@ -32,8 +35,6 @@
 <script type="application/ld+json">
     @Html.Raw(breadcrumbJson)
 </script>
-<link rel="canonical"
-      href="@IdeioSeoOptions.Value.BlogUrl(Model)" />
 <!-- Main start -->
 <main class="main">
 
@@ -67,7 +68,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="img" class="cmn-dots">
+        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +132,7 @@
                                     <h5 class="white mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1600">
                                         @Model.Title
                                     </h5>
-                                    @Html.Raw(Model.Description)
+                                    @Html.Raw(ImageHtml.PrepareContent(Model.Description, Model.Title))
                                    @*  <p class="pra-clr mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1550">
                                         Proin ultricies ultricies est vitae cursus. Nulla sit amet suscipit tortor.
                                         Maecenas dui erat, ornare eget tristique

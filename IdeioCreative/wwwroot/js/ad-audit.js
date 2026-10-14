@@ -121,6 +121,14 @@
             document.querySelector(".audit-form-intro").hidden = true;
             // Only signal a lead after the contact endpoint confirms it was saved.
             try {
+                if (typeof window.oaiq === "function" && result.conversionEventId) {
+                    window.oaiq("measure", "lead_created", { type: "customer_action" },
+                        { event_id: result.conversionEventId });
+                }
+            } catch {
+                // A blocked pixel must not change a confirmed application result or other tracking.
+            }
+            try {
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({ event: "generate_lead", lead_source: "free_ad_audit" });
                 if (typeof window.gtag === "function") {

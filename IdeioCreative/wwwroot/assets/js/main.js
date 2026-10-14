@@ -128,6 +128,7 @@ CSS TABLE OF CONTENTS
 		let calcScrollValue = () => {
 			let scrollProgress = document.getElementById("progress");
 			let progressValue = document.getElementById("valu");
+			if (!scrollProgress) return;
 			let pos = document.documentElement.scrollTop;
 			let calcHeight =
 				document.documentElement.scrollHeight -

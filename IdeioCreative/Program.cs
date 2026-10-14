@@ -7,11 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("local-business.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options => options.MaxModelBindingCollectionSize = int.MaxValue);
 builder.Services.AddDataProtection();
 builder.Services.AddSingleton<IdeioCreative.Tools.ContactSecurityQuestionService>();
+builder.Services.Configure<IdeioCreative.Tools.OpenAIAdsOptions>(
+    builder.Configuration.GetSection(IdeioCreative.Tools.OpenAIAdsOptions.SectionName));
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
@@ -46,7 +49,8 @@ builder.Services.AddRateLimiter(options =>
 });
 builder.Services.AddIdeioAiSeo(options =>
 {
-    options.BaseUrl = "https://www.ideiocreative.com";
+    builder.Configuration.GetSection("LocalBusiness").Bind(options.LocalBusiness);
+    options.BaseUrl = "https://ideiocreative.com";
     options.BrandName = "Ýdeio Creative";
     options.ImageBasePath = "/img/";
 
@@ -58,7 +62,7 @@ builder.Services.AddIdeioAiSeo(options =>
     options.AdditionalStaticPaths.Add("/ucretsiz-reklam-denetimi");
 
     options.PreferredLanguageName = "Turkish";
-    options.AllowGptBotForTraining = false;
+    options.AllowGptBotForTraining = true;
 
     // Ekip üyesi detay sayfanýz bulunmuyorsa false kalmalý.
     options.IncludeTeamDetailPages = false;
@@ -108,7 +112,14 @@ app.Use(async (context, next) =>
     DataRequestModel.Services =
         dbcontext.Services
             .AsNoTracking()
-            .Where(x => x.Language == language)
+            .Where(x => x.Language == language && x.PageType == ServicePageType.Service)
+            .OrderBy(x => x.Title)
+            .ToList();
+
+    DataRequestModel.Sectors =
+        dbcontext.Services
+            .AsNoTracking()
+            .Where(x => x.Language == language && x.PageType == ServicePageType.Sector)
             .OrderBy(x => x.Title)
             .ToList();
 

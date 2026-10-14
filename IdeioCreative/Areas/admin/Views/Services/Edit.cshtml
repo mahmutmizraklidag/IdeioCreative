@@ -1,27 +1,27 @@
-﻿@model Service
+﻿@model IdeioCreative.Areas.admin.Models.ServiceEditViewModel
 
 @{
-    ViewData["Title"] = "Hizmet Düzenle";
+    ViewData["Title"] = "Sayfa Düzenle";
 }
 
 <div class="container mt-5">
     <div class="card shadow border-0 rounded-3">
         <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Hizmet Düzenle</h4>
+            <h1 class="h4 mb-0"><i class="bi bi-pencil-square me-2"></i>Sayfa Düzenle</h1>
             <a asp-action="Index" class="btn btn-light btn-sm">
                 <i class="bi bi-arrow-left"></i> Geri Dön
             </a>
         </div>
 
         <div class="card-body">
-            <form asp-action="Edit" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none"></div>
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
                 <input type="hidden" asp-for="Id" />
 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label asp-for="Title" class="form-label fw-semibold"></label>
-                        <input asp-for="Title" class="form-control" placeholder="Hizmet başlığı" />
+                        <input asp-for="Title" class="form-control" placeholder="Sayfa başlığı" />
                         <span asp-validation-for="Title" class="text-danger small"></span>
                     </div>
                    
@@ -31,13 +31,20 @@
                         <span asp-validation-for="Slug" class="text-danger small"></span>
                     </div>
                     <div class="col-md-12">
+                        <label asp-for="PageType" class="form-label fw-semibold"></label>
+                        <select asp-for="PageType" class="form-select" asp-items="Html.GetEnumSelectList<ServicePageType>()"></select>
+                        <span asp-validation-for="PageType" class="text-danger small"></span>
+                        <div class="form-text">İçeriğin hizmet veya sektör sayfalarında görünmesini seçiniz.</div>
+                    </div>
+
+                    <div class="col-md-12">
                         <label asp-for="Description" class="form-label fw-semibold"></label>
-                        <textarea id="AboutEditor" asp-for="Description" class="form-control" rows="4" placeholder="Blog içeriğini düzenleyin"></textarea>
+                        <textarea id="AboutEditor" asp-for="Description" class="form-control" rows="4" placeholder="Sayfa içeriğini düzenleyin"></textarea>
                         <span asp-validation-for="Description" class="text-danger small"></span>
                     </div>
                     <div class="col-md-12">
                         <label asp-for="HomeDescription" class="form-label fw-semibold"></label>
-                        <textarea id="AboutEditor2" asp-for="HomeDescription" class="form-control" rows="4" placeholder="Hizmet içeriğini giriniz"></textarea>
+                        <textarea id="AboutEditor2" asp-for="HomeDescription" class="form-control" rows="4" placeholder="Kısa sayfa açıklamasını giriniz"></textarea>
                         <span asp-validation-for="HomeDescription" class="text-danger small"></span>
                     </div>
                    
@@ -78,7 +85,7 @@
                         {
                             <div class="mb-3">
                                 <label class="small text-muted d-block mb-1">Mevcut Görsel:</label>
-                                <img src="/img/@Model.Image" alt="@Model.Title" class="rounded border" width="200" />
+                                <img src="/img/@Model.Image" alt="@(string.IsNullOrWhiteSpace(Model.Title) ? "Sayfa görseli" : Model.Title)" class="rounded border" width="200" />
                             </div>
                         }
 
@@ -88,6 +95,8 @@
                         <span asp-validation-for="Image" class="text-danger small"></span>
                     </div>
                 </div>
+
+                @await Html.PartialAsync("_FaqEditor", Model)
 
                 <div class="text-end mt-4">
                     <button type="submit" class="btn btn-warning text-dark px-4">
@@ -100,6 +109,7 @@
 </div>
 
 @section Scripts {
+    <script src="~/js/admin-service-faqs.min.js" asp-append-version="true" defer></script>
     <script>
         // Yeni görsel önizleme
         document.getElementById("imageInput").addEventListener("change", function (event) {

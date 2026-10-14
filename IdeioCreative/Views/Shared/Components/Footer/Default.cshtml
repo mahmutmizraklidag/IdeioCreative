@@ -123,6 +123,17 @@
                                     Hizmetlerimiz
                                 </a>
                             </li>
+                            @if (DataRequestModel.Sectors.Any())
+                            {
+                                <li>
+                                    <a asp-controller="Sector" asp-action="Index" class="d-flex align-items-center gap-2 flink-items pra-clr">
+                                        <span class="ani-icons">
+                                            <i class="fas fa-angle-double-right pra-clr"></i>
+                                        </span>
+                                        Sektörler
+                                    </a>
+                                </li>
+                            }
                             <li>
                                 <a asp-controller="AdAudit" asp-action="Index" class="d-flex align-items-center gap-2 flink-items pra-clr">
                                     <span class="ani-icons">
@@ -250,7 +261,7 @@
         <div class="footer-bottom-version-one d-sm-flex gap-sm-0 gap-4 d-grid align-items-center justify-content-sm-between justify-content-center bg2-clr px-xxl-7 px-6 py-xxl-6 py-xl-6 py-7 mb-xxl-10 mb-lg-9 mb-sm-8 mb-5"
              data-aos="zoom-in-up" data-aos-duration="1600">
             <a asp-controller="Home" asp-action="Index" class="footer-logov1 m-sm-0 m-auto">
-                <img class="footer-logo-img" src="/img/@DataRequestModel.SiteSetting.Logo" alt="img">
+                <img class="footer-logo-img" src="/img/@DataRequestModel.SiteSetting.Logo" alt="İdeio Creative logosu">
             </a>
           
             

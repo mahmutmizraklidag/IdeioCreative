@@ -1,0 +1,26 @@
+@model FaqSectionViewModel
+@using IdeioCreative.Seo
+@if (Model.Items.Count > 0)
+{
+    <section id="faq" class="faq-section pt-space pb-space" aria-labelledby="faq-heading">
+        <div class="container">
+            <div class="faq-panel">
+                <h2 id="faq-heading" class="faq-heading white-clr">Sık Sorulan Sorular</h2>
+                <div class="faq-list">
+                    @foreach (var item in Model.Items)
+                    {
+                        <details class="faq-item">
+                            <summary class="faq-question"><h3>@item.Question</h3></summary>
+                            <p class="faq-answer">@item.Answer</p>
+                        </details>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    var faqJson = SeoJsonLdBuilder.FaqPage(Model);
+    if (!string.IsNullOrEmpty(faqJson))
+    {
+        <script type="application/ld+json">@Html.Raw(faqJson)</script>
+    }
+}

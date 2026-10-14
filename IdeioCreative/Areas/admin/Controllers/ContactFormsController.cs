@@ -55,7 +55,7 @@ namespace IdeioCreative.Areas.admin.Controllers
                 recordsTotal = customerData.Count();
 
                 // 2. VERİYİ ÇEKME VE FORMATLAMA (Select işlemi kritiktir)
-                var data = customerData
+                var records = customerData
                     .OrderByDescending(m => m.Id)
                     .Skip(skip)
                     .Take(pageSize)
@@ -67,9 +67,22 @@ namespace IdeioCreative.Areas.admin.Controllers
                         email = m.Email,
                         phone = m.Phone,
                         subject = m.Subject,
-                        message = m.Message
+                        message = m.Message,
+                        createDate = m.CreateDate
                     })
                     .ToList();
+
+                var data = records.Select(m => new
+                {
+                    m.id,
+                    m.name,
+                    m.email,
+                    m.phone,
+                    m.subject,
+                    m.message,
+                    createDate = m.createDate?.ToString("dd.MM.yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture)
+                        ?? "Tarih bilgisi yok"
+                }).ToList();
 
                 return Json(new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data });
             }

@@ -6,22 +6,29 @@ namespace IdeioCreative.Seo;
 
 public sealed class IdeioSeoOptions
 {
-    public string BaseUrl { get; set; } = "https://www.ideiocreative.com";
+    public string BaseUrl { get; set; } = "https://ideiocreative.com";
     public string BrandName { get; set; } = "İdeio Creative";
     public string ImageBasePath { get; set; } = "/img/";
 
     public string AboutPath { get; set; } = "/hakkimizda";
     public string ServicesPath { get; set; } = "/hizmetlerimiz";
+    public string SectorsPath { get; set; } = "/sektorler";
     public string TeamPath { get; set; } = "/ekibimiz";
     public string BlogPath { get; set; } = "/blog";
     public string ContactPath { get; set; } = "/iletisim";
 
     public string PreferredLanguageName { get; set; } = "Turkish";
     public int MaxBlogCountInLlms { get; set; } = 20;
-    public bool AllowGptBotForTraining { get; set; }
+    public bool AllowGptBotForTraining { get; set; } = true;
     public bool IncludeTeamDetailPages { get; set; }
+    public LocalBusinessSeoOptions LocalBusiness { get; set; } = new();
 
     public List<string> AdditionalStaticPaths { get; set; } = new();
+
+    // Set only when a significant change to the shared page templates is made.
+    // This is a source-content date, never a request, build or deployment date.
+    // The canonical URLs and shared SEO markup were updated on 2026-10-14.
+    public DateTime? PageTemplatesLastModified { get; set; } = new DateTime(2026, 10, 14);
 
     /// <summary>
     /// Dil enum değerini URL ön ekine dönüştürür. Belirtilmezse English/EN için /en,
@@ -101,7 +108,8 @@ public sealed class IdeioSeoOptions
             return Absolute(custom);
 
         var prefix = GetLanguagePrefix(service.Language);
-        return Absolute($"{prefix}{ServicesPath.TrimEnd('/')}/{Uri.EscapeDataString(service.Slug)}");
+        var parentPath = service.PageType == ServicePageType.Sector ? SectorsPath : ServicesPath;
+        return Absolute($"{prefix}{parentPath.TrimEnd('/')}/{Uri.EscapeDataString(service.Slug)}");
     }
 
     public string TeamUrl(Team member)

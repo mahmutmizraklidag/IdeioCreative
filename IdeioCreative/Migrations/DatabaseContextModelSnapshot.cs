@@ -17,7 +17,7 @@ namespace IdeioCreative.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "8.0.28")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -185,6 +185,26 @@ namespace IdeioCreative.Migrations
                     b.ToTable("References");
                 });
 
+            modelBuilder.Entity("IdeioCreative.Entities.SeoPageModification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("LastModifiedUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeoPageModifications");
+                });
+
             modelBuilder.Entity("IdeioCreative.Entities.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -214,6 +234,9 @@ namespace IdeioCreative.Migrations
                     b.Property<string>("MetaTitle")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PageType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -225,6 +248,38 @@ namespace IdeioCreative.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("IdeioCreative.Entities.ServiceFaq", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId", "SortOrder");
+
+                    b.ToTable("ServiceFaqs");
                 });
 
             modelBuilder.Entity("IdeioCreative.Entities.SiteSetting", b =>
@@ -369,6 +424,22 @@ namespace IdeioCreative.Migrations
                             Username = "admin",
                             password = "xyz123456"
                         });
+                });
+
+            modelBuilder.Entity("IdeioCreative.Entities.ServiceFaq", b =>
+                {
+                    b.HasOne("IdeioCreative.Entities.Service", "Service")
+                        .WithMany("Faqs")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("IdeioCreative.Entities.Service", b =>
+                {
+                    b.Navigation("Faqs");
                 });
 #pragma warning restore 612, 618
         }

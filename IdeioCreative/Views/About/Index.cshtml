@@ -1,5 +1,7 @@
 ﻿@model AboutViewModel
 @{
+    ViewData["CanonicalPath"] = "/hakkimizda";
+    ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
     var site = DataRequestModel.SiteSetting;
 
     ViewData["Title"] = string.IsNullOrEmpty(Model.About?.MetaTitle)
@@ -51,7 +53,7 @@
                                 {
                                     <div class="col d-flex justify-content-center">
                                         <div class="reference-logo-frame reference-logo-frame--plain">
-                                            <img src="/img/@item.Image" alt="@item.Name" class="reference-logo-image">
+                                            <img src="/img/@item.Image" alt="@(string.IsNullOrWhiteSpace(item.Name) ? "Referans marka logosu" : $"{item.Name} logosu")" class="reference-logo-image">
                                         </div>
                                     </div>
                                 }
@@ -73,11 +75,11 @@
                 <div class="col-lg-6 pe-lg-14">
                     <div class="d-flex gap-xxl-7 gap-xl-5 gap-4 position-relative z-index-1">
                         <div class="about-small-thumb w-100" data-aos="zoom-in" data-aos-duration="1500">
-                            <img src="/img/@Model.About.Image" alt="img" class="w-100">
+                            <img src="/img/@Model.About.Image" alt="İdeio Creative hakkında" class="w-100">
                         </div>
                         <div class="about-small-thumb w-100 mt-xxl-10 mt-xl-7 mt-lg-5 mt-3" data-aos="zoom-in"
                              data-aos-duration="1800">
-                            <img src="/img/@Model.About.Image2" alt="img" class="w-100">
+                            <img src="/img/@Model.About.Image2" alt="İdeio Creative ajans tanıtımı" class="w-100">
                         </div>
                         <!--- About Arrow -->
                      @*    <img src="/img/ideio-about.png" height="182" width="182" alt="img" class="about-tumb-arrow"> *@
@@ -96,13 +98,13 @@
                             </div>
                             <h2 class="stitle d-flex align-items-center mb-xxl-8 mb-xl-7 mb-lg-6 mb-5 gap-xxl-7 gap-xl-5 gap-3"
                                 data-aos="zoom-in-left" data-aos-duration="1700">
-                                <img src="/img/ideio-about.png" height="182" width="182" alt="img" data-aos="zoom-in-up"
+                                <img src="/img/ideio-about.png" height="182" width="182" alt="İdeio Creative simgesi" data-aos="zoom-in-up"
                                      data-aos-duration="2000">
                                 @Model.About.Title
                             </h2>
                             <p class="white-clr mb-xxl-8 mb-xl-8 mb-5" data-aos="zoom-in-up"
                                data-aos-duration="1400">
-                                @Html.Raw(Model.About.Description)
+                                @Html.Raw(ImageHtml.PrepareContent(Model.About.Description, Model.About.Title ?? "İdeio Creative hakkında"))
                             </p>
                        
                         </div>

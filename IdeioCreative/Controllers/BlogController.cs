@@ -11,7 +11,7 @@ namespace IdeioCreative.Controllers
         {
             _context = context;
         }
-
+        [Route("blog")]
         public IActionResult Index()
         {
             var blogs = _context.Blogs
@@ -24,6 +24,8 @@ namespace IdeioCreative.Controllers
         public IActionResult Detail(string slug)
         {
             var blog = _context.Blogs.FirstOrDefault(b => b.Slug == slug);
+            if (blog is null)
+                return NotFound();
             return View(blog);
         }
     }
