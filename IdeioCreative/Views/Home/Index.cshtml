@@ -15,9 +15,16 @@
     <!-- Custom Line Shape -->
     <!-- Hero Section Version0 -->
     <section class="hero-section-version1 position-relative">
-        <video class="hero-background-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="/video/reklam_1080p.mp4" type="video/mp4">
-        </video>
+        <div class="hero-background-video" data-youtube-cover aria-hidden="true">
+            <img class="hero-background-image" src="@Url.Content("~/assets/img/banner/hero-bg1.png")"
+                 alt="İdeio Creative ajans tanıtımı" width="1920" height="946" loading="eager" fetchpriority="high">
+            <iframe id="home-hero-youtube" class="hero-youtube-player youtube-player"
+                    data-src="https://www.youtube.com/embed/vYmVAC5Gsc0?enablejsapi=1&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=vYmVAC5Gsc0&amp;controls=0&amp;playsinline=1&amp;cc_load_policy=0&amp;rel=0&amp;disablekb=1&amp;fs=0"
+                    title="İdeio Creative tanıtım videosu"
+                    allow="autoplay; encrypted-media"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    tabindex="-1"></iframe>
+        </div>
         <div class="container">
             <div class="row g-5 hero-content-row" >
                 <div class="hero-v1-content position-relative">
@@ -32,18 +39,18 @@
                 <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6">
                     @foreach (var item in DataRequestModel.References)
                     {
-                        <a href="#" class="reference-logo-frame reference-logo-frame--plain">
+                        <div class="reference-logo-frame reference-logo-frame--plain">
                             <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@(string.IsNullOrWhiteSpace(item.Name) ? "Referans marka logosu" : $"{item.Name} logosu")" class="reference-logo-image" decoding="async" draggable="false">
-                        </a>
+                        </div>
                     }
                 </div>
 
                 <div class="sponsor-inner marquee-content d-flex align-items-center gap-xxl-13 gap-xl-10 gap-lg-8 gap-md-6 gap-5 mb-xxl-10 mb-xl-7 mb-lg-6 mb-6" aria-hidden="true">
                     @foreach (var item in DataRequestModel.References)
                     {
-                        <a href="#" class="reference-logo-frame reference-logo-frame--plain">
+                        <div class="reference-logo-frame reference-logo-frame--plain">
                             <img src="@Url.Content($"~/img/{Uri.EscapeDataString(item.Image ?? string.Empty)}")" alt="@(string.IsNullOrWhiteSpace(item.Name) ? "Referans marka logosu" : $"{item.Name} logosu")" class="reference-logo-image" decoding="async" draggable="false">
-                        </a>
+                        </div>
                     }
                 </div>
 
@@ -202,7 +209,7 @@
                         var html = (service.HomeDescription ?? "")
                         .Replace("{{SERVICE_IMAGE}}", Url.Content("~/img/" + service.Image ?? "~/img/" + service.Image))
                         .Replace("{{LINK}}", Url.Action("Detail", "Service", new { slug = service.Slug }));
-                        @Html.Raw(ImageHtml.PrepareContent(html, service.Title))
+                        @Html.Raw(AssetUrls.PrepareContent(html, service.Title))
                     }
 
                 </div>
@@ -253,7 +260,7 @@
                     {
                         <div class="swiper-slide">
                             <div class="reference-card">
-                                <a href="javascript:void(0)" class="reference-card-inner" aria-label="@reference.Name">
+                                <div class="reference-card-inner">
                                     <div class="reference-logo-wrap reference-logo-frame reference-logo-frame--plain">
                                         <img src="/img/@reference.Image"
                                              alt="@(string.IsNullOrWhiteSpace(reference.Name) ? "Referans marka logosu" : $"{reference.Name} logosu")"
@@ -261,7 +268,7 @@
                                     </div>
 
                                     
-                                </a>
+                                </div>
                             </div>
                         </div>
                     }
@@ -326,10 +333,8 @@
                                 <span class="bspan-clr position-relative mb-xxl-4 mb-xxl-3 mb-3">
                                     @team.Position
                                 </span>
-                                <h5 class="white-clr whitehover">
-                                    <a href="javascript:void(0);" class="white-clr whitehover">
-    @team.Name
-</a>
+                                <h5 class="white-clr">
+                                    @team.Name
                                 </h5>
                             </div>
                         </div>
@@ -539,6 +544,7 @@
 <!-- Main End -->
 
 @section Scripts {
+    <script src="@Url.Content("~/js/youtube-video.min.js")" asp-append-version="true" defer></script>
     <script src="@Url.Content("~/js/home-page.min.js")" asp-append-version="true" defer></script>
 }
 

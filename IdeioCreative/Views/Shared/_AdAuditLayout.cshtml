@@ -2,6 +2,7 @@
 @using IdeioCreative.Seo
 @using Microsoft.Extensions.Options
 @inject IOptions<IdeioSeoOptions> SeoOptions
+@inject SocialMetadataBuilder SocialMetadata
 @inject IOptions<IdeioCreative.Tools.OpenAIAdsOptions> OpenAIAdsOptions
 @{
     var settings = Model.SiteSetting;
@@ -36,13 +37,7 @@
     <title>@ViewData["Title"] | İdeio Creative</title>
     <meta name="description" content="@ViewData["MetaDescription"]">
     <link rel="canonical" href="@canonical">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="tr_TR">
-    <meta property="og:site_name" content="İdeio Creative">
-    <meta property="og:title" content="@ViewData["Title"] | İdeio Creative">
-    <meta property="og:description" content="@ViewData["MetaDescription"]">
-    <meta property="og:url" content="@canonical">
-    <meta property="og:image" content="@SeoOptions.Value.ImageUrl(logo)">
+    @await Html.PartialAsync("_SocialMeta", SocialMetadata.Create(ViewData, settings, "/ucretsiz-reklam-denetimi"))
     <link rel="icon" href="@Url.Content("~/img/fav/dark-favicon-32x32.png")" type="image/png">
     <link rel="stylesheet" href="@Url.Content("~/assets/css/ad-audit.bundle.min.css")" asp-append-version="true">
     <script type="application/ld+json">@Html.Raw(SeoJsonLdBuilder.Organization(settings, SeoOptions.Value))</script>
@@ -117,6 +112,7 @@
         </div>
     </footer>
     <a class="audit-mobile-cta audit-button" href="#basvuru">Ücretsiz denetim talep et <span aria-hidden="true">↗</span></a>
+    <script src="@Url.Content("~/js/youtube-video.min.js")" asp-append-version="true" defer></script>
     <script src="@Url.Content("~/js/ad-audit.min.js")" asp-append-version="true" defer></script>
 </body>
 </html>

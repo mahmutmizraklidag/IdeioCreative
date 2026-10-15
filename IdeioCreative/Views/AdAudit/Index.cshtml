@@ -40,11 +40,11 @@
                 </div>
             </div>
             <div class="audit-hero-media">
-                <div class="audit-video-frame">
-                    <video id="audit-hero-video" class="audit-hero-video" autoplay muted loop playsinline disablepictureinpicture disableremoteplayback preload="metadata" aria-label="İdeio Creative tanıtım videosu">
-                        <source src="@Url.Content("~/video/reklam_1080p.mp4")" type="video/mp4">
-                        Tarayıcınız videoyu oynatmayı desteklemiyor. <a href="@Url.Content("~/video/reklam_1080p.mp4")">Tanıtım videomuzu izleyin.</a>
-                    </video>
+                <div class="audit-video-frame" data-youtube-cover>
+                    <iframe id="audit-hero-video" class="audit-hero-video youtube-player"
+                            data-src="https://www.youtube.com/embed/vYmVAC5Gsc0?enablejsapi=1&amp;autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=vYmVAC5Gsc0&amp;controls=0&amp;playsinline=1&amp;cc_load_policy=0&amp;rel=0&amp;disablekb=1&amp;fs=0"
+                            data-sound-toggle="audit-video-sound" title="İdeio Creative tanıtım videosu"
+                            allow="autoplay; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" tabindex="-1"></iframe>
                     <button id="audit-video-sound" class="audit-video-sound" type="button" aria-controls="audit-hero-video" aria-label="Videonun sesini aç" aria-pressed="false" title="Videonun sesini aç" hidden>
                         <i class="fas fa-volume-mute" aria-hidden="true"></i>
                         <span>Sesi aç</span>

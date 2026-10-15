@@ -6,7 +6,7 @@
 @{
     var site = DataRequestModel.SiteSetting;
 
-    ViewData["Title"] = Model?.MetaTitle ?? "Son Yazılar";
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.MetaTitle) ? Model.Title : Model.MetaTitle;
     ViewData["MetaDescription"] = Model?.MetaDescription ?? site?.MetaDescription ?? "Son Yazılar";
     ViewData["MetaKeywords"] = Model?.Keywords ?? site?.Keywords ?? "Son Yazılar";
 }
@@ -132,7 +132,7 @@
                                     <h5 class="white mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1600">
                                         @Model.Title
                                     </h5>
-                                    @Html.Raw(ImageHtml.PrepareContent(Model.Description, Model.Title))
+                                    @Html.Raw(AssetUrls.PrepareContent(Model.Description, Model.Title))
                                    @*  <p class="pra-clr mb-xxl-5 mb-3" data-aos="fade-left" data-aos-duration="1550">
                                         Proin ultricies ultricies est vitae cursus. Nulla sit amet suscipit tortor.
                                         Maecenas dui erat, ornare eget tristique

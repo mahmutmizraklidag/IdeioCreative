@@ -5,6 +5,8 @@ import postcss from 'postcss';
 import { minify } from 'terser';
 import { parse as parseJavaScript } from 'acorn';
 import assert from 'node:assert/strict';
+import { readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const webRoot = path.join(root, 'IdeioCreative/wwwroot');
@@ -13,10 +15,12 @@ const cssBundles = {
     'assets/css/site.bundle.min.css': [
         'assets/css/bootstrap.min.css', 'assets/css/all.min.css', 'assets/css/magnific-popup.css',
         'assets/css/nice-select.css', 'assets/css/swiper.min.css', 'assets/css/aos.css',
-        'assets/css/main.css', 'css/reference-logos.css', 'assets/vendor/bootstrap-icons/bootstrap-icons.css'
+        'assets/css/main.css', 'css/reference-logos.css', 'css/footer.css',
+        'assets/vendor/bootstrap-icons/bootstrap-icons.css'
     ],
     'assets/css/ad-audit.bundle.min.css': ['assets/css/main.css', 'assets/css/all.min.css', 'css/ad-audit.css'],
     'css/home-page.min.css': ['css/home-hero.css', 'css/home-page.css'],
+    'css/contact-page.min.css': ['css/contact-page.css'],
     'css/recovery.min.css': ['css/recovery.css'],
     'css/faq.min.css': ['css/faq.css'],
     'css/site.min.css': ['css/site.css']
@@ -30,6 +34,7 @@ const jsBundles = {
     ],
     'js/contact.min.js': ['js/contact.js'],
     'js/home-page.min.js': ['js/home-page.js'],
+    'js/youtube-video.min.js': ['js/youtube-video.js'],
     'js/service-page.min.js': ['js/service-page.js'],
     'js/ad-audit.min.js': ['js/ad-audit.js'],
     'js/admin-service-faqs.min.js': ['js/admin-service-faqs.js']
@@ -120,7 +125,12 @@ function rebaseUrls(value, input, output) {
         const resource = suffixPosition < 0 ? url : url.slice(0, suffixPosition);
         const suffix = suffixPosition < 0 ? '' : url.slice(suffixPosition);
         const absolute = path.resolve(path.dirname(input), resource);
-        const rebased = path.relative(path.dirname(output), absolute).split(path.sep).join('/');
+        let target = absolute;
+        if (existsSync(absolute)) {
+            const hash = createHash('sha256').update(readFileSync(absolute)).digest('hex');
+            target = path.join(path.dirname(absolute), hash + '.' + path.basename(absolute));
+        }
+        const rebased = path.relative(path.dirname(output), target).split(path.sep).join('/');
         return `url("${rebased}${suffix}")`;
     });
 }

@@ -11,10 +11,12 @@ public static class ImageHtml
 
     // Content fragments sit below the page's main H1. Preserve their visual
     // heading size while preventing stored content from adding another H1.
-    public static string PrepareContent(string? html, string? imageDescription = null) =>
-        Rewrite(html, imageDescription, normalizeHeadings: true);
+    public static string PrepareContent(string? html, string? imageDescription = null,
+        Func<string, string>? assetUrl = null, Func<string, string>? sourceSet = null) =>
+        Rewrite(html, imageDescription, normalizeHeadings: true, assetUrl, sourceSet);
 
-    private static string Rewrite(string? html, string? imageDescription, bool normalizeHeadings)
+    private static string Rewrite(string? html, string? imageDescription, bool normalizeHeadings,
+        Func<string, string>? assetUrl = null, Func<string, string>? sourceSet = null)
     {
         if (string.IsNullOrEmpty(html))
             return html ?? string.Empty;
@@ -73,7 +75,9 @@ public static class ImageHtml
 
             string? replacement = null;
             if (!closing && validNameBoundary && name.Equals("img", StringComparison.OrdinalIgnoreCase))
-                replacement = RewriteTag(html, position, nameEnd, tagEnd, imageDescription, isHeading: false);
+                replacement = RewriteTag(html, position, nameEnd, tagEnd, imageDescription, isHeading: false, assetUrl, sourceSet);
+            else if (!closing && validNameBoundary && assetUrl is not null && name.Equals("source", StringComparison.OrdinalIgnoreCase))
+                replacement = RewriteTag(html, position, nameEnd, tagEnd, imageDescription, isHeading: false, assetUrl, sourceSet, urlsOnly: true);
             else if (normalizeHeadings && validNameBoundary && name.Equals("h1", StringComparison.OrdinalIgnoreCase))
             {
                 replacement = closing
@@ -104,7 +108,8 @@ public static class ImageHtml
     }
 
     private static string? RewriteTag(string html, int tagStart, int nameEnd, int tagEnd,
-        string? imageDescription, bool isHeading)
+        string? imageDescription, bool isHeading, Func<string, string>? assetUrl = null, Func<string, string>? sourceSet = null,
+        bool urlsOnly = false)
     {
         var attributes = new List<(int SpaceStart, int Start, int End, string Name, string? Value)>();
         var position = nameEnd;
@@ -179,6 +184,18 @@ public static class ImageHtml
         }
 
         var edits = new List<(int Start, int End, string Text)>();
+        foreach (var attribute in attributes)
+        {
+            if (attribute.Value is null) continue;
+            var transform = attribute.Name.Equals("src", StringComparison.OrdinalIgnoreCase) ? assetUrl
+                : attribute.Name.Equals("srcset", StringComparison.OrdinalIgnoreCase) ? sourceSet : null;
+            if (transform is null) continue;
+            var original = WebUtility.HtmlDecode(attribute.Value);
+            var transformed = transform(original);
+            if (transformed != original)
+                edits.Add((attribute.Start, attribute.End, $"{attribute.Name}=\"{WebUtility.HtmlEncode(transformed)}\""));
+        }
+        if (urlsOnly) return ApplyEdits(html, tagStart, tagEnd, edits);
         if (isHeading)
         {
             edits.Add((tagStart + 1, nameEnd, "h2"));

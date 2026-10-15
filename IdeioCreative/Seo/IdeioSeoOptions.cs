@@ -27,8 +27,8 @@ public sealed class IdeioSeoOptions
 
     // Set only when a significant change to the shared page templates is made.
     // This is a source-content date, never a request, build or deployment date.
-    // The canonical URLs and shared SEO markup were updated on 2026-10-14.
-    public DateTime? PageTemplatesLastModified { get; set; } = new DateTime(2026, 10, 14);
+    // Shared Open Graph and Twitter metadata were updated on 2026-10-15.
+    public DateTime? PageTemplatesLastModified { get; set; } = new DateTime(2026, 10, 15);
 
     /// <summary>
     /// Dil enum değerini URL ön ekine dönüştürür. Belirtilmezse English/EN için /en,

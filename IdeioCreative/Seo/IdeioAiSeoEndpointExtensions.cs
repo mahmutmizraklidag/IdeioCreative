@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using IdeioCreative.Tools;
 
 namespace IdeioCreative.Seo;
 
@@ -22,6 +24,9 @@ public static class IdeioAiSeoEndpointExtensions
     {
         services.Configure(configure);
         services.AddSingleton<SeoTextFormatter>();
+        services.AddMemoryCache();
+        services.TryAddSingleton<ContentHashedAssets>();
+        services.AddSingleton<SocialMetadataBuilder>();
         return services;
     }
 

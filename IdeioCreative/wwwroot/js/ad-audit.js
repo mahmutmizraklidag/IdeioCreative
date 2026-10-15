@@ -1,41 +1,6 @@
 (() => {
     "use strict";
 
-    const heroVideo = document.getElementById("audit-hero-video");
-    const soundToggle = document.getElementById("audit-video-sound");
-    if (heroVideo && soundToggle) {
-        const soundIcon = soundToggle.querySelector("i");
-        const soundLabel = soundToggle.querySelector("span");
-        function updateSoundToggle() {
-            const silent = heroVideo.muted || heroVideo.volume === 0;
-            const label = silent ? "Videonun sesini aç" : "Videonun sesini kapat";
-            soundToggle.setAttribute("aria-pressed", String(!silent));
-            soundToggle.setAttribute("aria-label", label);
-            soundToggle.title = label;
-            soundLabel.textContent = silent ? "Sesi aç" : "Sesi kapat";
-            soundIcon.classList.toggle("fa-volume-mute", silent);
-            soundIcon.classList.toggle("fa-volume-up", !silent);
-        }
-        soundToggle.addEventListener("click", () => {
-            if (heroVideo.muted || heroVideo.volume === 0) {
-                heroVideo.volume = 1;
-                heroVideo.muted = false;
-            } else {
-                heroVideo.muted = true;
-            }
-            updateSoundToggle();
-            if (heroVideo.paused) {
-                heroVideo.play().catch(() => {
-                    heroVideo.muted = true;
-                    updateSoundToggle();
-                });
-            }
-        });
-        heroVideo.addEventListener("volumechange", updateSoundToggle);
-        updateSoundToggle();
-        soundToggle.hidden = false;
-    }
-
     const form = document.getElementById("audit-form");
     if (!form) return;
 

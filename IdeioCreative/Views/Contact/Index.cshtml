@@ -3,17 +3,30 @@
     ViewData["CanonicalPath"] = "/iletisim";
     ViewData["IncludeLocalBusiness"] = true;
     ViewData["HeroImagePath"] = "~/assets/img/banner/breadcrumnd-bg.png";
-    ViewData["MetaDescription"] = "Bizimle iletişime geçin";
-    ViewData["MetaKeywords"] = "Bizimle iletişime geçin";
+    ViewData["MetaDescription"] = "İdeio Creative ile iletişime geçin. İzmir Bayraklı ofisimizin adresi, haritası, telefon, WhatsApp, e-posta ve çalışma saatlerine ulaşın; projenizi formdan paylaşın.";
+    ViewData["MetaKeywords"] = "İdeio Creative iletişim, İzmir reklam ajansı iletişim";
 
 }
 @inject IdeioCreative.Tools.ContactSecurityQuestionService ContactSecurityQuestionService
 @inject Microsoft.Extensions.Options.IOptions<IdeioCreative.Seo.IdeioSeoOptions> IdeioSeoOptions
 @{
     var contactSecurityQuestion = ContactSecurityQuestionService.CreateQuestion();
+    var settings = DataRequestModel.SiteSetting;
+    var business = IdeioSeoOptions.Value.LocalBusiness;
+    var phoneNumber = new string((settings.Phone ?? "").Where(character => char.IsAsciiDigit(character) || character == '+').ToArray());
+    var mapQuery = string.IsNullOrWhiteSpace(settings.Address) ? business.Name ?? "İdeio Creative" : settings.Address;
+    var mapUrl = string.IsNullOrWhiteSpace(business.MapUrl)
+        ? $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(mapQuery)}"
+        : business.MapUrl;
+    var mapEmbedUrl = string.IsNullOrWhiteSpace(settings.mapLink)
+        ? $"https://maps.google.com/maps?q={Uri.EscapeDataString(mapQuery)}&output=embed"
+        : settings.mapLink;
+}
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/css/contact-page.min.css")" asp-append-version="true">
 }
 <!-- Main start -->
-<main class="main">
+<main class="main contact-page">
 
     <!-- Breadcrumnd Banner -->
     <section class="breadcrumnd-banner position-relative">
@@ -21,9 +34,10 @@
             <div class="row g-5 justify-content-center">
                 <div class="col-lg-12">
                     <div class="breadcrumnd-content text-center">
-                        <h1 class="white mb-xxl-10 mb-xl-8 mb-6" style="font-size:60px!important" data-aos="zoom-in-left" data-aos-duration="1800">
-                            Uyum İçindeki İki marka, en güçlü ortaklıktır
+                        <h1 class="white contact-page-title">
+                            İdeio Creative İle İletişime Geçin
                         </h1>
+                        <p class="contact-page-intro pra-clr">Projenizi konuşmak için bizi arayın, WhatsApp’tan yazın veya aşağıdaki formu doldurun.</p>
                         <ul class="breadcrumnd d-inline-flex align-items-center gap-2 pra-border radius100 py-xxl-3 py-2 px-xxl-4 px-4"
                             data-aos="zoom-in-right" data-aos-duration="2000">
                             <li>
@@ -45,7 +59,7 @@
             </div>
         </div>
         <!--Element-->
-        <img src="assets/img/element/cmn-dost.png" alt="Dekoratif nokta deseni" class="cmn-dots">
+        <img src="@Url.Content("~/assets/img/element/cmn-dost.png")" alt="Dekoratif nokta deseni" class="cmn-dots">
         <div class="cmn-svg-shape cmn-svg">
             <svg width="280" height="280" viewBox="0 0 211 211" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -98,12 +112,14 @@
                             <path d="M46.4242 16.4252L37.5742 7.5752" stroke="#f47e3e" stroke-width="4"
                                   stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <h5 class="white mt-xxl-7 mt-6 mb-xxl-7 mb-6">
+                        <h2 class="contact-info-title white-clr">
                             Telefon
-                        </h5>
-                        <span class="msub d-block mb-2">
-                            @DataRequestModel.SiteSetting.Phone
-                        </span>
+                        </h2>
+                        <a class="msub d-block contact-detail-link" href="tel:@phoneNumber">@settings.Phone</a>
+                        <a class="contact-whatsapp" href="https://wa.me/905544387416?text=Merhabalar%2C%20Projem%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum."
+                           target="_blank" rel="noopener noreferrer">
+                            <i class="bi bi-whatsapp" aria-hidden="true"></i> WhatsApp’tan yazın
+                        </a>
                         
                     </div>
                 </div>
@@ -114,12 +130,10 @@
                             <path d="M3.04604 3.04604C3.69236 2.39975 4.58521 2 5.57143 2H62.7143C63.7004 2 64.5932 2.39975 65.2396 3.04604M3.04604 3.04604C2.39975 3.69236 2 4.58521 2 5.57143V48.4286C2 50.4011 3.599 52 5.57143 52H41.2857M3.04604 3.04604L9.14286 9.14307M65.2396 3.04604C65.8861 3.69236 66.2857 4.58521 66.2857 5.57143V48.4286C66.2857 50.4011 64.6868 52 62.7143 52H55.5714M65.2396 3.04604L39.1936 29.0918C36.4039 31.8814 31.8814 31.8814 29.0918 29.0918L19.8571 19.8571"
                                   stroke="#f47e3e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <h5 class="white mt-xxl-7 mt-6 mb-xxl-7 mb-6">
-                            E-mail
-                        </h5>
-                        <span class="msub d-block mb-2">
-                            @DataRequestModel.SiteSetting.Email
-                        </span>
+                        <h2 class="contact-info-title white-clr">
+                            E-posta
+                        </h2>
+                        <a class="msub d-block contact-detail-link" href="mailto:@settings.Email">@settings.Email</a>
                        
                     </div>
                 </div>
@@ -130,12 +144,11 @@
                             <path d="M19.1781 -0.0175781C8.92969 -0.0175781 0.25 8.71211 0.25 19.0512C0.25 29.8793 10.3109 40.9527 17.0781 48.7355C17.1047 48.7668 18.1984 49.9809 19.5453 49.9809H19.6641C21.0125 49.9809 22.0984 48.7668 22.125 48.7355C28.475 41.4355 37.75 29.3965 37.75 19.0512C37.75 8.71055 30.9797 -0.0175781 19.1781 -0.0175781ZM19.8047 46.6387C19.75 46.6934 19.6703 46.7543 19.6 46.8059C19.5281 46.7559 19.45 46.6934 19.3922 46.6387L18.575 45.698C12.1594 38.3387 3.37344 28.259 3.37344 19.0496C3.37344 10.4059 10.6109 3.1043 19.1766 3.1043C29.8469 3.1043 34.6234 11.1121 34.6234 19.0496C34.6234 26.0402 29.6375 35.3246 19.8047 46.6387ZM19.0547 9.44336C13.8781 9.44336 9.67969 13.6402 9.67969 18.8184C9.67969 23.9965 13.8781 28.1934 19.0547 28.1934C24.2312 28.1934 28.4297 23.9949 28.4297 18.8184C28.4297 13.6418 24.2328 9.44336 19.0547 9.44336ZM19.0547 25.0684C15.6078 25.0684 12.7328 22.1965 12.7328 18.7496C12.7328 15.3027 15.5359 12.4996 18.9828 12.4996C22.4312 12.4996 25.2328 15.3027 25.2328 18.7496C25.2344 22.1965 22.5031 25.0684 19.0547 25.0684Z"
                                   fill="#f47e3e" />
                         </svg>
-                        <h5 class="white mt-xxl-7 mt-6 mb-xxl-7 mb-6">
-                            Lokasyon
-                        </h5>
-                        <span class="msub d-block mb-2">
-                            @DataRequestModel.SiteSetting.Address
-                        </span>
+                        <h2 class="contact-info-title white-clr">
+                            Adres
+                        </h2>
+                        <address class="msub">@settings.Address</address>
+                        <a class="contact-text-link" href="@mapUrl" target="_blank" rel="noopener noreferrer">Yol tarifi alın <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
                        
                     </div>
                 </div>
@@ -146,75 +159,90 @@
                             <path d="M27 13.1111V27H40.8889M27 52C13.1929 52 2 40.8072 2 27C2 13.1929 13.1929 2 27 2C40.8072 2 52 13.1929 52 27C52 40.8072 40.8072 52 27 52Z"
                                   stroke="#f47e3e" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
-                        <h5 class="white mt-xxl-7 mt-6 mb-xxl-7 mb-6">
+                        <h2 class="contact-info-title white-clr">
                             Çalışma Saatleri
-                        </h5>
-                        @foreach (var hours in IdeioSeoOptions.Value.LocalBusiness.OpeningHours.Where(group => group.IsValid))
+                        </h2>
+                        @foreach (var hours in business.OpeningHours.Where(group => group.IsValid))
                         {
                             <span class="msub d-block mb-2">@hours.DisplayText</span>
                         }
                     </div>
                 </div>
             </div>
-            <section section id="teklif-al" class="quote-target">
-                <div class="row g-xxl-7 g-4">
-                    <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="2000">
-                        <div class="contact-map">
-                            <iframe src="@DataRequestModel.SiteSetting.mapLink"
-                                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                    <div class="col-lg-6" data-aos="zoom-in" data-aos-duration="2000">
+            <section id="teklif-al" class="quote-target" aria-labelledby="contact-form-title">
+                <div class="row g-xxl-7 g-4 align-items-start">
+                    <div class="col-lg-7">
                         <div class="contact-content bg1-clr">
-                            <h3 class="white mb-xxl-15 mb-xl-10 mb-lg-7 mb-5">
-                                Sizinle Tanışmamız İçin İletişime Geçin...
-                            </h3>
-                            <form action="#" id="iletisimFormu" method="post">
+                            <h2 id="contact-form-title" class="contact-section-title white-clr">Projenizden bahsedin</h2>
+                            <p class="pra-clr contact-form-intro">Markanızı ve ihtiyacınızı kısaca anlatın; sizinle iletişime geçelim. Yıldızlı alanlar zorunludur.</p>
+                            <form action="@Url.Content("~/Contact/Index")" id="iletisimFormu" method="post">
                                 @Html.AntiForgeryToken()
                                 <!-- Formun ne zaman acildigini tutar; botlarin sayfayi acmadan direkt POST atmasini zorlastirmak icin eklendi. -->
                                 <input type="hidden" id="ContactFormStartedAt" name="FormStartedAt" value="" />
-                                <div class="row g-xxl-8 g-xl-6 g-lg-4 g-4">
-                                    <div class="col-lg-12">
-                                        <input type="text" name="Name" id="Name" placeholder="İsim Soyisim">
+                                <div class="contact-form-grid">
+                                    <div class="contact-form-field contact-form-field--full">
+                                        <label for="Name">Ad soyad <span aria-hidden="true">*</span></label>
+                                        <input type="text" name="Name" id="Name" autocomplete="name" required>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <input type="email" name="Email" id="Email" placeholder="Email">
+                                    <div class="contact-form-field">
+                                        <label for="Email">E-posta <span aria-hidden="true">*</span></label>
+                                        <input type="email" name="Email" id="Email" autocomplete="email" required>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <input type="text" name="Phone" id="Phone" placeholder="Telefon">
+                                    <div class="contact-form-field">
+                                        <label for="Phone">Telefon</label>
+                                        <input type="tel" name="Phone" id="Phone" autocomplete="tel">
                                     </div>
-                                    <div class="col-lg-6">
-                                        <input type="text" name="Sector" id="Sector" placeholder="Sektör">
+                                    <div class="contact-form-field">
+                                        <label for="Sector">Sektör</label>
+                                        <input type="text" name="Sector" id="Sector">
                                     </div>
-                                    <div class="col-lg-6">
-                                        <input type="text" name="Account" id="Account" placeholder="Web Sitesi">
+                                    <div class="contact-form-field">
+                                        <label for="Account">Web sitesi veya sosyal medya hesabı</label>
+                                        <input type="text" name="Account" id="Account">
                                     </div>
-                                    <div class="col-lg-12">
-                                        <input type="text" name="Subject" id="Subject" placeholder="Konu">
+                                    <div class="contact-form-field contact-form-field--full">
+                                        <label for="Subject">Konu</label>
+                                        <input type="text" name="Subject" id="Subject">
                                     </div>
                                     <!-- Honeypot alanı -->
-                                    <div style="display:none;">
-                                        <input type="text" name="Website" id="ContactWebsite" autocomplete="off">
+                                    <div hidden>
+                                        <input type="text" name="Website" id="ContactWebsite" autocomplete="off" tabindex="-1">
                                     </div>
-                                    <div class="col-lg-12">
-                                        <textarea rows="5" name="Message" placeholder="Mesajınız..." id="Message"></textarea>
+                                    <div class="contact-form-field contact-form-field--full">
+                                        <label for="Message">Mesajınız <span aria-hidden="true">*</span></label>
+                                        <textarea rows="5" name="Message" id="Message" placeholder="Markanız, hedefleriniz ve ihtiyaç duyduğunuz hizmetler…" required></textarea>
                                     </div>
-                                    <div class="col-lg-12">
+                                    <div class="contact-form-field contact-form-field--full">
                                         <!-- Guvenlik sorusu, basit botlarin formu otomatik doldurup gondermesini azaltmak icin eklendi. -->
                                         <input type="hidden" name="SecurityQuestionToken" value="@contactSecurityQuestion.Token">
-                                        <input type="text" name="SecurityAnswer" id="ContactSecurityAnswer" placeholder="@contactSecurityQuestion.Question" required>
+                                        <label for="ContactSecurityAnswer">@contactSecurityQuestion.Question <span aria-hidden="true">*</span></label>
+                                        <input type="text" name="SecurityAnswer" id="ContactSecurityAnswer" inputmode="numeric" autocomplete="off" required>
                                     </div>
-                                    <div class="col-lg-5">
+                                    <div class="contact-form-field contact-form-field--full">
                                         <button type="submit" class="submit-btn">
-                                            Gönder
+                                            Mesajı gönder
                                         </button>
                                     </div>
                                 </div>
                                 <!-- Mesaj kutuları -->
-                                <div class="alert alert-success sent-message mt-3 text-center" style="display:none;">Mesajınız gönderildi.</div>
-                                <div class="alert alert-danger error-message mt-3 text-center" style="display:none;"></div>
+                                <div class="alert alert-success sent-message mt-3 text-center" role="status" aria-live="polite" style="display:none;">Mesajınız gönderildi.</div>
+                                <div class="alert alert-danger error-message mt-3 text-center" role="alert" style="display:none;"></div>
                             </form>
                         </div>
+                    </div>
+                    <div class="col-lg-5 contact-sidebar">
+                        <section class="contact-meeting bg1-clr" aria-labelledby="first-meeting-title">
+                            <h2 id="first-meeting-title" class="contact-section-title white-clr">İlk görüşmede ne olur?</h2>
+                            <p class="pra-clr">İlk görüşmede markanızı, hedef kitlenizi ve ulaşmak istediğiniz sonuçları dinliyoruz. Mevcut çalışmalarınızı ve ihtiyaçlarınızı birlikte değerlendirip hangi hizmetlerin size uygun olabileceğini konuşuyoruz. Görüşmenin sonunda öncelikleri ve bir sonraki adımı birlikte netleştiriyoruz.</p>
+                        </section>
+                        <section class="contact-location" aria-labelledby="contact-map-title">
+                            <h2 id="contact-map-title" class="contact-section-title white-clr">Ofisimize ulaşın</h2>
+                            <div class="contact-map">
+                                <iframe src="@mapEmbedUrl" title="İdeio Creative ofisinin haritadaki konumu"
+                                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <a class="contact-text-link" href="@mapUrl" target="_blank" rel="noopener noreferrer">Google Haritalar’da aç <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                        </section>
                     </div>
                 </div>
             </section>

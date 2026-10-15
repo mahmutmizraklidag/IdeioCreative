@@ -1,3 +1,4 @@
+using IdeioCreative.Tools;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -107,6 +108,7 @@ public sealed class AdminContactTests
             });
             builder.Logging.ClearProviders();
             builder.WebHost.UseUrls("http://127.0.0.1:0");
+            builder.Services.AddSiteDelivery();
             builder.Services.AddControllersWithViews();
             builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
             builder.Services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>("Test", _ => { });

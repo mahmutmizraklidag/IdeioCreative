@@ -2,6 +2,7 @@ using IdeioCreative.Data;
 using IdeioCreative.Entities;
 using IdeioCreative.Models;
 using IdeioCreative.Seo;
+using IdeioCreative.Tools;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
@@ -12,6 +13,7 @@ builder.Configuration.AddJsonFile("local-business.json", optional: false, reload
 // Add services to the container.
 builder.Services.AddControllersWithViews(options => options.MaxModelBindingCollectionSize = int.MaxValue);
 builder.Services.AddDataProtection();
+builder.Services.AddSiteDelivery();
 builder.Services.AddSingleton<IdeioCreative.Tools.ContactSecurityQuestionService>();
 builder.Services.Configure<IdeioCreative.Tools.OpenAIAdsOptions>(
     builder.Configuration.GetSection(IdeioCreative.Tools.OpenAIAdsOptions.SectionName));
@@ -77,6 +79,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseHttpsRedirection();
+app.UseSiteDelivery();
+app.UseLowercaseUrlRedirects();
+
 app.Use(async (context, next) =>
 {
     var dbcontext =
@@ -131,9 +137,6 @@ app.Use(async (context, next) =>
 
     await next();
 });
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
 app.UseRouting();
 
 app.UseRateLimiter();

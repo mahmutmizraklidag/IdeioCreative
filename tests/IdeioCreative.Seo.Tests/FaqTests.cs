@@ -1,3 +1,4 @@
+using IdeioCreative.Tools;
 using System.Globalization;
 using System.Net;
 using System.Security.Claims;
@@ -295,6 +296,7 @@ public sealed class FaqTests
             });
             builder.Logging.ClearProviders();
             builder.WebHost.UseUrls("http://127.0.0.1:0");
+            builder.Services.AddSiteDelivery();
             builder.Services.AddControllersWithViews(options => options.MaxModelBindingCollectionSize = int.MaxValue);
             builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
             builder.Services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthenticationHandler>("Test", _ => { });

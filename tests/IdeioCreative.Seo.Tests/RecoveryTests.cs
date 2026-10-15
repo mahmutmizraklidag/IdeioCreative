@@ -1,4 +1,5 @@
 using System.Net;
+using System.Buffers.Binary;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using IdeioCreative.Controllers;
@@ -22,6 +23,94 @@ namespace IdeioCreative.Seo.Tests;
 
 public sealed class RecoveryTests
 {
+    [Theory]
+    [InlineData("GET", "/Blog", "/blog")]
+    [InlineData("HEAD", "/BLOG", "/blog")]
+    [InlineData("GET", "/BLOG/WEB-REHBERI?utm_source=Google&token=AbC%2FDeF", "/blog/web-rehberi?utm_source=Google&token=AbC%2FDeF")]
+    [InlineData("GET", "/HIZMETLERIMIZ/WEB-TASARIMI", "/hizmetlerimiz/web-tasarimi")]
+    [InlineData("GET", "/ARAMA?q=Web", "/arama?q=Web")]
+    public async Task UppercasePageUrlsPermanentlyRedirectToWorkingLowercasePages(string method, string path, string expected)
+    {
+        await using var host = await RecoveryHost.Start();
+        using var request = new HttpRequestMessage(new HttpMethod(method), path);
+        using var redirect = await host.Http.SendAsync(request);
+        Assert.Equal(HttpStatusCode.MovedPermanently, redirect.StatusCode);
+        Assert.Equal(new Uri(host.Http.BaseAddress!, expected), redirect.Headers.Location);
+
+        using var followUp = new HttpRequestMessage(new HttpMethod(method), redirect.Headers.Location);
+        using var page = await host.Http.SendAsync(followUp);
+        Assert.Equal(HttpStatusCode.OK, page.StatusCode);
+        Assert.Null(page.Headers.Location);
+    }
+
+    [Fact]
+    public async Task UppercaseFormActionsKeepTheirPostBody()
+    {
+        await using var host = await RecoveryHost.Start();
+        using var form = new FormUrlEncodedContent(new Dictionary<string, string> { ["message"] = "Hello World" });
+        using var response = await host.Http.PostAsync("/TEST/SUBMIT", form);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Null(response.Headers.Location);
+        Assert.Equal("Hello World", await response.Content.ReadAsStringAsync());
+    }
+
+    [Fact]
+    public async Task ExistingMixedCaseImageFilenamesAreServedWithoutRedirecting()
+    {
+        await using var host = await RecoveryHost.Start();
+        using var response = await host.Http.GetAsync("/assets/img/team/DSCF5769.jpg");
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Null(response.Headers.Location);
+        Assert.Equal("image/jpeg", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task PublicPagesHaveUniqueSocialTagsCanonicalUrlsAndWorkingLargeImages()
+    {
+        await using var host = await RecoveryHost.Start();
+        foreach (var path in new[]
+        {
+            "/?utm_source=fixture", "/iletisim", "/hakkimizda", "/hizmetlerimiz",
+            "/hizmetlerimiz/web-tasarimi?utm_source=fixture", "/blog", "/blog/web-rehberi?gclid=fixture",
+            "/ekibimiz", "/ucretsiz-reklam-denetimi?utm_source=fixture", "/arama?q=Web", "/404"
+        })
+        {
+            using var page = await host.Http.GetAsync(path);
+            var html = await page.Content.ReadAsStringAsync();
+            var head = Regex.Match(html, "<head\\b[^>]*>([\\s\\S]*?)</head>", RegexOptions.IgnoreCase).Groups[1].Value;
+            var tags = HtmlTags(head, "meta");
+            string Meta(string key)
+            {
+                var tag = Assert.Single(tags, tag => HtmlAttributeValues(tag, key.StartsWith("og:") ? "property" : "name").Contains(key));
+                return Assert.Single(HtmlAttributeValues(tag, "content"));
+            }
+            Assert.NotEmpty(Meta("og:title"));
+            Assert.NotEmpty(Meta("og:description"));
+            Assert.Equal("tr_TR", Meta("og:locale"));
+            Assert.Equal("summary_large_image", Meta("twitter:card"));
+            Assert.Equal(Meta("og:title"), Meta("twitter:title"));
+            Assert.Equal(Meta("og:description"), Meta("twitter:description"));
+            Assert.Equal(Meta("og:image"), Meta("twitter:image"));
+            Assert.Equal("1200", Meta("og:image:width"));
+            Assert.Equal("630", Meta("og:image:height"));
+            Assert.NotEmpty(Meta("og:image:alt"));
+            var canonical = new Uri(Meta("og:url"));
+            Assert.Equal("https", canonical.Scheme);
+            Assert.Equal("ideiocreative.com", canonical.Host);
+            Assert.Empty(canonical.Query);
+            Assert.Equal(path.StartsWith("/blog/web-rehberi") ? "article" : "website", Meta("og:type"));
+            if (path.StartsWith("/blog/web-rehberi")) Assert.Contains("Web Rehberi", Meta("og:title"));
+            var image = new Uri(Meta("og:image"));
+            Assert.Equal("https", image.Scheme);
+            using var response = await host.Http.GetAsync(image.PathAndQuery);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("image/png", response.Content.Headers.ContentType!.MediaType);
+            var bytes = await response.Content.ReadAsByteArrayAsync();
+            Assert.Equal(1200, BinaryPrimitives.ReadInt32BigEndian(bytes.AsSpan(16, 4)));
+            Assert.Equal(630, BinaryPrimitives.ReadInt32BigEndian(bytes.AsSpan(20, 4)));
+        }
+    }
+
     [Fact]
     public async Task PublicPagesServeMinifiedAssetsInDependencyOrder()
     {
@@ -44,6 +133,8 @@ public sealed class RecoveryTests
                 Assert.Matches("\\sdefer(?:\\s|=|>)", script.Value);
                 using var asset = await host.Http.GetAsync(WebUtility.HtmlDecode(script.Groups[1].Value));
                 Assert.Equal(HttpStatusCode.OK, asset.StatusCode);
+                Assert.Equal(TimeSpan.FromDays(365), asset.Headers.CacheControl!.MaxAge);
+                Assert.Contains(asset.Headers.CacheControl.Extensions, extension => extension.Name == "immutable");
             }
             if (path != "/ucretsiz-reklam-denetimi")
                 Assert.Contains("site.bundle.min.js", localScripts[0].Groups[1].Value);
@@ -58,10 +149,31 @@ public sealed class RecoveryTests
                 Assert.Contains(".min.css", stylesheet.Groups[1].Value);
                 using var asset = await host.Http.GetAsync(WebUtility.HtmlDecode(stylesheet.Groups[1].Value));
                 Assert.Equal(HttpStatusCode.OK, asset.StatusCode);
+                Assert.Equal(TimeSpan.FromDays(365), asset.Headers.CacheControl!.MaxAge);
             }
         }
         using var font = await host.Http.GetAsync("/assets/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2");
         Assert.Equal(HttpStatusCode.OK, font.StatusCode);
+    }
+
+    [Fact]
+    public async Task BundledCssUsesWorkingImmutableFontAndBackgroundFilenames()
+    {
+        await using var host = await RecoveryHost.Start();
+        var cssUrl = host.AssetUrl("/assets/css/site.bundle.min.css");
+        var css = await host.Http.GetStringAsync(cssUrl);
+        var urls = Regex.Matches(css, "url\\(\"([^\"]+)\"\\)")
+            .Select(match => match.Groups[1].Value).ToList();
+        foreach (var name in new[] { "fa-solid-900.woff2", "bootstrap-icons.woff2", "footer-version1bg.png", "ekip.webp" })
+        {
+            var relative = urls.First(url => url.Contains(name, StringComparison.Ordinal));
+            Assert.Matches("/[0-9a-f]{64}\\.", relative);
+            var absolute = new Uri(new Uri(host.Http.BaseAddress!, cssUrl), relative);
+            using var response = await host.Http.GetAsync(absolute);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(TimeSpan.FromDays(365), response.Headers.CacheControl!.MaxAge);
+            Assert.Contains(response.Headers.CacheControl.Extensions, extension => extension.Name == "immutable");
+        }
     }
 
     [Fact]
@@ -101,10 +213,17 @@ public sealed class RecoveryTests
                 var priority = HtmlAttributeValues(image, "fetchpriority");
                 Assert.InRange(priority.Length, 0, 1);
                 var isTrackingPixel = source.StartsWith("https://www.facebook.com/tr?", StringComparison.Ordinal);
-                Assert.Equal(isTrackingPixel ? "eager" : "lazy",
+                var isHeroImage = path == "/" && source == host.AssetUrl("/assets/img/banner/hero-bg1.png");
+                Assert.Equal(isTrackingPixel || isHeroImage ? "eager" : "lazy",
                     Assert.Single(HtmlAttributeValues(image, "loading")));
-                Assert.Empty(priority);
+                if (isHeroImage)
+                    Assert.Equal("high", Assert.Single(priority));
+                else
+                    Assert.Empty(priority);
             }
+
+            if (path == "/")
+                Assert.Single(images, image => HtmlAttributeValues(image, "fetchpriority").Contains("high"));
 
             if (detailImages.TryGetValue(path, out var detailSource))
                 Assert.Contains(images, image => HtmlAttributeValues(image, "src").Contains(detailSource));
@@ -118,10 +237,10 @@ public sealed class RecoveryTests
             {
                 var preload = Assert.Single(preloadedImages);
                 Assert.Equal("high", Assert.Single(HtmlAttributeValues(preload, "fetchpriority")));
-                Assert.Equal("/assets/img/banner/breadcrumnd-bg.png", Assert.Single(HtmlAttributeValues(preload, "href")));
+                Assert.Equal(host.AssetUrl("/assets/img/banner/breadcrumnd-bg.png"), Assert.Single(HtmlAttributeValues(preload, "href")));
             }
 
-            var logos = images.Where(image => HtmlAttributeValues(image, "src").Contains("/img/ideio-logo.png")).ToList();
+            var logos = images.Where(image => HtmlAttributeValues(image, "src").Contains(host.AssetUrl("/img/ideio-logo.png"))).ToList();
             Assert.True(logos.Count >= 2, $"Header and footer logos must render at {path}.");
             Assert.All(logos, logo => Assert.Equal("lazy", Assert.Single(HtmlAttributeValues(logo, "loading"))));
 
@@ -135,11 +254,19 @@ public sealed class RecoveryTests
 
             if (path is "/" or "/ucretsiz-reklam-denetimi")
             {
-                var video = Assert.Single(HtmlTags(html, "video"));
-                Assert.Equal("metadata", Assert.Single(HtmlAttributeValues(video, "preload")));
-                Assert.Empty(HtmlAttributeValues(video, "loading"));
-                Assert.Empty(HtmlAttributeValues(video, "decoding"));
-                Assert.Empty(HtmlAttributeValues(video, "fetchpriority"));
+                Assert.Empty(HtmlTags(html, "video"));
+                var player = Assert.Single(HtmlTags(html, "iframe"),
+                    tag => HtmlAttributeValues(tag, "class").Any(value => value.Split(' ').Contains("youtube-player")));
+                Assert.Empty(HtmlAttributeValues(player, "src"));
+                var source = new Uri(Assert.Single(HtmlAttributeValues(player, "data-src")));
+                Assert.Equal("https://www.youtube.com/embed/vYmVAC5Gsc0", source.GetLeftPart(UriPartial.Path));
+                var parameters = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(source.Query);
+                foreach (var parameter in new[] { "enablejsapi", "autoplay", "mute", "loop", "playsinline" })
+                    Assert.Equal("1", parameters[parameter].ToString());
+                Assert.Equal("vYmVAC5Gsc0", parameters["playlist"].ToString());
+                Assert.Equal("0", parameters["controls"].ToString());
+                Assert.Equal("0", parameters["cc_load_policy"].ToString());
+                Assert.DoesNotContain("/video/", html);
                 Assert.Contains(images, image => HtmlAttributeValues(image, "src").Contains("/img/about-home.png"));
             }
             if (path is "/" or "/ekibimiz")
@@ -449,7 +576,7 @@ public sealed class RecoveryTests
         await using var host = await RecoveryHost.Start();
         foreach (var path in new[]
         {
-            "/404", "/Home/NotFound", "/missing/deep/page", "/missing.css",
+            "/404", "/home/notfound", "/missing/deep/page", "/missing.css",
             "/hizmetlerimiz/missing-service", "/blog/missing-post", "/test/plain-404"
         })
         {
@@ -463,7 +590,7 @@ public sealed class RecoveryTests
             Assert.Contains("href=\"tel:+902321234567\"", html);
             Assert.Contains("+90 (232) 123 45 67", html);
             Assert.Contains("name=\"robots\" content=\"noindex, follow\"", html);
-            Assert.Contains("/assets/img/error/opps.png", html);
+            Assert.Contains(host.AssetUrl("/assets/img/error/opps.png"), html);
             Assert.DoesNotContain("Web English Secret", html);
         }
 
@@ -549,6 +676,7 @@ public sealed class RecoveryTests
         public WebApplication App => _app;
         public HttpClient Http { get; }
         public IdeioSeoOptions SeoOptions { get; }
+        public string AssetUrl(string path) => _app.Services.GetRequiredService<ContentHashedAssets>().Url(path);
 
         private RecoveryHost(WebApplication app)
         {
@@ -573,6 +701,7 @@ public sealed class RecoveryTests
             builder.Logging.ClearProviders();
             builder.Configuration.AddJsonFile(Path.Combine(projectDirectory, "local-business.json"), optional: false);
             builder.WebHost.UseUrls("http://127.0.0.1:0");
+            builder.Services.AddSiteDelivery();
             builder.Services.AddControllersWithViews();
             builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
             builder.Services.AddSingleton<ContactSecurityQuestionService>();
@@ -637,7 +766,8 @@ public sealed class RecoveryTests
             }
 
             app.UseExceptionHandler("/Home/NotFound");
-            app.UseStaticFiles();
+            app.UseSiteDelivery();
+            app.UseLowercaseUrlRedirects();
             app.UseRouting();
             app.Use(async (http, next) =>
             {
@@ -658,6 +788,8 @@ public sealed class RecoveryTests
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapFallbackToController("NotFound", "Home");
             app.MapGet("/test/plain-404", () => Results.NotFound());
+            app.MapPost("/test/submit", async (HttpRequest request) =>
+                Results.Text((await request.ReadFormAsync())["message"].ToString()));
             app.MapGet("/test/server-error", () =>
                 Results.Problem(statusCode: ThrowServerError()));
             await app.StartAsync();
